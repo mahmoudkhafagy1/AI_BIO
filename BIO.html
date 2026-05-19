@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Molecular Biology Quiz</title>
+    <title>AI_BIO</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
 
         :root {
-            --dark-bg: #0b0f19;
-            --dark-card: #1a2235;
+            --dark-bg: #090b14;
+            --dark-card: #151a2d;
             --neon-green: #00ffcc;
             --neon-blue: #0088ff;
+            --neon-purple: #b026ff;
             --text-light: #e2e8f0;
             --text-muted: #94a3b8;
             --correct-bg: rgba(34, 197, 94, 0.2);
@@ -37,14 +38,8 @@
             padding: 20px;
         }
 
-        .ar-text {
-            font-family: 'Cairo', sans-serif;
-        }
-
-        .en-text {
-            direction: ltr;
-            text-align: left;
-        }
+        .ar-text { font-family: 'Cairo', sans-serif; }
+        .en-text { direction: ltr; text-align: left; }
 
         .quiz-container {
             background-color: var(--dark-card);
@@ -52,7 +47,7 @@
             box-shadow: 0 0 20px rgba(0, 136, 255, 0.2);
             border-radius: 16px;
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
             padding: 30px;
             position: relative;
             overflow: hidden;
@@ -64,14 +59,14 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue), var(--neon-green));
         }
 
         h1 {
             text-align: center;
-            font-size: 28px;
+            font-size: 26px;
             margin-bottom: 20px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -82,7 +77,7 @@
             color: var(--text-muted);
             font-size: 15px;
             margin-bottom: 20px;
-            border-bottom: 1px solid #334155;
+            border-bottom: 1px solid #2a3441;
             padding-bottom: 15px;
             flex-wrap: wrap;
             gap: 10px;
@@ -98,7 +93,7 @@
         .wrong-text { color: var(--wrong-border); }
 
         .question {
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 600;
             margin-bottom: 20px;
             line-height: 1.5;
@@ -113,7 +108,7 @@
         .option-btn {
             background-color: transparent;
             color: var(--text-light);
-            border: 2px solid #334155;
+            border: 2px solid #2a3441;
             border-radius: 12px;
             padding: 15px;
             font-size: 16px;
@@ -148,19 +143,17 @@
         .rationale {
             margin-top: 20px;
             padding: 15px;
-            background-color: rgba(0, 255, 204, 0.1);
-            border: 1px solid rgba(0, 255, 204, 0.3);
+            background-color: rgba(0, 136, 255, 0.1);
+            border: 1px solid rgba(0, 136, 255, 0.3);
             border-radius: 12px;
             display: none;
             animation: fadeIn 0.5s;
         }
 
-        .rationale.show {
-            display: block;
-        }
+        .rationale.show { display: block; }
 
         .rationale-title {
-            color: var(--neon-green);
+            color: var(--neon-blue);
             font-weight: bold;
             margin-bottom: 5px;
         }
@@ -183,13 +176,11 @@
             display: none;
         }
 
-        .nav-btn.show {
-            display: block;
-        }
+        .nav-btn.show { display: block; }
 
         #next-btn {
             background-color: var(--neon-blue);
-            color: var(--text-light);
+            color: #fff;
         }
 
         #next-btn:hover {
@@ -198,22 +189,18 @@
         }
 
         #prev-btn {
-            background-color: #334155;
+            background-color: #2a3441;
             color: var(--text-light);
         }
 
-        #prev-btn:hover {
-            background-color: #475569;
-        }
+        #prev-btn:hover { background-color: #3f4e60; }
 
         .result-container {
             text-align: center;
             display: none;
         }
 
-        .result-container.show {
-            display: block;
-        }
+        .result-container.show { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -225,11 +212,11 @@
 
     <div class="quiz-container" id="quiz-container">
         <div class="header-line"></div>
-        <h1>Maze Tech - Molecular Biology</h1>
+        <h1>Ultimate Developmental Biology</h1>
         
         <div id="quiz-content">
             <div class="stats en-text">
-                <span id="question-tracker">Question 1 of 50</span>
+                <span id="question-tracker">Question 1 of X</span>
                 <div class="counters">
                     <span id="correct-tracker" class="correct-text">✅ Correct: 0</span>
                     <span id="wrong-tracker" class="wrong-text">❌ Wrong: 0</span>
@@ -254,70 +241,138 @@
         <div class="result-container" id="result-container">
             <h2 style="font-size: 32px; margin-bottom: 20px; color: white;">Exam Completed!</h2>
             <div style="font-size: 24px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
-                <p>Final Score: <span id="final-score" style="color: var(--neon-blue); font-weight: bold;"></span> / 50</p>
+                <p>Final Score: <span id="final-score" style="color: var(--neon-blue); font-weight: bold;"></span></p>
                 <p class="correct-text">✅ Correct: <span id="final-correct"></span></p>
                 <p class="wrong-text">❌ Wrong: <span id="final-wrong"></span></p>
             </div>
-            <button class="nav-btn show en-text" style="background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); width: 100%;" onclick="location.reload()">Try Again</button>
+            <button class="nav-btn show en-text" style="background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); width: 100%;" onclick="location.reload()">Retake Exam</button>
         </div>
     </div>
 
     <script>
-        // مصفوفة الأسئلة - Molecular & Cell Biology
+        // جميع الأسئلة المستخرجة من الصورة وملف الـ PDF المكون من 21 صفحة (MCQs + True/False)
         const questions = [
-            // --- MCQs ---
-            { q: "1. Which enzyme relieves stress on the DNA molecule during replication?", o: ["Helicase", "DNA ligase", "Methylase", "Topoisomerase"], a: 3, r: "إنزيم التوبوأيزوميراز (Topoisomerase) يقلل من الضغط الميكانيكي (Supercoiling) الناتج عن فك شريطي الـ DNA." },
-            { q: "2. The first scientist who concluded that cells must arise from preexisting cells:", o: ["Rudolf Virchow", "Matthias Schleiden", "Erwin Chargaff", "James Watson"], a: 0, r: "فيرشو (Virchow) هو من أضاف المبدأ القائل بأن الخلية لا تنشأ إلا من خلية سابقة لها." },
-            { q: "3. The length of a DNA molecule with 3000 bp equals:", o: ["3 x 10^4 nm", "1.02 nm", "1.02 um", "1020 um"], a: 2, r: "المسافة بين كل قاعدتين هي 0.34 نانومتر، إذن 3000 × 0.34 = 1020 نانومتر، وهو ما يعادل 1.02 ميكرومتر (um)." },
-            { q: "4. Purines include which of the following bases?", o: ["A and G", "T and C", "G and C", "A and T"], a: 0, r: "البيورينات (Purines) هي القواعد ذات الحلقتين وتشمل الأدينين (A) والجوانين (G)." },
-            { q: "5. The component that is most critical to the function of a plasmid as a vector:", o: ["EcoRI site", "Ampicillin resistance", "Origin of replication", "Ligase"], a: 2, r: "منشأ التضاعف (Ori) هو الجزء الأساسي الذي يسمح للبلازميد بالتضاعف ذاتياً داخل الخلية." },
-            { q: "6. During replication, a DNA strand with the bases CTAGGT produces a strand with:", o: ["TCGAAC", "AGCTTG", "GATCCA", "GAUCCA"], a: 2, r: "حسب قاعدة تكامل القواعد في الـ DNA: C يقابله G، و T يقابله A، و A يقابله T، و G يقابله C." },
-            { q: "7. One microgram (ug) of DNA equals _________ nanogram (ng).", o: ["10", "100", "1000", "10^6"], a: 2, r: "الميكروغرام الواحد يحتوي على 1000 نانوغرام." },
-            { q: "8. Which choice best describes the DNA (chromosome) of a prokaryote?", o: ["Single circular", "Single linear", "Multiple circular", "Multiple linear"], a: 0, r: "الكروموسوم البكتيري (بدائيات النواة) عبارة عن جزيء DNA دائري مفرد (Single circular)." },
-            { q: "9. The first level of DNA compaction is called:", o: ["Solenoid", "Nucleosome", "Helical fiber", "Chromosome"], a: 1, r: "النيوكليوسوم (Nucleosome) هو المستوى الأول لتعبئة الـ DNA عن طريق لفه حول بروتينات الهيستون." },
-            { q: "10. The number of amino acids given by this sequence AACATGCCUGCGUUUGA:", o: ["3", "4", "5", "6"], a: 2, r: "نبدأ العد من كودون البدء (AUG)، وكل 3 قواعد تعطي حمض أميني واحد حتى نصل لكودون الوقف (UGA)." },
-            { q: "11. Enzymes used to 'charge' the tRNA with the proper amino acid:", o: ["Methylase", "Reverse transcriptase", "Aminoacyl tRNA synthetases", "Primase"], a: 2, r: "هذا الإنزيم هو المسؤول عن ربط الحمض الأميني الصحيح بجزيء الـ tRNA الخاص به." },
-            { q: "12. In PCR, at what temperature does denaturation of DNA double helix take place?", o: ["55 °C", "94 °C", "72 °C", "60 °C"], a: 1, r: "درجة الحرارة 94-95 درجة مئوية ضرورية لكسر الروابط الهيدروجينية وفصل شريطي الـ DNA." },
-            { q: "13. How many DNA duplexes are obtained from one DNA duplex after 4 cycles of PCR?", o: ["8", "16", "32", "64"], a: 1, r: "يتم الحساب بالمعادلة (2^n) حيث n عدد الدورات. إذن 2 أس 4 يساوي 16." },
-            { q: "14. Bacteria protect themselves from the action of their own restriction enzymes by:", o: ["Phosphorylation", "Methylation", "Amination", "Alkylation"], a: 1, r: "البكتيريا تضيف مجموعات ميثيل (Methylation) لمواقع التعرف الخاصة بها لحمايتها من القطع." },
-            { q: "15. The enzyme that removes RNA primer and inserts the correct DNA bases is:", o: ["DNA Polymerase I", "RNA Polymerase", "DNA Polymerase II", "DNA Polymerase III"], a: 0, r: "بوليميراز DNA الأول هو المسؤول عن إزالة بوادئ الـ RNA واستبدالها بالـ DNA في بدائيات النواة." },
-            { q: "16. In replication, which protein recognizes the Ori?", o: ["DNA A protein", "Helicase", "Topoisomerase", "Spliceosome"], a: 0, r: "بروتين DnaA هو الذي يرتبط بمنشأ التضاعف (Ori) ليبدأ عملية فتح الشريطين." },
-            { q: "17. Which of the following is likely to contribute to a shift in the reading frame (Frameshift)?", o: ["Addition of a triplet code", "Removal of a single base", "Removal of nine bases", "Removal of a triplet code"], a: 1, r: "إزالة أو إضافة قاعدة نيتروجينية واحدة يؤدي لتغيير إطار القراءة بالكامل، بينما المضاعفات الثلاثية لا تفعل ذلك." },
-            { q: "18. The DNA molecules of different species differ in their:", o: ["Phosphate backbone", "Sequence of bases", "Nucleotides type", "All of the previous"], a: 1, r: "جميع الكائنات تمتلك نفس أنواع النيوكليوتيدات وهيكل الفوسفات، الاختلاف الجيني يكمن فقط في (تتابع القواعد)." },
-            { q: "19. The percentage of coding capacity in the prokaryotic genome is approximately:", o: ["3%", "10%", "90%", "50%"], a: 2, r: "الجينوم البكتيري مضغوط جداً ويحتوي على نسبة عالية من الجينات المشفرة للبروتينات (تصل لـ 90%)." },
-            { q: "20. Disproved the spontaneous generation theory:", o: ["Anton van Leuwenhoek", "Robert Hooke", "Louis Pasteur", "Matthias Schleiden"], a: 2, r: "لويس باستير هو من دحض نظرية التوالد الذاتي نهائياً بتجربة دوارق عنق البجعة." },
-            { q: "21. A recognition site of a restriction endonuclease is typically palindromic. Which is correct?", o: ["GATATC", "TATCAG", "TTATAT", "GCCGCC"], a: 0, r: "تتابع GATATC هو تتابع باليندرومي (يُقرأ من 5' لـ 3' بنفس الطريقة على الشريطين) وهو موقع التعرف لإنزيم EcoRV." },
-            { q: "22. The enzyme that stitches Okazaki fragments together (along the lagging strand):", o: ["DNA Polymerase II", "DNA Ligase", "Topoisomerase", "Holoenzyme"], a: 1, r: "إنزيم الربط (DNA Ligase) هو الذي يربط قطع أوكازاكي بروابط فوسفاتية." },
-            { q: "23. Introns are removed from the primary RNA transcript by:", o: ["A-tailing", "G-capping", "Restriction endonuclease", "Spliceosomes"], a: 3, r: "الجسيم اللاحم (Spliceosome) هو المسؤول عن قص الإنترونات غير المشفرة وربط الإكسونات." },
-            { q: "24. Cause the ribosome, the mRNA, and the new polypeptide to separate and terminate translation:", o: ["tRNA", "UTR", "Release factors", "Chaperone"], a: 2, r: "عوامل الإطلاق (Release factors) ترتبط بكودون الوقف وتُنهي عملية الترجمة." },
-            { q: "25. Which enzyme is used by retroviruses to transcribe virus RNA into DNA?", o: ["RNA polymerase", "Reverse transcriptase", "Restriction nuclease", "Methylase"], a: 1, r: "إنزيم النسخ العكسي (Reverse transcriptase) يحول الـ RNA الفيروسي إلى DNA ليُدمج في الجينوم." },
-            { q: "26. In a DNA molecule, if there is 31% guanine, how much thymine is present?", o: ["31%", "19%", "69%", "11%"], a: 1, r: "إذا كان الـ G=31%، إذن C=31% (المجموع 62%). يتبقى 38% لـ A و T معاً، فيكون نصيب الثايمين (T) النصف وهو 19%." },
-            { q: "27. In a DNA molecule, if there is 26% thymine, how much cytosine is present?", o: ["24%", "26%", "48%", "74%"], a: 0, r: "T=26% إذن A=26% (المجموع 52%). يتبقى 48% تقسم على G و C. إذن السيتوزين (C) = 24%." },
-            { q: "28. A promoter is a:", o: ["Binding site for DNA polymerase", "Start signal for transcription", "Binding site for RNA polymerase", "Start signal for translation"], a: 2, r: "المحفز (Promoter) هو منطقة على الـ DNA يرتبط بها إنزيم RNA polymerase لبدء عملية النسخ." },
-            { q: "29. cDNA refers to:", o: ["DNA with both introns and exons", "Cloned DNA", "DNA with only introns", "DNA with only exons that can be cloned"], a: 3, r: "الـ cDNA يُصنع باستخدام إنزيم النسخ العكسي من الـ mRNA الناضج، لذلك لا يحتوي على إنترونات (يحتوي على إكسونات فقط)." },
-            { q: "30. The nonbranching helical structure of starch is called:", o: ["Amylose", "Dextrin", "Amylopectin", "Amino sugars"], a: 0, r: "الأميلوز هو الجزء الخطي (غير المتفرع) من النشا النباتي." },
+            // --- أسئلة الصورة المرفقة ---
+            { q: "Centriole exist in prokaryotes.", o: ["True", "False"], a: 1, r: "خطأ. السنتريول (الجسم المركزي) يوجد في حقيقيات النواة (الخلايا الحيوانية) فقط ولا يوجد في البدائيات." },
+            { q: "In eukaryotes, cell wall is rigid formed from glycoproteins (mainly mucin).", o: ["True", "False"], a: 1, r: "خطأ. الجدار الخلوي في حقيقيات النواة (كالنباتات) يتكون بشكل أساسي من السليلوز (Cellulose) وليس الميوسين." },
+            { q: "DNA replication takes place during M phase of cell division.", o: ["True", "False"], a: 1, r: "خطأ. تضاعف الـ DNA يحدث في الطور البيني وتحديداً في مرحلة (S phase) وليس في طور الانقسام (M phase)." },
+            { q: "For synthesis of a leading strand, each fragment (Okazaki) must be primed separately.", o: ["True", "False"], a: 1, r: "خطأ. قطع أوكازاكي تتكون في الشريط المتأخر (Lagging strand) وليس الشريط القائد (Leading strand)." },
+            { q: "To prove genetic material, viral protein was tagged with P32.", o: ["True", "False"], a: 1, r: "خطأ. الفسفور المشع (P32) استخدم لترقيم الـ DNA الفيروسي، بينما الكبريت المشع (S35) استخدم لترقيم البروتين." },
+            { q: "Enzyme that relieves stress on the DNA molecule:", o: ["Helicase", "DNA ligase", "Methylase", "Topoisomerase"], a: 3, r: "إنزيم التوبوأيزوميراز يقلل من إجهاد الالتفاف الفوقي (Supercoiling) الناتج عن فك شريطي الـ DNA." },
+            { q: "The first scientists who concluded that cells must arise from preexisting cells:", o: ["Rudolf Virchow", "Matthias Schleiden", "Erwin Chargaff", "James Watson"], a: 0, r: "فيرشو هو من أضاف مبدأ أن الخلية لا تنشأ إلا من خلية سابقة لها بالانقسام." },
+            { q: "The length of a DNA molecule with 3000 bp =", o: ["3 x 10^4 nm", "1.02 nm", "1.02 um", "1020 um"], a: 2, r: "المسافة بين القواعد 0.34 نانومتر. 3000 × 0.34 = 1020 نانومتر، وهو ما يعادل 1.02 ميكرومتر (um)." },
+            { q: "Purines include:", o: ["A and G", "T and C", "G and C", "A and T"], a: 0, r: "البيورينات هي القواعد النيتروجينية المكونة من حلقتين وتشمل الأدينين والجوانين." },
+            { q: "The component that is most critical to the function of as plasmid:", o: ["EcoRI site", "Ampicillin resistance", "Origin of replication", "Ligase"], a: 2, r: "منشأ التضاعف (Ori) هو العنصر الأهم الذي يسمح للبلازميد بالتضاعف ذاتياً داخل الخلية." },
+            { q: "During replication, a DNA strand that has the bases CTAGGT produces a strand with the bases:", o: ["TCGAAC", "AGCTTG", "GATCCA", "GAUCCA"], a: 2, r: "حسب قاعدة التكامل: C يقابله G، و T يقابله A، و A يقابله T، و G يقابله C." },
+            { q: "One microgram (ug) of DNA equals ------------- nanogram (ng):", o: ["10", "100", "1000", "10^6"], a: 2, r: "الميكروغرام الواحد يحتوي على 1000 نانوغرام." },
+            { q: "Which choice best describes the DNA (chromosome) of a prokaryote?", o: ["Single circular", "Single linear", "Multiple circular", "Multiple linear"], a: 0, r: "الكروموسوم البكتيري عبارة عن جزيء DNA دائري مفرد." },
+            { q: "The first level of DNA compaction called:", o: ["Solenoid", "Nucleosome", "Helical fiber", "Chromosome"], a: 1, r: "النيوكليوسوم هو المستوى الأول لتعبئة الـ DNA بالتفافه حول الهيستونات." },
+            { q: "The number of amino acids given by this sequence AACATGCCGGCGTTTTGA:", o: ["3", "4", "5", "6"], a: 1, r: "نبدأ من كودون البدء ATG، ثم CCC، ثم GCG، ثم TTT، وأخيراً كودون الوقف TGA. إذن ينتج 4 أحماض أمينية." },
 
-            // --- True / False (Formatted as 2 options) ---
-            { q: "31. For synthesis of a lagging strand, each fragment (Okazaki) must be primed separately.", o: ["True", "False"], a: 0, r: "صحيح، لأن بوليميراز الـ DNA يحتاج لنهاية 3' حرة لكل قطعة، لذا يتطلب الشريط المتأخر بوادئ RNA متعددة." },
-            { q: "32. mRNA post-transcriptional modification occurs in prokaryotes.", o: ["True", "False"], a: 1, r: "خطأ. التعديلات اللاحقة للنسخ (زي قص الإنترونات) تحدث في حقيقيات النواة (Eukaryotes) فقط." },
-            { q: "33. Polycistronic mRNA exists only in prokaryotes.", o: ["True", "False"], a: 0, r: "صحيح، البكتيريا تنتج mRNA يحمل شفرات لأكثر من بروتين (Polycistronic)." },
-            { q: "34. The promotor region exists on both DNA and mRNA transcript.", o: ["True", "False"], a: 1, r: "خطأ. منطقة المحفز موجودة على الـ DNA فقط لتوجيه الإنزيم، ولا يتم نسخها في الـ mRNA." },
-            { q: "35. Dolly sheep was the first cloned animal.", o: ["True", "False"], a: 0, r: "صحيح، النعجة دوللي هي أول حيوان ثديي يتم استنساخه من خلية جسدية بالغة." },
-            { q: "36. The last amino acid in a polypeptide is called the 'N-terminal'.", o: ["True", "False"], a: 1, r: "خطأ. الحمض الأميني الأخير يُسمى الطرف الكربوكسيلي (C-terminal)، بينما الأول هو الـ N-terminal." },
-            { q: "37. DNA replication takes place during the M phase of cell division.", o: ["True", "False"], a: 1, r: "خطأ. تضاعف الـ DNA يحدث في الطور البيني وتحديداً في مرحلة الـ S phase." },
-            { q: "38. In PCR, MgCl2 is the best buffer/cofactor for Taq polymerase.", o: ["True", "False"], a: 0, r: "صحيح، أيونات الماغنيسيوم ضرورية جداً كعامل مساعد لعمل إنزيم الـ Taq polymerase." },
-            { q: "39. The number of DNA molecules following 8 PCR cycles is 256.", o: ["True", "False"], a: 0, r: "صحيح، باستخدام معادلة 2 أس n، فإن 2^8 تساوي 256 جزيء." },
-            { q: "40. In DNA structure, purines or pyrimidines project inward toward the axis of the helix.", o: ["True", "False"], a: 0, r: "صحيح، القواعد النيتروجينية تكون للداخل لتكوين الروابط الهيدروجينية (درجات السلم)، والسكر والفوسفات للخارج." },
-            { q: "41. Conservative replication proved to be the right way to explain replication.", o: ["True", "False"], a: 1, r: "خطأ. التضاعف يحدث بالطريقة شبه المحافظة (Semi-conservative)." },
-            { q: "42. The 64 possible codons of the genetic code all specify amino acids.", o: ["True", "False"], a: 1, r: "خطأ. هناك 3 كودونات وقف لا تشفر لأي أحماض أمينية، لذا 61 كودوناً فقط هي التي تشفر." },
-            { q: "43. Telomerase performs its function in all prokaryotic cells.", o: ["True", "False"], a: 1, r: "خطأ. التيلوميراز يعمل على الأطراف الخطية للكروموسومات، والبكتيريا كروموسوماتها دائرية لا تحتوي على تيلوميرات." },
-            { q: "44. Taq polymerase was extracted from thermal fungi.", o: ["True", "False"], a: 1, r: "خطأ. تم استخلاصه من البكتيريا المحبة للحرارة (Thermus aquaticus) وليس الفطريات." },
-            { q: "45. Spontaneous generation theory hypothesized that non-living material can produce life.", o: ["True", "False"], a: 0, r: "صحيح، هذه النظرية الخاطئة كانت تفترض نشوء الكائنات من مواد غير حية، وتم دحضها بواسطة باستير." },
-            { q: "46. DNA fragments can hybridize with plasmids that have been cut by the same restriction enzyme.", o: ["True", "False"], a: 0, r: "صحيح، لأن القطع بنفس الإنزيم يُنتج 'نهايات لاصقة' متوافقة (Sticky ends)." },
-            { q: "47. Any somatic cell can produce all types of proteins.", o: ["True", "False"], a: 1, r: "خطأ. رغم احتواء جميع الخلايا الجسدية على نفس الجينوم، إلا أن هناك 'تنظيم جيني' يسمح بإنتاج بروتينات محددة لكل نسيج (Cell differentiation)." },
-            { q: "48. The negative charge in a DNA molecule is due to the deoxyribose sugar.", o: ["True", "False"], a: 1, r: "خطأ. الشحنة السالبة ترجع لمجموعات الفوسفات (Phosphate groups) في هيكل الـ DNA." },
-            { q: "49. Pyrimidines include thymine (T), cytosine (C) and uracil (U).", o: ["True", "False"], a: 0, r: "صحيح، هذه هي القواعد النيتروجينية أحادية الحلقة (البريميدينات)." },
-            { q: "50. In eukaryotes, transcription and translation may take place together at the same time.", o: ["True", "False"], a: 1, r: "خطأ. هذا يحدث في بدائيات النواة (Prokaryotes) فقط لعدم وجود غلاف نووي يفصل العمليتين." }
+            // --- أسئلة ملف الـ PDF الشامل (True / False) ---
+            { q: "mRNA post-transcriptional modification occurs in prokaryotes.", o: ["True", "False"], a: 1, r: "خطأ. التعديلات اللاحقة للنسخ (كقص الإنترونات) تحدث في حقيقيات النواة (Eukaryotes) فقط." },
+            { q: "The process of translation takes place in eukaryotes in the cytoplasm.", o: ["True", "False"], a: 0, r: "صحيح. النسخ يحدث في النواة، ثم يخرج الـ mRNA للسيتوبلازم لتتم الترجمة." },
+            { q: "Isoschizomer are pairs of restriction enzymes specific to the same recognition sequence.", o: ["True", "False"], a: 0, r: "صحيح. الأيزوسكيزومرات هي إنزيمات قطع مختلفة تُستخرج من بكتيريا مختلفة ولكنها تتعرف على نفس التتابع." },
+            { q: "Polysictronic mRNA exist only in prokaryotes.", o: ["True", "False"], a: 0, r: "صحيح. في البدائيات، قد يحمل الـ mRNA الواحد شفرات لعدة بروتينات (Polycistronic)." },
+            { q: "The genome of E. coli contains 4x10^6 base pairs.", o: ["True", "False"], a: 0, r: "صحيح. جينوم بكتيريا الإشريكية القولونية يبلغ حوالي 4.6 مليون زوج من القواعد." },
+            { q: "All cells are basically the same in chemical composition and metabolic activities.", o: ["True", "False"], a: 0, r: "صحيح. هذا أحد مبادئ نظرية الخلية الحديثة، فجميع الخلايا تشترك في التركيب الكيميائي الأساسي." },
+            { q: "In PCR, Taq polymerase is involved in the attachment of nucleotides to synthesize DNA.", o: ["True", "False"], a: 0, r: "صحيح. إنزيم Taq هو بوليميراز يتحمل الحرارة ويبني شريط الـ DNA الجديد في جهاز الـ PCR." },
+            { q: "Bacteria protect itself from the action of its own restriction enzymes by phosphorylation.", o: ["True", "False"], a: 1, r: "خطأ. البكتيريا تحمي نفسها عن طريق إضافة مجموعات ميثيل (Methylation) وليس الفسفرة." },
+            { q: "One micrometer (um) equals 10^3 angstrom.", o: ["True", "False"], a: 1, r: "خطأ. الميكرومتر يساوي 10,000 أنجستروم (10^4) لأن الأنجستروم جزء من عشرة آلاف من الميكرون." },
+            { q: "The average distance between cuts of 6-base restriction cutter equals 1024 bp.", o: ["True", "False"], a: 1, r: "خطأ. احتمالية التتابع السداسي هي 4 أس 6، أي 4096 قاعدة مزدوجة." },
+            { q: "Conservative replication proved to be the right way to explain replication.", o: ["True", "False"], a: 1, r: "خطأ. التضاعف شبه المحافظ (Semi-conservative) هو الطريقة الصحيحة والمثبتة علمياً." },
+            { q: "The promotor region exists on both DNA and mRNA transcript.", o: ["True", "False"], a: 1, r: "خطأ. المحفز (Promoter) موجود على الـ DNA فقط ولا يتم نسخه إلى الـ mRNA." },
+            { q: "The 64 possible codons of the genetic code specify amino acids.", o: ["True", "False"], a: 1, r: "خطأ. 61 كودوناً فقط تشفر لأحماض أمينية، بينما الـ 3 المتبقية هي كودونات وقف." },
+            { q: "Telomerase perform its function in all prokaryotic cells.", o: ["True", "False"], a: 1, r: "خطأ. التيلوميراز يعمل على أطراف الكروموسومات الخطية في حقيقيات النواة (Eukaryotes)، وبدائيات النواة كروموسوماتها دائرية." },
+            { q: "An operon is the region where RNA polymerase bind.", o: ["True", "False"], a: 1, r: "خطأ. المنطقة التي يرتبط بها إنزيم النسخ تسمى المحفز (Promoter)." },
+            { q: "The last amino acids in a polypeptide is called the 'N-terminal'.", o: ["True", "False"], a: 1, r: "خطأ. الحمض الأميني الأخير يسمى الطرف الكربوكسيلي (C-terminal)." },
+            { q: "Dolly sheep was the first cloned animal.", o: ["True", "False"], a: 0, r: "صحيح. النعجة دوللي هي أشهر وأول حيوان ثديي تم استنساخه من خلية جسدية." },
+            { q: "Spontaneous generation theory hypothesized that non-living material can produce life.", o: ["True", "False"], a: 0, r: "صحيح. نظرية التوالد الذاتي كانت تفترض خطأً أن الحياة يمكن أن تنشأ من جماد." },
+            { q: "Robert Hooke thought that cells only existed in plants and fungi.", o: ["True", "False"], a: 0, r: "صحيح. روبرت هوك اكتشف الخلايا في الفلين (نبات) واعتقد أنها تقتصر على النباتات والفطريات." },
+            { q: "None membrane bound organelles characterize prokaryotes.", o: ["True", "False"], a: 0, r: "صحيح. بدائيات النواة تفتقر للعضيات المحاطة بأغشية كالميتوكوندريا وأجسام جولجي." },
+            { q: "To obtain a final mRNA, spliceosomes remove exons and bind introns.", o: ["True", "False"], a: 1, r: "خطأ. العكس هو الصحيح؛ حيث تتم إزالة الإنترونات (غير المشفرة) وربط الإكسونات." },
+            { q: "Removal a triplet code results to a shift in the reading frame in an mRNA molecule.", o: ["True", "False"], a: 1, r: "خطأ. حذف كودون كامل (3 قواعد) يزيل حمضاً أمينياً واحداً دون تغيير إطار القراءة (No shift)." },
+            { q: "The region called -10 exists on both DNA and mRNA transcript.", o: ["True", "False"], a: 1, r: "خطأ. منطقة -10 (صندوق بريبناو/تاتا) موجودة فقط على الـ DNA ضمن منطقة المحفز." },
+            { q: "The length of Okazaki fragments in bacteria is about 1000-2000 nucleotides.", o: ["True", "False"], a: 0, r: "صحيح. قطع أوكازاكي في البكتيريا أطول بكثير منها في حقيقيات النواة." },
+            { q: "Watson and Crick presumed that DNA is made of two strands that twist into a double helix.", o: ["True", "False"], a: 0, r: "صحيح. هما من وضعا نموذج اللولب المزدوج الشهير." },
+            { q: "A cDNA formation is always associated with reverse transcriptase.", o: ["True", "False"], a: 0, r: "صحيح. الـ cDNA (الحمض النووي المكمل) يُصنع من الـ mRNA باستخدام إنزيم النسخ العكسي." },
+            { q: "To be cut by a restriction enzyme, the DNA sequence should be palindromic.", o: ["True", "False"], a: 0, r: "صحيح. معظم إنزيمات القطع تتعرف على تتابعات متماثلة تُقرأ بنفس الترتيب من الاتجاهين (Palindromic)." },
+            { q: "Taq polymerase was extracted from thermal fungi.", o: ["True", "False"], a: 1, r: "خطأ. استُخلص من بكتيريا محبة للحرارة تُسمى Thermus aquaticus وليس الفطريات." },
+            { q: "All genetic codons specify amino acid components are represented in a protein.", o: ["True", "False"], a: 1, r: "خطأ. كودونات الوقف (UAA, UAG, UGA) لا تشفر لأي أحماض أمينية." },
+            { q: "PCR is a DNA amplifying in vivo method.", o: ["True", "False"], a: 1, r: "خطأ. الـ PCR يحدث خارج الجسم في أنابيب الاختبار (In vitro)." },
+            { q: "Primers used in PCR are single stranded RNA oligonucleotide.", o: ["True", "False"], a: 1, r: "خطأ. البوادئ في الـ PCR هي قطع قصيرة من الـ DNA وليس الـ RNA لثباتها الحراري." },
+            { q: "In PCR, CaCl2 is the best buffer for Taq polymerase.", o: ["True", "False"], a: 1, r: "خطأ. أيونات الماغنيسيوم (MgCl2) هي العامل المساعد الأفضل والضروري لإنزيم البلمرة." },
+            { q: "The number of DNA molecules following 8 PCR cycles is 256.", o: ["True", "False"], a: 0, r: "صحيح. 2 أس 8 يساوي 256 جزيء." },
+            { q: "In DNA structure, purine or pyrimidine attached to each deoxyribose projects in toward axis of helix.", o: ["True", "False"], a: 0, r: "صحيح. القواعد النيتروجينية تتجه للداخل لتكوين الروابط الهيدروجينية، بينما الفوسفات للخارج." },
+            { q: "In prokaryots, a Shine-Delgaron sequence on the mRNA pairs with the 16S rRNA.", o: ["True", "False"], a: 0, r: "صحيح. هذا التتابع ضروري لارتباط الريبوسوم بالـ mRNA لبدء الترجمة في البكتيريا." },
+            { q: "A wobble position refers to 1st base of anticodon that can pair with several different nucleotides.", o: ["True", "False"], a: 1, r: "خطأ. قاعدة التأرجح (Wobble) تتعلق بالقاعدة الثالثة في الكودون، وليس الأولى." },
+            { q: "In eukaryotic ribosomes, the 40S subunit contains three rRNAs; 5S, 5.8S, 28S.", o: ["True", "False"], a: 1, r: "خطأ. الوحدة الصغرى 40S تحتوي على 18S rRNA فقط، بينما البقية في الوحدة الكبرى 60S." },
+            { q: "DNA fragments can hybridize with plasmids that have been cut by the same restriction enzyme.", o: ["True", "False"], a: 0, r: "صحيح. القطع بنفس الإنزيم ينتج نهايات لاصقة متوافقة (Sticky ends) يمكن ربطها." },
+            { q: "In DNA replication, the lagging strand grows the same general direction as the leading strand.", o: ["True", "False"], a: 1, r: "خطأ. الشريطان ينموان في اتجاهين متعاكسين (Antiparallel) بالنسبة لشوكة التضاعف." },
+            { q: "In DNA replication, DNA Polymerase III removes RNA primer and inserts the correct DNA bases.", o: ["True", "False"], a: 1, r: "خطأ. بوليميراز DNA الأول (Pol I) هو المسؤول عن إزالة البادئ واستبداله، بينما Pol III للتطويل." },
+            { q: "Telomers replication differ from the rest of chromosome replication.", o: ["True", "False"], a: 0, r: "صحيح. التيلوميرات تُبنى بواسطة إنزيم خاص (تيلوميراز) لا يعتمد على قالب DNA تقليدي بل قالب RNA مدمج فيه." },
+            { q: "DNA mutations may not necessarily lead to a mutated protein.", o: ["True", "False"], a: 0, r: "صحيح. الطفرات الصامتة (Silent mutations) تغير الكودون دون تغيير الحمض الأميني المشفر." },
+            { q: "Histones exist only in prokaryotic cells.", o: ["True", "False"], a: 1, r: "خطأ. الهيستونات هي بروتينات التعبئة الأساسية في حقيقيات النواة، وتغيب عن معظم البدائيات." },
+            { q: "In prokaryotes, mRNA is long and contains many genes.", o: ["True", "False"], a: 0, r: "صحيح. يُعرف بالـ Polycistronic mRNA حيث يحمل رسائل لعدة بروتينات معاً." },
+            { q: "Overhang exist in all cuts with restriction enzymes.", o: ["True", "False"], a: 1, r: "خطأ. بعض الإنزيمات تقطع بشكل مستقيم وتنتج نهايات عمياء (Blunt ends) بلا بروز (Overhang)." },
+            { q: "No mitochondria exist in prokaryotic cells.", o: ["True", "False"], a: 0, r: "صحيح. البدائيات لا تحتوي على عضيات غشائية." },
+            { q: "EcoRI is so named because it was isolated from Entamoeba coli.", o: ["True", "False"], a: 1, r: "خطأ. الاسم مشتق من بكتيريا الإشريكية القولونية (Escherichia coli)." },
+            { q: "For the same gene, a transcription unit is usually longer than a translation unit.", o: ["True", "False"], a: 0, r: "صحيح. وحدة النسخ (mRNA) تحتوي على مناطق غير مترجمة (UTRs) في البداية والنهاية." },
+            { q: "In PCR, a number of enzymes share in DNA amplification.", o: ["True", "False"], a: 1, r: "خطأ. يعتمد الـ PCR بشكل أساسي على إنزيم واحد فقط هو Taq polymerase للقيام بكل شيء بمساعدة التغيرات الحرارية." },
+            { q: "In agarose gel electrophoresis, the small molecules migrate faster than larger ones.", o: ["True", "False"], a: 0, r: "صحيح. الجزيئات الأصغر تعبر مسام الجل بشكل أسرع وأسهل." },
+            { q: "The number of DNA molecules following 4 PCR cycles is 16.", o: ["True", "False"], a: 0, r: "صحيح. 2 أس 4 يساوي 16." },
+            { q: "Any somatic cell can produce all types of proteins.", o: ["True", "False"], a: 1, r: "خطأ. بسبب التمايز الخلوي (Differentiation) والتنظيم الجيني، كل خلية تنتج فقط البروتينات التي تحتاجها لوظيفتها." },
+            { q: "The negative charge in DNA molecule is due to the deoxyribose sugar.", o: ["True", "False"], a: 1, r: "خطأ. الشحنة السالبة تأتي من مجموعات الفوسفات." },
+            { q: "Pyrimidines include thymine (T), cytosine (C) and uracil (U).", o: ["True", "False"], a: 0, r: "صحيح. هذه هي القواعد النيتروجينية أحادية الحلقة." },
+            { q: "In DNA, the distance between two consecutive base pairs equals 0.34 Angstrom.", o: ["True", "False"], a: 1, r: "خطأ. المسافة هي 0.34 نانومتر، وهو ما يعادل 3.4 أنجستروم." },
+            { q: "Some restriction enzymes cut randomly 1000 bp far from the recognition site.", o: ["True", "False"], a: 0, r: "صحيح. هذا سلوك إنزيمات القطع من النوع الأول (Type I restriction enzymes)." },
+            { q: "Arginine and lysine are negatively charged amino acids.", o: ["True", "False"], a: 1, r: "خطأ. الأرجنين واللايسين أحماض أمينية قاعدية تحمل شحنات موجبة." },
+            { q: "In eukaryotes, pre-mRNA contains exons and introns.", o: ["True", "False"], a: 0, r: "صحيح. الشريط الأولي (Pre-mRNA) يحتوي على المناطق المشفرة وغير المشفرة قبل عملية التضفير." },
+            { q: "Most proteins start with methionine amino acid.", o: ["True", "False"], a: 0, r: "صحيح. كودون البدء AUG يشفر دائماً للحمض الأميني ميثيونين." },
+            { q: "The number of amino acids for a gene consists of 666 bp equals 222.", o: ["True", "False"], a: 1, r: "خطأ. الكودون الأخير هو كودون وقف لا يشفر لحمض أميني، لذا العدد يكون 221." },
+            { q: "In prokaryotes, transcription and translation may take place together at the same time.", o: ["True", "False"], a: 0, r: "صحيح. لعدم وجود غلاف نووي، ترتبط الريبوسومات بالـ mRNA أثناء نسخه." },
+            { q: "The first level of DNA packaging is called solenoid.", o: ["True", "False"], a: 1, r: "خطأ. المستوى الأول هو النيوكليوسوم، أما السولينويد فهو المستوى الذي يليه." },
+
+            // --- أسئلة ملف الـ PDF الشامل (MCQs) ---
+            { q: "Join breaks in the phosphodiester backbone of DNA that occur during replication:", o: ["Helicase", "DNA ligase", "Topoisomerase", "DNA polymerase II"], a: 1, r: "إنزيم الربط (Ligase) يعالج الشقوق في الهيكل السكري الفوسفاتي ويربط قطع أوكازاكي." },
+            { q: "A strand of DNA has the following sequence of bases: TAGCAGAAGTTC the other strand of DNA is:", o: ["UUCAAGCAGUAG", "ATCGTCTTCAAG", "UAGCAGAAGUUC", "TAGCAGAAGTTG"], a: 1, r: "قاعدة التكامل للـ DNA: T مع A، و A مع T، و G مع C، و C مع G." },
+            { q: "Which of the following is likely to contribute to a shift in the reading frame in an mRNA molecule?", o: ["Addition of a triplet code", "Removal of a single base", "Removal of nine bases", "Removal a triplet code"], a: 1, r: "إزالة أو إضافة قاعدة واحدة يزيح الإطار بالكامل، بينما إزالة مضاعفات الثلاثة يزيل أحماضاً أمينية كاملة دون التأثير على الباقي." },
+            { q: "The DNA molecules of different species differ in their:", o: ["Phosphate backbone", "Sequence of bases", "Nucleotides type", "All the previous"], a: 1, r: "التنوع البيولوجي والجيني ينبع فقط من اختلاف ترتيب (تسلسل) القواعد النيتروجينية." },
+            { q: "Chicken DNA cut with restriction enzyme A can be joined to:", o: ["Chicken DNA cut with enzyme B", "Chicken DNA that is uncut", "Bacterial DNA cut with enzyme A", "Bacterial DNA that is uncut"], a: 2, r: "أي جزيئي DNA مقطوعين بنفس إنزيم القطع سينتجان نهايات لاصقة متطابقة يمكن ربطها، بغض النظر عن مصدرهما." },
+            { q: "How much of a prokaryotic genome encodes proteins?", o: ["3%", "10%", "90%", "100%"], a: 2, r: "الجينوم البكتيري شديد الكفاءة ومكدس بالجينات، فحوالي 90% منه يترجم لبروتينات، عكس الإنسان." },
+            { q: "Which choice best describes the DNA (chromosome) of a eukaryote?", o: ["Single linear", "Single circular", "Multiple linear", "Multiple circular"], a: 2, r: "الكروموسومات في حقيقيات النواة تكون خطية ومتعددة (مثل 46 كروموسوم في الإنسان)." },
+            { q: "A linear 3000 bp DNA was treated with a restriction enzyme. The plasmid has restriction sites at position 100 and 2000. Which represents the size of produced fragments?", o: ["1900, 1100", "2900, 100", "1900, 100, 1000", "2900, 50, 50"], a: 2, r: "القطع سيتم عند القاعدة 100 والقاعدة 2000. القطعة الأولى من 0 لـ 100 (طولها 100). الثانية من 100 لـ 2000 (طولها 1900). والثالثة من 2000 لـ 3000 (طولها 1000)." },
+            { q: "The DNA code is known to be:", o: ["Unique to humans", "Found only in mammals", "Shared by all living things", "Unique to bacteria"], a: 2, r: "الشفرة الوراثية عالمية (Universal) وتُقرأ بنفس الطريقة تقريباً في جميع الكائنات الحية." },
+            { q: "A recognition site of a restriction enzyme:", o: ["GATATC", "TATCAG", "TTATAT", "GCCGCC"], a: 0, r: "التتابع GATATC متماثل (Palindromic) حيث يقرأ شريطه المكمل CTATAG عكسياً بنفس الطريقة 5' إلى 3'." },
+            { q: "The number of different kinds of amino acids is:", o: ["3", "4", "20", "72"], a: 2, r: "يوجد 20 حمضاً أمينياً قياسياً تدخل في بناء البروتينات." },
+            { q: "The enzyme that removes RNA primer and inserts the correct DNA bases:", o: ["DNA Ligase", "RNA Polymerase", "DNA Polymerase I", "DNA Polymerase III"], a: 2, r: "بوليميراز DNA الأول يمتلك نشاط تكسير 5' إلى 3' يمكنه من إزالة البادئ واستبداله." },
+            { q: "How many DNA duplex is obtained from one DNA duplex after 5 cycles of PCR?", o: ["16", "20", "32", "4"], a: 2, r: "القانون 2 أس n. إذن 2 أس 5 يساوي 32." },
+            { q: "Enzymes used to 'charge' the tRNA with the proper amino acid:", o: ["Methylase", "Reverse transcriptase", "Aminoacyl tRNA synthetases", "Primase"], a: 2, r: "هذا الإنزيم المعقد يربط الحمض الأميني المناسب بـ الـ tRNA الخاص به ليستخدم في الترجمة." },
+            { q: "In replication, it recognizes the Ori:", o: ["DNA A protein", "Helicase", "Topoisomerase", "Spliceosome"], a: 0, r: "بروتين DnaA هو أول من يتعرف ويرتبط بمنشأ التضاعف في البكتيريا لبدء فصل الشريطين." },
+            { q: "Disproved the spontaneous generation theory:", o: ["Anton van Leeuwenhoek", "Robert Hooke", "Louis Pasteur", "Matthias Schleiden"], a: 2, r: "لويس باستير وتجربة دوارق عنق البجعة قضت نهائياً على نظرية التوالد الذاتي." },
+            { q: "The reason why early scientists thought protein was cell's hereditary material that it is:", o: ["Radioactive", "Denaturized", "More complex", "Found in nucleus & cytoplasm"], a: 2, r: "لأن البروتينات تتكون من 20 حمضاً أمينياً بينما الـ DNA من 4 قواعد فقط، فظنوا أن البروتين أكثر تعقيداً ليكون المادة الوراثية." },
+            { q: "Animal cell does not contain:", o: ["Mitochondria", "Nucleus", "Cell wall", "Chromosome"], a: 2, r: "الخلايا الحيوانية لا تمتلك جداراً خلوياً (Cell wall)، بل غشاء بلازمي فقط." },
+            { q: "In PCR, at what temperature denaturation of DNA double helix takes place?", o: ["55 °C", "94 °C", "72 °C", "60 °C"], a: 1, r: "تستخدم حرارة تقارب 94 درجة لكسر الروابط الهيدروجينية وفصل شريطي الـ DNA." },
+            { q: "The base sequence of RNA transcribed from a DNA strand sequence TGCAGCACA is:", o: ["ACGUCGUGU", "ACGUCGUCU", "UGCAGCACA", "GUACUACAC"], a: 0, r: "الشريط المكمل للـ DNA ينسخ لـ RNA باستبدال الـ T بـ U. التكامل مع T(A) G(C) C(G) A(U) G(C) C(G) A(U) C(G) A(U) -> ACGUCGUGU." },
+            { q: "In replication, it can initiate the synthesis of a polynucleotide:", o: ["DNA polymerase I", "DNA polymerase II", "DNA polymerase III", "RNA polymerase (Primase)"], a: 3, r: "إنزيمات بلمرة الـ DNA لا تستطيع البدء من الصفر، وتحتاج لإنزيم البرايميز (وهو نوع من RNA pol) لوضع بادئ." },
+            { q: "Act as adapters between the codons of mRNA and the amino acids they code for:", o: ["rRNA", "tRNA", "RNA polymerase II", "UTP"], a: 1, r: "جزيئات الـ tRNA تعمل كمحولات؛ ترتبط بالكودون من جهة وبحمض أميني من الجهة الأخرى." },
+            { q: "Introns are removed from the primary RNA transcript by:", o: ["A-tailing", "G-capping", "Restriction endonuclease", "Spliceosomes"], a: 3, r: "الجسيم اللاحم (Spliceosome) هو المسؤول عن تضفير الـ RNA وقص الإنترونات غير المشفرة." },
+            { q: "Cause the ribosome, the mRNA, and the new polypeptide to separate and terminate translation:", o: ["tRNA", "UTR", "Release factors", "Chaperone"], a: 2, r: "عوامل الإطلاق (Release factors) ترتبط بكودونات الوقف وتفكك المعقد لتنهي الترجمة." },
+            { q: "The number of possible cuts by a 4-base restriction enzyme cutter in a 1300 bp linear fragment is:", o: ["4", "5", "6", "7"], a: 1, r: "احتمالية القطع للرباعي هي مرة كل 4^4 = 256 قاعدة. 1300 مقسومة على 256 تعطي حوالي 5 قطعات." },
+            { q: "A promoter is a:", o: ["Binding site for DNA polymerase", "Start signal for transcription", "Binding site for RNA polymerase", "Start signal for translation"], a: 2, r: "المحفز (Promoter) هو تسلسل على الـ DNA يرتبط به إنزيم RNA polymerase للبدء في النسخ." },
+            { q: "The number of amino acids formed from 3000 bp gene is:", o: ["3000", "1000", "999", "300"], a: 2, r: "3000 قاعدة تشكل 1000 كودون. آخر كودون هو كودون وقف لا يشفر لحمض أميني، لذا ينتج 999 حمضاً أمينياً." },
+            { q: "Sections of DNA within a gene that encode part of the protein that the gene produces are:", o: ["Introns", "Exons", "Promoters", "Terminator"], a: 1, r: "الإكسونات (Exons) هي الأجزاء المعبرة والمشفرة من الجين." },
+            { q: "The enzyme that corrects the mistakes that happen during replication:", o: ["DNA polymerase I", "DNA polymerase II", "DNA polymerase III", "RNA polymerase"], a: 1, r: "العديد من البوليميرات لها نشاط تصحيحي، ولكن Pol II غالباً ما يُشار إليه تحديداً في مهام الإصلاح (Repair) في بعض المناهج." },
+            { q: "An enzyme used by retroviruses that transcribes virus RNA into DNA, is:", o: ["RNA polymerase", "Reverse transcriptase", "Restriction nuclease", "Methylase"], a: 1, r: "إنزيم النسخ العكسي يقوم بتحويل المادة الوراثية للفيروس من RNA إلى DNA." },
+            { q: "One nanogram (ng) of DNA equals ------ microgram (µg).", o: ["10^-3", "100", "1000", "10^6"], a: 0, r: "النانوغرام أصغر من الميكروغرام بـ 1000 مرة، لذا يساوي 10 أس سالب 3 ميكروغرام." },
+            { q: "Which of the following does not contribute to a shift in the reading frame in an mRNA molecule?", o: ["Adding 1 nucleotide", "Adding 2 nucleotides", "Adding 3 nucleotides", "Adding 4 nucleotides"], a: 2, r: "إضافة 3 نيوكليوتيدات تعني إضافة كودون كامل لحمض أميني، مما لا يؤثر على قراءة باقي السلسلة." },
+            { q: "cDNA is:", o: ["DNA with both introns and exons", "Cloned DNA", "DNA with only introns", "Eukaryotic DNA with only exons that can be cloned"], a: 3, r: "يُبنى الـ cDNA من الـ mRNA الناضج، لذلك فهو يخلو من الإنترونات ويحتوي على الإكسونات فقط." },
+            { q: "In a DNA molecule, if there is 31% guanine, how much thymine is present?", o: ["31%", "19%", "11%", "69%"], a: 1, r: "G=31% إذن C=31% (مجموع 62%). يتبقى 38% يقسم على A و T، إذن T=19%." },
+            { q: "Which of the following are found in both DNA and RNA?", o: ["Ribose, phosphate groups, and adenine", "Deoxyribose, phosphate groups, and guanine", "Phosphate groups, guanine, and cytosine", "Phosphate groups, guanine, and thymine"], a: 2, r: "الفوسفات والجوانين والسيتوزين والأدينين متطابقة في الحمضين، بينما يختلف السكر ويختلف الثايمين واليوراسيل." },
+            { q: "Binding of sugar to a nitrogenous base is called:", o: ["Nucleotide", "Nucleosome", "Ribonucleotide", "Nucleoside"], a: 3, r: "السكر مع القاعدة يسمى نيوكليوسيد، وبإضافة مجموعة فوسفات يصبح نيوكليوتيد." },
+            { q: "Increase in number when energy is required in a cell:", o: ["Lysosomes", "Ribosomes", "Mitochondria", "Nucleic acids"], a: 2, r: "الميتوكوندريا هي بيوت الطاقة في الخلية وتزيد أعدادها في الخلايا النشطة." },
+            { q: "The length of a gene (in µm) with 4800 bp (approximately):", o: ["0.016", "16", "1.6", "96"], a: 2, r: "4800 × 0.34 نانومتر = 1632 نانومتر، ما يعادل تقريباً 1.6 ميكرومتر (µm)." },
+            { q: "Splicing is the process that does which of the following?", o: ["Remove exons and conserve introns", "Remove mutated regions", "Remove introns and conserve exons", "Add multiple adenosine bases"], a: 2, r: "عملية التضفير (Splicing) تتضمن قص وإزالة الإنترونات ودمج الإكسونات المعبرة معاً." }
         ];
 
         let currentQuestion = 0;
@@ -449,12 +504,12 @@
             resultContainer.classList.add('show');
             
             const stats = updateStats();
-            finalScore.textContent = stats.correct;
+            finalScore.textContent = `${stats.correct} / ${questions.length}`;
             finalCorrect.textContent = stats.correct;
             finalWrong.textContent = stats.wrong;
         }
 
-        // بدء الاختبار
+        // تشغيل الاختبار
         loadQuestion();
     </script>
 </body>
