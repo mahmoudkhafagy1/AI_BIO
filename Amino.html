@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Tech - Amino Acids Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+        :root {
+            --dark-bg: #0b0f19;
+            --dark-card: #1a2235;
+            --neon-green: #00ffcc;
+            --neon-blue: #0088ff;
+            --neon-purple: #b026ff;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --correct-bg: rgba(34, 197, 94, 0.2);
+            --correct-border: #22c55e;
+            --wrong-bg: rgba(239, 68, 68, 0.2);
+            --wrong-border: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .ar-text {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .en-text {
+            direction: ltr;
+            text-align: left;
+        }
+
+        .quiz-container {
+            background-color: var(--dark-card);
+            border: 1px solid var(--neon-purple);
+            box-shadow: 0 0 20px rgba(176, 38, 255, 0.2);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-green));
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .counters {
+            display: flex;
+            gap: 15px;
+            font-weight: bold;
+        }
+
+        .correct-text { color: var(--correct-border); }
+        .wrong-text { color: var(--wrong-border); }
+
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 10px rgba(176, 38, 255, 0.3);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-btn.correct {
+            border-color: var(--correct-border);
+            background-color: var(--correct-bg);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+            opacity: 1;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--wrong-border);
+            background-color: var(--wrong-bg);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            opacity: 1;
+        }
+
+        .rationale {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(176, 38, 255, 0.1);
+            border: 1px solid rgba(176, 38, 255, 0.3);
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .rationale.show {
+            display: block;
+        }
+
+        .rationale-title {
+            color: var(--neon-purple);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .nav-btn.show {
+            display: block;
+        }
+
+        #next-btn {
+            background-color: var(--neon-purple);
+            color: var(--text-light);
+        }
+
+        #next-btn:hover {
+            background-color: #d175ff;
+            box-shadow: 0 0 15px rgba(176, 38, 255, 0.6);
+        }
+
+        #prev-btn {
+            background-color: #334155;
+            color: var(--text-light);
+        }
+
+        #prev-btn:hover {
+            background-color: #475569;
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-container">
+        <div class="header-line"></div>
+        <h1>Maze Tech - Amino Acids Quiz</h1>
+        
+        <div id="quiz-content">
+            <div class="stats en-text">
+                <span id="question-tracker">Question 1 of 100</span>
+                <div class="counters">
+                    <span id="correct-tracker" class="correct-text">✅ Correct: 0</span>
+                    <span id="wrong-tracker" class="wrong-text">❌ Wrong: 0</span>
+                </div>
+            </div>
+
+            <div class="question en-text" id="question-text"></div>
+            
+            <div class="options en-text" id="options-container"></div>
+
+            <div class="rationale ar-text" id="rationale-container">
+                <div class="rationale-title">💡 الشرح:</div>
+                <div id="rationale-text"></div>
+            </div>
+
+            <div class="nav-buttons en-text">
+                <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">⬅️ Previous</button>
+                <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Next Question ➔</button>
+            </div>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <h2 style="font-size: 32px; margin-bottom: 20px; color: white;">Quiz Completed!</h2>
+            <div style="font-size: 24px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                <p>Final Score: <span id="final-score" style="color: var(--neon-purple); font-weight: bold;"></span> / 100</p>
+                <p class="correct-text">✅ Correct: <span id="final-correct"></span></p>
+                <p class="wrong-text">❌ Wrong: <span id="final-wrong"></span></p>
+            </div>
+            <button class="nav-btn show en-text" style="background: transparent; border: 2px solid var(--neon-purple); color: var(--neon-purple); width: 100%;" onclick="location.reload()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "1. Which of the following is most found in protein molecule?", o: ["Carbon", "Hydrogen", "Oxygen", "Nitrogen"], a: 0, r: "الكربون هو العنصر الأساسي الذي يشكل الهيكل البنائي لجميع الأحماض الأمينية والبروتينات." },
+            { q: "2. No of naturally occuring aminoacids is.", o: ["10", "20", "30", "40"], a: 1, r: "يوجد 20 حمض أميني قياسي تدخل في بناء البروتينات." },
+            { q: "3. All of the following are aliphatic amino acids except.", o: ["Glycine", "Alanine", "Proline", "Lysine"], a: 2, r: "البرولين يعتبر حمضاً إيمينياً (Imino acid) لاحتوائه على حلقة بيروليدين، وليس أليفاتياً خطياً كالبقية." },
+            { q: "4. One of the following is neutral amino acid.", o: ["Arginine", "Lysine", "Glutamine", "Valine"], a: 2, r: "الجلوتامين هو حمض أميني متعادل يحمل مجموعة أميد في سلسلته الجانبية." },
+            { q: "5. All of the following are hydroxy containing amino acids except.", o: ["Serine", "Threonine", "Valine", "Tyrosine"], a: 2, r: "الفالين حمض أميني أليفاتي لا يحتوي على مجموعة هيدروكسيل (-OH)." },
+            { q: "6. One of the following is optically non active amino acid", o: ["Valine", "Tyrosine", "Glycine", "Threonine"], a: 2, r: "الجلايسين هو الحمض الأميني الوحيد غير النشط ضوئياً لعدم احتوائه على ذرة كربون كيرالية." },
+            { q: "7. All of the following are polar amino acids except.", o: ["Serine", "Glutamate", "Arginine", "Alanine"], a: 3, r: "الألانين حمض أميني غير قطبي لاحتوائه على مجموعة ميثيل (CH3) كارهة للماء." },
+            { q: "8. All of the following are essential amino acids except.", o: ["Lysine", "Aspartate", "Tryptophan", "Hisitidine"], a: 1, r: "الأسبارتات (حمض الأسبارتيك) هو حمض أميني غير أساسي يمكن للجسم تصنيعه." },
+            { q: "9. Lysine.", o: ["Basic Only ketogenic", "Ketogenic glucogenic", "Acidic glucogenic", "Non essential"], a: 1, r: "حسب النموذج المرفق، اللايسين يُصنف هنا (Ketogenic glucogenic)، رغم أنه بيولوجياً يعتبر أساسياً للكيتون." },
+            { q: "10. All of the following are primary aminoacids except.", o: ["Cysteine", "Cystine", "Alanine", "Arginine"], a: 1, r: "السيستين (Cystine) هو ثنائي (Dimer) يتكون من جزيئي Cysteine مرتبطين برابطة ثنائية الكبريتيد، وليس حمضاً أمينياً أولياً مفرداً." },
+            { q: "11. Which of the following is precursor of T3 and T4.", o: ["GABA", "Dopa", "B-Alanine", "Di-iodotyrosine"], a: 3, r: "مركب ثنائي يودوتيروزين هو السلف المباشر لتصنيع هرمونات الغدة الدرقية T3 و T4." },
+            { q: "12. Zwitter ion are.", o: ["Basic", "Acidic", "Neutral", "Carry both +ve & -ve charges", "Both c and d"], a: 3, r: "أيون الزويتريون هو جزيء يحمل شحنة موجبة وسالبة في نفس الوقت مما يجعله متعادلاً كهربائياً بشكل كلي." },
+            { q: "13. The unit of peptides is.", o: ["Moiety", "Residue", "Polypeptide", "Both a and b"], a: 3, r: "الوحدة البنائية للأحماض الأمينية داخل الببتيد تسمى Residue أو Moiety." },
+            { q: "14. Lactic acid is buffered by.", o: ["L.Carnosine", "Glutathione", "Casenogin", "Dopa"], a: 0, r: "الكارنوزين يعمل كمنظم (Buffer) للأس الهيدروجيني في العضلات لمواجهة حمض اللاكتيك." },
+            { q: "15. N terminal of glutathione is", o: ["Glycine", "Cysteine", "Glutamate", "Aspartate"], a: 2, r: "الجلوتاثيون يتكون من جلوتامات-سيستين-جلايسين، والطرف N هو الجلوتامات." },
+            { q: "16. Which of the following is BLOOD iron carrier?", o: ["Haemoglobin", "Albumin", "Transferrin", "Globulin"], a: 2, r: "الترانسفيرين هو البروتين المسؤول عن نقل الحديد في مجرى الدم." },
+            { q: "17. Storage form of iron.", o: ["Transferrin", "Ferritin", "Myosin", "Actin"], a: 1, r: "الفيريتين هو البروتين المسؤول عن تخزين الحديد داخل الخلايا." },
+            { q: "18. Which of the following protien is found in bone.", o: ["Keratin", "Ossein", "Mucin", "Actin"], a: 1, r: "الأوسين (Ossein) هو المادة العضوية الأساسية (الكولاجين) الموجودة في نسيج العظام." },
+            { q: "19. Type of bonds between C terminal and N terminal is.", o: ["Covalent", "Disulphide bond", "Peptide", "Ionic", "Both a and c"], a: 4, r: "الرابطة بين الطرف الكربوكسيلي والأميني هي رابطة ببتيدية، وهي نوع من الروابط التساهمية القوية (Covalent)." },
+            { q: "20. Type of bond between nitrogen and carbonyl group.", o: ["Hydrogen bonds", "Covalent bond", "Peptide bond", "Disulphide bond"], a: 0, r: "حسب النموذج المرفق الإجابة أ (روابط هيدروجينية تلعب دوراً في البنية الثانوية بين هذه المجموعات)." },
+            { q: "21. All of the following are non covalent except", o: ["Hydrophobic interactions", "Disulphide bond", "Hydrogen bond", "Electrostatic bond"], a: 1, r: "الرابطة ثنائية الكبريتيد (Disulphide bond) هي رابطة تساهمية قوية بين ذرتي كبريت." },
+            { q: "22. Primary structure of proteins refers to.", o: ["Coiling and folding in form of specific structure", "Number and sequence of amino acids in a chain", "3D structure", "Alpha and Beta sheets"], a: 1, r: "البنية الأولية تحدد فقط عدد وتسلسل الأحماض الأمينية في السلسلة الببتيدية." },
+            { q: "23. Denaturation involves.", o: ["Peptide bonds", "Primary structure of protein", "Secondary structure", "Function", "Both c and d"], a: 4, r: "التمسخ يغير البنية الثانوية والثالثية ويفقد البروتين وظيفته، لكنه لا يكسر الروابط الببتيدية (البنية الأولية)." },
+            { q: "24. Tertiary structure of proteins involves EXCEPT:", o: ["Domains", "Globular", "Fibrous", "Beta sheets"], a: 3, r: "صفائح بيتا (Beta sheets) هي من خصائص البنية الثانوية للبروتين وليس البنية الثالثية." },
+            { q: "25. All of the following are simple proteins except", o: ["Histones", "Albumin", "Keratins", "Glycoprotein"], a: 3, r: "الجليكوبروتين هو بروتين مقترن (Conjugated) لاحتوائه على كربوهيدرات مرتبطة بالبروتين." },
+            { q: "26. Which of the following is sulphur highly containing protein.", o: ["Collagen", "Keratin", "Ossein", "Reticulin"], a: 1, r: "الكيراتين بروتين ليفي يتميز باحتوائه على نسبة عالية جداً من الحمض الأميني السيستين الغني بالكبريت." },
+            { q: "27. Casenogen is", o: ["Chromoprotein", "Phosphoprotein", "Glycoprotein", "Lipoprotein"], a: 1, r: "الكازينوجين (بروتين الحليب) هو فوسفوبروتين لاحتوائه على مجموعات فوسفات." },
+            { q: "28. X-ray is a chemical agent for protein denaturation", o: ["True", "False"], a: 1, r: "خطأ، لأن أشعة إكس تعتبر عاملاً فيزيائياً للتمسخ وليس كيميائياً." },
+            { q: "29. Increase viscosity of proteins is due to", o: ["Denaturation", "Isoelectric point", "Both", "None"], a: 0, r: "عملية التمسخ (Denaturation) تؤدي إلى فك طيات البروتين مما يزيد من لزوجته في المحلول." },
+            { q: "30. Separation of low molecular weight protein from high one is", o: ["Dialysis", "Cromotography", "Electrophoiesis", "Ultracentrifugation"], a: 0, r: "الفرز الغشائي (Dialysis) يستخدم غشاء شبه منفذ لفصل الجزيئات الصغيرة عن البروتينات الكبيرة." },
+            { q: "31. Example of basic essential amino acids", o: ["Arginine", "Histidine", "Lysine", "All of the above", "None of the above"], a: 3, r: "كل من الأرجينين والهيستيدين واللايسين هي أحماض أمينية قاعدية أساسية." },
+            { q: "32. Example of non-protein amino acid", o: ["Glycine", "Alanine", "Tryptophan", "All of the above", "None of the above"], a: 4, r: "جميع الخيارات المذكورة هي أحماض أمينية بروتينية قياسية، لذا لا شيء مما سبق صحيح." },
+            { q: "33. Example of non-protein amino acid", o: ["Alanine", "Citrulline", "Phenylalanine", "Leucine"], a: 1, r: "السيترولين حمض أميني يشارك في دورة اليوريا ولا يدخل في تركيب بروتينات الجسم." },
+            { q: "34. Glutathione is an example for", o: ["Amino acid", "Dipeptide", "Polypeptide", "Protein", "Tripeptide"], a: 4, r: "الجلوتاثيون يتكون من 3 أحماض أمينية (جلوتامات، سيستين، جلايسين) فهو ثلاثي الببتيد (Tripeptide)." },
+            { q: "35. The active group of glutathione is", o: ["Amino group", "Sulfhydryl group", "Carboxylic group", "Imino group", "Peptide linkage"], a: 1, r: "مجموعة السلفهيدريل (-SH) الموجودة في السيستين هي المجموعة النشطة في الجلوتاثيون والتي تعمل كمضاد أكسدة." },
+            { q: "36. The peptide bond is", o: ["Covalent bond", "Non-covalent bond", "Weak bond", "Responsible for secondary structure", "Between sulfhydryl groups"], a: 0, r: "الرابطة الببتيدية هي رابطة كيميائية تساهمية قوية (Covalent bond) تربط الأحماض الأمينية." },
+            { q: "37. First order of protein structure refers to", o: ["Bending of protein chain", "Number and sequence of amino acids", "Three dimensional structure", "Site of disulfide bonds"], a: 1, r: "البنية الأولية تشير إلى التسلسل الخطي للأحماض الأمينية وأنواعها وأعدادها." },
+            { q: "38. Second order of protein structure refers to", o: ["Number and sequence", "Three dimensional structure", "More than one monomer", "Bending of protein molecule", "Dependence on covalent bonds"], a: 3, r: "البنية الثانوية تشير إلى الانثناءات (Bending/Folding) الموضعية مثل حلزون ألفا وصفيحة بيتا." },
+            { q: "39. Third structure of protein structure refers to", o: ["Number and sequence", "Three dimensional structure", "More than one monomer", "Bending of protein molecule", "Dependence on covalent bonds"], a: 1, r: "البنية الثالثية تصف الشكل الهندسي الكلي ثلاثي الأبعاد للبروتين." },
+            { q: "40. Fourth structure of protein structure refers to", o: ["Proteins formed of more than one monomer", "Myoglobin is an example", "Depends on covalent bonds", "None of the above", "All of the above"], a: 0, r: "البنية الرابعية تحدث فقط عندما يتكون البروتين من أكثر من سلسلة ببتيدية (Monomers/Subunits) مثل الهيموجلوبين." },
+            { q: "41. Covalent bond is", o: ["A weak bond", "A true chemical bond", "A hydrogen bond", "Responsible for secondary structure"], a: 1, r: "الرابطة التساهمية تعتبر رابطة كيميائية حقيقية وقوية تشارك فيها الإلكترونات." },
+            { q: "42. Example of essential aromatic amino acids", o: ["Threonine", "Alanine", "Phenyl alanine", "Glycine", "Cysteine"], a: 2, r: "الفينيل ألانين هو الحمض الأميني العطري الأساسي الوحيد بين الخيارات." },
+            { q: "43. Protein of high biological value", o: ["Contains essential amino acids", "Is poor in essential amino acids", "Is of plant source", "Contains amino acid glycine", "Is a basic protein"], a: 0, r: "البروتينات ذات القيمة الحيوية العالية (كاللحوم والبيض) تحتوي على جميع الأحماض الأمينية الأساسية التي يحتاجها الجسم." },
+            { q: "44. Albumin is", o: ["Insoluble in water", "Heat coagulable protein", "A plant protein", "A protein of low biological value"], a: 1, r: "الألبومين من البروتينات التي تتجلط وتتخثر عند تعرضها للحرارة (Heat coagulable)." },
+            { q: "45. Globulin is", o: ["A basic protein", "A protein of low molecular weight", "Heat coagulable protein", "Easily soluble in water"], a: 2, r: "الجلوبيولين أيضاً مثل الألبومين يتجلط بالحرارة." },
+            { q: "46. Keratin is", o: ["Protein of tendons", "Rich in sulfur", "Poor in cysteine", "Conjugated protein"], a: 1, r: "الكيراتين بروتين صلب موجود في الشعر والأظافر ويتميز بكونه غنياً بالكبريت (من السيستين)." },
+            { q: "47. Collagen contains high percentage of", o: ["Glycine", "Tryptophan", "Phenyl alanine", "Serine", "Valine"], a: 0, r: "الكولاجين يتميز بأن حوالي ثلث أحماضه الأمينية عبارة عن جلايسين (Glycine)." },
+            { q: "48. Caseinogen is a", o: ["Simple protein", "Derived protein", "Phosphoprotein", "Rich in sulfur containing amino acids"], a: 2, r: "الكازينوجين (في الحليب) هو بروتين مقترن بالفسفور (Phosphoprotein)." },
+            { q: "49. On electrophoresis for plasma proteins using buffer of pH 8.6", o: ["The proteins are neutral", "The proteins carry negative charge", "The proteins carry positive charge", "The proteins are easily precipitated"], a: 1, r: "عند درجة حموضة قاعدية (8.6)، تعمل البروتينات كأحماض وتفقد بروتونات لتحمل شحنة سالبة وتتجه للأنود." },
+            { q: "50. Albumins are separated by", o: ["1/2 saturated ammonium sulfate", "Full saturated ammonium sulfate", "20% saturated ammonium sulfate", "60% saturated ammonium sulfate"], a: 1, r: "الألبومين يحتاج لتركيز عالي جداً من الأملاح ليترسب، لذلك يُفصل بالتشبع الكامل بكبريتات الأمونيوم." },
+            { q: "51. Albumins and globulins are defined as.", o: ["Derived protein", "Conjugated protein", "Fibrous protein", "Globular protein", "Lipoprotein"], a: 3, r: "الألبومين والجلوبيولين هما من أمثلة البروتينات الكروية (Globular) الذائبة." },
+            { q: "52. Plasma proteins are separated by", o: ["Dialysis", "Electrophoresis", "Filtration", "Alcohol precipitation"], a: 1, r: "التفريد الكهربائي (Electrophoresis) هو التقنية المعيارية لفصل بروتينات البلازما بناءً على شحنتها وحجمها." },
+            { q: "53. Example of essential sulphur containing amino acids", o: ["Lysine", "Cysteine", "Cystine", "Alanine", "Methionine"], a: 4, r: "الميثيونين هو الحمض الأميني الأساسي الوحيد الذي يحتوي على كبريت (السيستين غير أساسي)." },
+            { q: "54. The bonds present in the primary structure of protein are", o: ["Peptide bonds", "Hydrogen bonds", "Disulfide bonds", "All of these"], a: 0, r: "البنية الأولية تعتمد حصرياً على الروابط الببتيدية التساهمية التي تربط الأحماض الأمينية." },
+            { q: "55. A protein rich in proline and hydroxy proline is", o: ["Globin", "Collagen", "Casein", "Histone"], a: 1, r: "الكولاجين غني جداً بالبرولين والهيدروكسي برولين التي تمنحه الصلابة المميزة لتركيبه الحلزوني." },
+            { q: "56. The buffering property of proteins is due to the presence of", o: ["Acidic and basic groups", "Hydrogen bonds", "Indole groups", "Hyrophobic bonds"], a: 0, r: "وجود المجموعات الحمضية (الكربوكسيل) والقاعدية (الأمين) يجعل البروتين قادراً على العمل كمنظم (Buffer) للأس الهيدروجيني." },
+            { q: "57. Arginine, lysine and ornithine are", o: ["Obtained by hydrolysis of proteins", "Essential amino acids", "Basic amino acids", "Derived from butyric acid"], a: 2, r: "هذه الأحماض الثلاثة تتميز باحتوائها على مجموعات قاعدية إضافية في سلاسلها الجانبية." },
+            { q: "58. Glycine Is characterized by", o: ["Absence of an asymmeteric carbon", "Absence of optical activity", "The shortest amino acid", "All of these"], a: 3, r: "الجلايسين هو أبسط حمض أميني، ليس له كربون كيرالي، ولا نشاط ضوئي، وسلسلته الجانبية هي ذرة هيدروجين فقط." },
+            { q: "59. Ornithine is", o: ["A basic amino acid", "An essential amino acid", "Present in protein structure", "All of these"], a: 0, r: "الأورنيثين حمض قاعدي، ولكنه غير أساسي ولا يدخل في تركيب بروتينات الجسم بل في دورة اليوريا." },
+            { q: "60. Albumin, globulin and casein are", o: ["Milk proteins", "Plasma proteins", "Egg proteins", "Meat proteins"], a: 0, r: "الحليب يحتوي على بروتين الكازين، بالإضافة إلى ألبومين الحليب (Lactalbumin) وجلوبيولين الحليب." },
+            { q: "61. Cysteine, cystine and methionine are", o: ["Essential amino acids", "Present in protein structure", "Acidic amino acids", "All of these"], a: 1, r: "جميعها أحماض أمينية كبريتية تدخل في تركيب البروتينات، ولكن الميثيونين فقط هو الأساسي." },
+            { q: "62. A protein that gives positive biuret test is", o: ["Albumin", "Globulin", "Casein", "All of these"], a: 3, r: "اختبار بيوريت يُكشف به عن وجود الروابط الببتيدية، لذلك سيعطي نتيجة إيجابية مع كل البروتينات المذكورة." },
+            { q: "63. A basic amino acid present in protein structure is", o: ["Histidine", "Citruline", "Ornithine", "All of these"], a: 0, r: "الهيستيدين حمض أميني قاعدي يدخل في البروتينات، أما السيترولين والأورنيثين فهما لا يدخلان في تركيب البروتينات." },
+            { q: "64. Example of amino acid containing guanido group", o: ["Arginine", "Lysine", "Histidine", "Valine", "Leucine"], a: 0, r: "الأرجينين يتميز باحتوائه على مجموعة الجوانيدين (Guanidino group) في سلسلته الجانبية، مما يجعله شديد القاعدية." },
+            { q: "65. Keratin is", o: ["A scleroprotein", "Rich in cystine", "A simple protein", "All of these"], a: 3, r: "الكيراتين بروتين ليفي صلب (Scleroprotein) بسيط، ويتميز بارتفاع نسبة السيستين والروابط ثنائية الكبريتيد فيه." },
+            { q: "66. A fibrous protein is", o: ["Albumin", "Myosin", "Casein", "Globulin"], a: 1, r: "الميوسين هو بروتين ليفي يتواجد في العضلات ويساعد في الانقباض العضلي." },
+            { q: "67. Glycine is", o: ["A non-optically active amino acid", "Present in structure of glutathione", "A neutral amino acid", "All of these"], a: 3, r: "الجلايسين متعادل، غير نشط ضوئياً، ويمثل الطرف الكربوكسيلي في جزيء الجلوتاثيون." },
+            { q: "68. Proteins associated with nucleic acid in nucleo-protein are", o: ["Albumin", "Globulin", "Keratin", "Histones"], a: 3, r: "الهستونات هي بروتينات قاعدية ترتبط بقوة مع الأحماض النووية سالبة الشحنة لتكوين النيوكليوبروتين." },
+            { q: "69. In proteins, the alpha-helix and Beta-pleated sheet are examples of", o: ["Primary structure", "Secondary structure", "Tertiary structure", "Quaternary structure"], a: 1, r: "هذه الأنماط تمثل التكوين المكاني الموضعي (البنية الثانوية) الناتجة عن الروابط الهيدروجينية." },
+            { q: "70. A tetra peptide contains the following number of preptide bonds", o: ["Two", "Three", "Four", "Five"], a: 1, r: "الببتيد الرباعي يتكون من 4 أحماض أمينية، وترتبط ببعضها عن طريق 3 روابط ببتيدية." },
+            { q: "71. A globular protein is", o: ["Actin", "Myosin", "Collagen", "Albumin"], a: 3, r: "الألبومين هو بروتين بلازما كروي (Globular) قابل للذوبان في الماء، عكس الكولاجين والميوسين والأكتين." },
+            { q: "72. Example of branched amino acid", o: ["Valine", "Leucine", "Isoleucine", "All of the above", "None of the above"], a: 3, r: "الأحماض الأمينية متفرعة السلسلة (BCAAs) تشمل الفالين والليوسين والإيزوليوسين." },
+            { q: "73. Example of hydroxy containing amino acids", o: ["Serine", "Phenyl alanine", "Tryptophan", "Proline", "Glutamic acid"], a: 0, r: "السيرين يحتوي على مجموعة هيدروكسيل (-OH) كحولية في سلسلته الجانبية." },
+            { q: "74. Example of amino acids containing imino group", o: ["Glycine", "Valine", "Proline", "Lysine", "Phenyl alanine"], a: 2, r: "البرولين هو الحمض الوحيد الذي يحتوي على حلقة بيروليدين تتضمن مجموعة إيمينو (Imino) بدلاً من الأمينو العادية." },
+            { q: "75. Example of an amino acid containing sulfhydryl group", o: ["Alanine", "Cysteine", "Proline", "Tryptophan", "Lysine"], a: 1, r: "السيستين يتميز بوجود مجموعة السلفهيدريل (-SH) الحرة القادرة على تكوين روابط ثنائية الكبريتيد." },
+            { q: "76. Example of non-optically active amino acid", o: ["Proline", "Alanine", "Glycine", "Phenylalanine"], a: 2, r: "الجلايسين هو الوحيد غير النشط ضوئياً. (ملاحظة: نموذج الإجابة المرفق ذكر الإجابة D خطأً، الإجابة الصحيحة علمياً هي الجلايسين C)." },
+            { q: "77. Which of the following statements about amino acids is not true?", o: ["Amino acids are ampholytes", "Amino acids are linked through peptide bonds", "Amino acids are not Crystalline compounds", "Leucine is a purely ketogenic amino acid"], a: 2, r: "الأحماض الأمينية هي في الواقع مركبات بلورية صلبة في درجة حرارة الغرفة، لذا العبارة (C) غير صحيحة." },
+            { q: "78. The amino acids found in biological proteins are of.", o: ["D-Configuration and dextrorotatory", "L-Configuration and levorotatory", "D-Configuration and levo/dextrorotatory", "L-Configuration and dextro/laevoratatory"], a: 3, r: "أحماض الجسم من النوع L، ولكنها تختلف في التدوير الضوئي، فبعضها يميني (Dextro) والآخر يساري (Laevo)." },
+            { q: "79. Which amino acid doesn't occur in proteins of biological system?", o: ["Ornithine", "Arginine", "Cystine", "Histidine"], a: 0, r: "الأورنيثين حمض أميني يشارك في دورة اليوريا فقط ولا يستخدم في بناء البروتينات." },
+            { q: "80. All amino adds are optically active except.", o: ["Proline", "Glycine", "Tryptophan", "Threonine"], a: 1, r: "الجلايسين لا يحتوي على كربون كيرالي، فهو متماثل وغير نشط ضوئياً." },
+            { q: "81. Which of the following amino acids possesses an imino group?", o: ["Tryptophan", "Hydroxylysine", "Tyrosine", "Proline"], a: 3, r: "البرولين يتميز بحلقة إيمينو تجعله صلباً ويؤدي لانثناء سلسلة البروتين." },
+            { q: "82. An amino acid which contains a disulphide bond is:", o: ["Lysine", "Methionine", "Homocysteine", "Cystine"], a: 3, r: "السيستين (Cystine) ناتج عن أكسدة جزيئي Cysteine برابطة ثنائية الكبريتيد." },
+            { q: "83. Chemically keratin is a.", o: ["Globulin", "Fibrous protein", "Tripeptide", "Conjugated protein"], a: 1, r: "الكيراتين بروتين ليفي (Fibrous) غير ذائب في الماء ويشكل الهيكل الأساسي للشعر والجلد." },
+            { q: "84. The most abundant protein in the human body is.", o: ["Collagen", "Keratin", "Myosin", "Albumin"], a: 0, r: "الكولاجين هو البروتين الأكثر وفرة في الثدييات ويمثل حوالي 25-35% من محتوى البروتين الكلي بالجسم." },
+            { q: "85. Denaturation of proteins is often characterised by.", o: ["Loss of biological activity", "Always being irreversible", "Being greater the lower the temperature", "Changes in primary structure"], a: 0, r: "عملية التمسخ (Denaturation) تؤدي لفقدان الوظيفة الحيوية للبروتين نتيجة تغير شكله الفراغي." },
+            { q: "86. Decarboxylation of amino acids will result in the formation of:", o: ["Amines", "Imino acids", "Basic amino acids", "Amides"], a: 0, r: "إزالة مجموعة الكربوكسيل من الحمض الأميني تحوله إلى أمين أولي (Amine)." },
+            { q: "87. The number of amino acid residues in one spiral of alpha-helix of proteins is usually.", o: ["2.6", "3.6", "4.6", "5.6"], a: 1, r: "كل لفة كاملة في حلزون ألفا تحتوي على حوالي 3.6 حمض أميني وتستقر بالروابط الهيدروجينية." },
+            { q: "88. Which of the following is not found in proteins?", o: ["Citrulline", "Arginine", "Methionine", "Cysteine"], a: 0, r: "السيترولين حمض أميني وسط في دورة اليوريا ولا يملك كودوناً ليتم إدراجه في البروتينات." },
+            { q: "89. The only amino acid containing indole ring is.", o: ["Tryptophan", "Tyrosine", "Histidine", "Phenylalanine"], a: 0, r: "التريبتوفان هو الحمض الأميني الوحيد الذي يحتوي على حلقة الإندول العطرية الضخمة." },
+            { q: "90. With the exception of glycine, all amino acids found in proteins are.", o: ["Optically active", "Dextrorotatory", "Of L-configuration", "Levorotatory"], a: 0, r: "جميع الأحماض الأمينية في البروتينات (باستثناء الجلايسين) تمتلك كربون كيرالي وتكون نشطة ضوئياً (تكسر الضوء المستقطب)." },
+            { q: "91. Essential amino acids are so named because", o: ["They are essential for life process", "Cannot be synthesized in the body", "Deficiency leads to genetic diseases", "Important in cell growth"], a: 1, r: "تسمى بالأحماض الأساسية لأن الجسم يفتقر للإنزيمات اللازمة لتصنيعها، فيجب الحصول عليها من النظام الغذائي." },
+            { q: "92. Casein is a.", o: ["Lipoprotein", "Mucoprotein", "Phosphoprotein", "Chromoprotein"], a: 2, r: "الكازين هو بروتين الحليب الرئيسي ويرتبط عضوياً بمجموعات فوسفات، مما يجعله فوسفوبروتين." },
+            { q: "93. Which is a basic amino acid?", o: ["Lysine", "Tyrosine", "Glycine", "Leucine"], a: 0, r: "اللايسين هو حمض أميني قاعدي (يحمل شحنة موجبة) لاحتوائه على مجموعة أمين إضافية." },
+            { q: "94. An amino acid containing imidazole group Is.", o: ["Isoleucine", "Arginine", "Proline", "Histidine"], a: 3, r: "الهيستيدين يحتوي على حلقة إيميدازول، وهي تلعب دوراً هاماً في تنظيم الأس الهيدروجيني في الدم." },
+            { q: "95. The major linkage between amino acids in protein is the", o: ["Hydrogen bond", "Ionic bond", "Sulphide bond", "Peptide bond"], a: 3, r: "الرابطة الببتيدية (رابطة أميدية) هي العمود الفقري والأساس الذي ترتبط به جميع الأحماض الأمينية معاً." },
+            { q: "96. An example of a chromoprotein is.", o: ["Casein", "Hemoglobin", "Peptone", "Collagen"], a: 1, r: "الكروموبروتين (البروتين الملون) يحتوي على مجموعة ملونة مقترنة، مثل مجموعة الهيم الحمراء في الهيموجلوبين." },
+            { q: "97. When a peptide bond is formed there is removal of,", o: ["CO2", "H2O", "NH3", "H"], a: 1, r: "تتكون الرابطة الببتيدية عبر تفاعل تكثيف يُنزع فيه جزيء ماء (H2O) بين مجموعة الكربوكسيل والأمين." },
+            { q: "98. Aspartic acid is a (an),", o: ["Monoamino dicarboxylic acid", "Diamino monocarboxylic acid", "Aromatic amino acid", "Imino acid"], a: 0, r: "حمض الأسبارتيك حمض أميني حمضي يمتلك مجموعة أمين واحدة ومجموعتي كربوكسيل (Dicarboxylic)." },
+            { q: "99. All amino acids are optically active except.", o: ["Glycine", "Serine", "Threonine", "Tryptophan"], a: 0, r: "السؤال مكرر للأهمية: الجلايسين غير نشط ضوئياً." },
+            { q: "100. Amino acid which synthesizes many hormones is:", o: ["Valine", "Phenylalanine", "Alanine", "Histidine"], a: 1, r: "الفينيل ألانين يتحول إلى تيروزين، والذي يُستخدم بدوره لتصنيع هرمونات هامة مثل الدوبامين والإبينفرين والنورإبينفرين وهرمونات الغدة الدرقية." }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const rationaleContainer = document.getElementById('rationale-container');
+        const rationaleText = document.getElementById('rationale-text');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const questionTracker = document.getElementById('question-tracker');
+        const correctTracker = document.getElementById('correct-tracker');
+        const wrongTracker = document.getElementById('wrong-tracker');
+        const quizContent = document.getElementById('quiz-content');
+        const resultContainer = document.getElementById('result-container');
+        const finalScore = document.getElementById('final-score');
+        const finalCorrect = document.getElementById('final-correct');
+        const finalWrong = document.getElementById('final-wrong');
+
+        function updateStats() {
+            let correct = 0;
+            let wrong = 0;
+            
+            for(let i = 0; i < questions.length; i++) {
+                if(userAnswers[i] !== null) {
+                    if(userAnswers[i] === questions[i].a) {
+                        correct++;
+                    } else {
+                        wrong++;
+                    }
+                }
+            }
+            
+            correctTracker.textContent = `✅ Correct: ${correct}`;
+            wrongTracker.textContent = `❌ Wrong: ${wrong}`;
+            return { correct, wrong };
+        }
+
+        function loadQuestion() {
+            rationaleContainer.classList.remove('show');
+            optionsContainer.innerHTML = '';
+            
+            questionTracker.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            updateStats();
+            
+            const q = questions[currentQuestion];
+            questionText.textContent = q.q;
+
+            if(currentQuestion > 0) {
+                prevBtn.classList.add('show');
+            } else {
+                prevBtn.classList.remove('show');
+            }
+
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = 'Show Results ➔';
+            } else {
+                nextBtn.textContent = 'Next Question ➔';
+            }
+
+            q.o.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                
+                if(userAnswers[currentQuestion] !== null) {
+                    btn.disabled = true;
+                    if(index === q.a) {
+                        btn.classList.add('correct');
+                    } else if (index === userAnswers[currentQuestion]) {
+                        btn.classList.add('wrong');
+                    }
+                } else {
+                    btn.onclick = () => checkAnswer(index, btn);
+                }
+                
+                optionsContainer.appendChild(btn);
+            });
+
+            if(userAnswers[currentQuestion] !== null) {
+                rationaleText.textContent = q.r;
+                rationaleContainer.classList.add('show');
+                nextBtn.classList.add('show');
+            } else {
+                nextBtn.classList.remove('show');
+            }
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            userAnswers[currentQuestion] = selectedIndex;
+            
+            const q = questions[currentQuestion];
+            const allBtns = optionsContainer.querySelectorAll('.option-btn');
+            
+            allBtns.forEach(btn => btn.disabled = true);
+
+            if (selectedIndex === q.a) {
+                btnElement.classList.add('correct');
+            } else {
+                btnElement.classList.add('wrong');
+                allBtns[q.a].classList.add('correct');
+            }
+
+            updateStats();
+            rationaleText.textContent = q.r;
+            rationaleContainer.classList.add('show');
+            nextBtn.classList.add('show');
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizContent.style.display = 'none';
+            resultContainer.classList.add('show');
+            
+            const stats = updateStats();
+            finalScore.textContent = stats.correct;
+            finalCorrect.textContent = stats.correct;
+            finalWrong.textContent = stats.wrong;
+        }
+
+        // تشغيل التطبيق
+        loadQuestion();
+    </script>
+</body>
+</html>

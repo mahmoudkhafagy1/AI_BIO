@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Tech Academy | كلية الذكاء الاصطناعي - القسم الحيوي</title>
+    <meta name="description" content="منصة تعليمية متخصصة لطلاب كلية الذكاء الاصطناعي - القسم الحيوي. بنوك أسئلة وكويزات تفاعلية.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="bg-grid"></div>
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-inner">
+        <div class="nav-logo">
+            <div class="logo-icon">🧬</div>
+            <div class="logo-text">
+                <span class="logo-main">Maze Tech</span>
+                <span class="logo-sub">Academy</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#subjects" class="nav-link">المواد</a>
+            <a href="#about" class="nav-link">عن المنصة</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-badge">🎓 كلية الذكاء الاصطناعي · القسم الحيوي</div>
+    <h1 class="hero-title">
+        منصة التعلم<br>
+        <span class="gradient-text">التفاعلية</span>
+    </h1>
+    <p class="hero-desc">بنوك أسئلة شاملة وكويزات تفاعلية لجميع مواد القسم الحيوي. تدرّب، اختبر نفسك، وتفوّق.</p>
+    <div class="hero-stats">
+        <div class="stat-item">
+            <span class="stat-num" id="total-q">250+</span>
+            <span class="stat-label">سؤال</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-num">3</span>
+            <span class="stat-label">كويز</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-num">1</span>
+            <span class="stat-label">مادة</span>
+        </div>
+    </div>
+    <a href="#subjects" class="cta-btn">
+        <span>ابدأ الدراسة الآن</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+</section>
+
+<!-- Subjects Section -->
+<section class="subjects-section" id="subjects">
+    <div class="section-header">
+        <div class="section-tag">📚 المواد الدراسية</div>
+        <h2 class="section-title">اختر المادة</h2>
+        <p class="section-desc">كل مادة تحتوي على بنك أسئلة مقسّم إلى كويزات متخصصة</p>
+    </div>
+
+    <div class="subjects-grid">
+        <!-- Bio Chemistry Card -->
+        <div class="subject-card active-subject" onclick="openSubject('biochem')">
+            <div class="card-glow"></div>
+            <div class="card-header">
+                <div class="subject-icon">⚗️</div>
+                <div class="subject-badge">متاح</div>
+            </div>
+            <h3 class="subject-name">Biochemistry</h3>
+            <p class="subject-ar">الكيمياء الحيوية</p>
+            <p class="subject-desc">كربوهيدرات، بروتينات، أحماض أمينية، ليبيدات، وإنزيمات</p>
+            <div class="subject-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📝</span>
+                    <span>250 سؤال</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🎯</span>
+                    <span>3 كويزات</span>
+                </div>
+            </div>
+            <div class="quiz-list">
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('carbohydrates')">
+                    <span class="pill-icon">🍞</span>
+                    <span>أسئلة الكربوهيدرات</span>
+                    <span class="pill-count">100 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('amino-acids')">
+                    <span class="pill-icon">🧪</span>
+                    <span>أسئلة الأحماض الأمينية</span>
+                    <span class="pill-count">100 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('dna-rna')">
+                    <span class="pill-icon">🧬</span>
+                    <span>أسئلة DNA & RNA</span>
+                    <span class="pill-count">50 سؤال</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="open-btn" onclick="event.stopPropagation(); openSubject('biochem')">
+                    فتح المادة
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Coming Soon Cards -->
+        <div class="subject-card coming-soon">
+            <div class="card-header">
+                <div class="subject-icon">📐</div>
+                <div class="subject-badge soon-badge">قريباً</div>
+            </div>
+            <h3 class="subject-name">Linear Algebra</h3>
+            <p class="subject-ar">الجبر الخطي</p>
+            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+        </div>
+
+        <div class="subject-card coming-soon">
+            <div class="card-header">
+                <div class="subject-icon">💻</div>
+                <div class="subject-badge soon-badge">قريباً</div>
+            </div>
+            <h3 class="subject-name">OOP</h3>
+            <p class="subject-ar">البرمجة كائنية التوجه</p>
+            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+        </div>
+
+        <div class="subject-card coming-soon">
+            <div class="card-header">
+                <div class="subject-icon">🧬</div>
+                <div class="subject-badge soon-badge">قريباً</div>
+            </div>
+            <h3 class="subject-name">Genomics</h3>
+            <p class="subject-ar">علم الجينوم</p>
+            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+        </div>
+
+        <div class="subject-card coming-soon">
+            <div class="card-header">
+                <div class="subject-icon">🔬</div>
+                <div class="subject-badge soon-badge">قريباً</div>
+            </div>
+            <h3 class="subject-name">Molecular & Cell Biology</h3>
+            <p class="subject-ar">البيولوجيا الجزيئية والخلوية</p>
+            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+        </div>
+
+        <div class="subject-card coming-soon">
+            <div class="card-header">
+                <div class="subject-icon">📊</div>
+                <div class="subject-badge soon-badge">قريباً</div>
+            </div>
+            <h3 class="subject-name">Probability & Statistics</h3>
+            <p class="subject-ar">الاحتمالات والإحصاء</p>
+            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+        </div>
+
+        <div class="subject-card coming-soon">
+            <div class="card-header">
+                <div class="subject-icon">🔌</div>
+                <div class="subject-badge soon-badge">قريباً</div>
+            </div>
+            <h3 class="subject-name">Electronics</h3>
+            <p class="subject-ar">الإلكترونيات</p>
+            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section" id="about">
+    <div class="about-card">
+        <div class="about-icon">🚀</div>
+        <h2>منصة مصممة للتميز</h2>
+        <p>تم تصميم هذه المنصة خصيصاً لطلاب كلية الذكاء الاصطناعي - القسم الحيوي لمساعدتهم على المراجعة والتدريب على امتحانات المادة.</p>
+        <div class="about-features">
+            <div class="feature">✅ شرح تفصيلي لكل إجابة</div>
+            <div class="feature">✅ تتبع النتائج الفورية</div>
+            <div class="feature">✅ التنقل بين الأسئلة</div>
+            <div class="feature">✅ تصميم يدعم العربية والإنجليزية</div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>🧬 Maze Tech Academy · كلية الذكاء الاصطناعي - القسم الحيوي</p>
+</footer>
+
+<!-- Quiz Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+    <div class="modal-container" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">✕ إغلاق</button>
+        <iframe id="quiz-frame" src="" frameborder="0"></iframe>
+    </div>
+</div>
+
+<script>
+    const quizMap = {
+        'carbohydrates': 'exam.html',
+        'amino-acids':   'Amino.html',
+        'dna-rna':       'BIO.html'
+    };
+
+    function openQuiz(key) {
+        const src = quizMap[key];
+        if (!src) return;
+        document.getElementById('quiz-frame').src = src;
+        document.getElementById('modal-overlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function openSubject(id) {
+        if (id === 'biochem') {
+            document.getElementById('subjects').scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('modal-overlay').classList.remove('active');
+        document.getElementById('quiz-frame').src = '';
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

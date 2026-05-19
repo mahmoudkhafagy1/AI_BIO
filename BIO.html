@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Tech - Molecular Biology Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+        :root {
+            --dark-bg: #0b0f19;
+            --dark-card: #1a2235;
+            --neon-green: #00ffcc;
+            --neon-blue: #0088ff;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --correct-bg: rgba(34, 197, 94, 0.2);
+            --correct-border: #22c55e;
+            --wrong-bg: rgba(239, 68, 68, 0.2);
+            --wrong-border: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .ar-text {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .en-text {
+            direction: ltr;
+            text-align: left;
+        }
+
+        .quiz-container {
+            background-color: var(--dark-card);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.2);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .counters {
+            display: flex;
+            gap: 15px;
+            font-weight: bold;
+        }
+
+        .correct-text { color: var(--correct-border); }
+        .wrong-text { color: var(--wrong-border); }
+
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 136, 255, 0.3);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-btn.correct {
+            border-color: var(--correct-border);
+            background-color: var(--correct-bg);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+            opacity: 1;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--wrong-border);
+            background-color: var(--wrong-bg);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            opacity: 1;
+        }
+
+        .rationale {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(0, 255, 204, 0.1);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .rationale.show {
+            display: block;
+        }
+
+        .rationale-title {
+            color: var(--neon-green);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .nav-btn.show {
+            display: block;
+        }
+
+        #next-btn {
+            background-color: var(--neon-blue);
+            color: var(--text-light);
+        }
+
+        #next-btn:hover {
+            background-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.6);
+        }
+
+        #prev-btn {
+            background-color: #334155;
+            color: var(--text-light);
+        }
+
+        #prev-btn:hover {
+            background-color: #475569;
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-container">
+        <div class="header-line"></div>
+        <h1>Maze Tech - Molecular Biology</h1>
+        
+        <div id="quiz-content">
+            <div class="stats en-text">
+                <span id="question-tracker">Question 1 of 50</span>
+                <div class="counters">
+                    <span id="correct-tracker" class="correct-text">✅ Correct: 0</span>
+                    <span id="wrong-tracker" class="wrong-text">❌ Wrong: 0</span>
+                </div>
+            </div>
+
+            <div class="question en-text" id="question-text"></div>
+            
+            <div class="options en-text" id="options-container"></div>
+
+            <div class="rationale ar-text" id="rationale-container">
+                <div class="rationale-title">💡 الشرح:</div>
+                <div id="rationale-text"></div>
+            </div>
+
+            <div class="nav-buttons en-text">
+                <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">⬅️ Previous</button>
+                <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Next Question ➔</button>
+            </div>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <h2 style="font-size: 32px; margin-bottom: 20px; color: white;">Exam Completed!</h2>
+            <div style="font-size: 24px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                <p>Final Score: <span id="final-score" style="color: var(--neon-blue); font-weight: bold;"></span> / 50</p>
+                <p class="correct-text">✅ Correct: <span id="final-correct"></span></p>
+                <p class="wrong-text">❌ Wrong: <span id="final-wrong"></span></p>
+            </div>
+            <button class="nav-btn show en-text" style="background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); width: 100%;" onclick="location.reload()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        // مصفوفة الأسئلة - Molecular & Cell Biology
+        const questions = [
+            // --- MCQs ---
+            { q: "1. Which enzyme relieves stress on the DNA molecule during replication?", o: ["Helicase", "DNA ligase", "Methylase", "Topoisomerase"], a: 3, r: "إنزيم التوبوأيزوميراز (Topoisomerase) يقلل من الضغط الميكانيكي (Supercoiling) الناتج عن فك شريطي الـ DNA." },
+            { q: "2. The first scientist who concluded that cells must arise from preexisting cells:", o: ["Rudolf Virchow", "Matthias Schleiden", "Erwin Chargaff", "James Watson"], a: 0, r: "فيرشو (Virchow) هو من أضاف المبدأ القائل بأن الخلية لا تنشأ إلا من خلية سابقة لها." },
+            { q: "3. The length of a DNA molecule with 3000 bp equals:", o: ["3 x 10^4 nm", "1.02 nm", "1.02 um", "1020 um"], a: 2, r: "المسافة بين كل قاعدتين هي 0.34 نانومتر، إذن 3000 × 0.34 = 1020 نانومتر، وهو ما يعادل 1.02 ميكرومتر (um)." },
+            { q: "4. Purines include which of the following bases?", o: ["A and G", "T and C", "G and C", "A and T"], a: 0, r: "البيورينات (Purines) هي القواعد ذات الحلقتين وتشمل الأدينين (A) والجوانين (G)." },
+            { q: "5. The component that is most critical to the function of a plasmid as a vector:", o: ["EcoRI site", "Ampicillin resistance", "Origin of replication", "Ligase"], a: 2, r: "منشأ التضاعف (Ori) هو الجزء الأساسي الذي يسمح للبلازميد بالتضاعف ذاتياً داخل الخلية." },
+            { q: "6. During replication, a DNA strand with the bases CTAGGT produces a strand with:", o: ["TCGAAC", "AGCTTG", "GATCCA", "GAUCCA"], a: 2, r: "حسب قاعدة تكامل القواعد في الـ DNA: C يقابله G، و T يقابله A، و A يقابله T، و G يقابله C." },
+            { q: "7. One microgram (ug) of DNA equals _________ nanogram (ng).", o: ["10", "100", "1000", "10^6"], a: 2, r: "الميكروغرام الواحد يحتوي على 1000 نانوغرام." },
+            { q: "8. Which choice best describes the DNA (chromosome) of a prokaryote?", o: ["Single circular", "Single linear", "Multiple circular", "Multiple linear"], a: 0, r: "الكروموسوم البكتيري (بدائيات النواة) عبارة عن جزيء DNA دائري مفرد (Single circular)." },
+            { q: "9. The first level of DNA compaction is called:", o: ["Solenoid", "Nucleosome", "Helical fiber", "Chromosome"], a: 1, r: "النيوكليوسوم (Nucleosome) هو المستوى الأول لتعبئة الـ DNA عن طريق لفه حول بروتينات الهيستون." },
+            { q: "10. The number of amino acids given by this sequence AACATGCCUGCGUUUGA:", o: ["3", "4", "5", "6"], a: 2, r: "نبدأ العد من كودون البدء (AUG)، وكل 3 قواعد تعطي حمض أميني واحد حتى نصل لكودون الوقف (UGA)." },
+            { q: "11. Enzymes used to 'charge' the tRNA with the proper amino acid:", o: ["Methylase", "Reverse transcriptase", "Aminoacyl tRNA synthetases", "Primase"], a: 2, r: "هذا الإنزيم هو المسؤول عن ربط الحمض الأميني الصحيح بجزيء الـ tRNA الخاص به." },
+            { q: "12. In PCR, at what temperature does denaturation of DNA double helix take place?", o: ["55 °C", "94 °C", "72 °C", "60 °C"], a: 1, r: "درجة الحرارة 94-95 درجة مئوية ضرورية لكسر الروابط الهيدروجينية وفصل شريطي الـ DNA." },
+            { q: "13. How many DNA duplexes are obtained from one DNA duplex after 4 cycles of PCR?", o: ["8", "16", "32", "64"], a: 1, r: "يتم الحساب بالمعادلة (2^n) حيث n عدد الدورات. إذن 2 أس 4 يساوي 16." },
+            { q: "14. Bacteria protect themselves from the action of their own restriction enzymes by:", o: ["Phosphorylation", "Methylation", "Amination", "Alkylation"], a: 1, r: "البكتيريا تضيف مجموعات ميثيل (Methylation) لمواقع التعرف الخاصة بها لحمايتها من القطع." },
+            { q: "15. The enzyme that removes RNA primer and inserts the correct DNA bases is:", o: ["DNA Polymerase I", "RNA Polymerase", "DNA Polymerase II", "DNA Polymerase III"], a: 0, r: "بوليميراز DNA الأول هو المسؤول عن إزالة بوادئ الـ RNA واستبدالها بالـ DNA في بدائيات النواة." },
+            { q: "16. In replication, which protein recognizes the Ori?", o: ["DNA A protein", "Helicase", "Topoisomerase", "Spliceosome"], a: 0, r: "بروتين DnaA هو الذي يرتبط بمنشأ التضاعف (Ori) ليبدأ عملية فتح الشريطين." },
+            { q: "17. Which of the following is likely to contribute to a shift in the reading frame (Frameshift)?", o: ["Addition of a triplet code", "Removal of a single base", "Removal of nine bases", "Removal of a triplet code"], a: 1, r: "إزالة أو إضافة قاعدة نيتروجينية واحدة يؤدي لتغيير إطار القراءة بالكامل، بينما المضاعفات الثلاثية لا تفعل ذلك." },
+            { q: "18. The DNA molecules of different species differ in their:", o: ["Phosphate backbone", "Sequence of bases", "Nucleotides type", "All of the previous"], a: 1, r: "جميع الكائنات تمتلك نفس أنواع النيوكليوتيدات وهيكل الفوسفات، الاختلاف الجيني يكمن فقط في (تتابع القواعد)." },
+            { q: "19. The percentage of coding capacity in the prokaryotic genome is approximately:", o: ["3%", "10%", "90%", "50%"], a: 2, r: "الجينوم البكتيري مضغوط جداً ويحتوي على نسبة عالية من الجينات المشفرة للبروتينات (تصل لـ 90%)." },
+            { q: "20. Disproved the spontaneous generation theory:", o: ["Anton van Leuwenhoek", "Robert Hooke", "Louis Pasteur", "Matthias Schleiden"], a: 2, r: "لويس باستير هو من دحض نظرية التوالد الذاتي نهائياً بتجربة دوارق عنق البجعة." },
+            { q: "21. A recognition site of a restriction endonuclease is typically palindromic. Which is correct?", o: ["GATATC", "TATCAG", "TTATAT", "GCCGCC"], a: 0, r: "تتابع GATATC هو تتابع باليندرومي (يُقرأ من 5' لـ 3' بنفس الطريقة على الشريطين) وهو موقع التعرف لإنزيم EcoRV." },
+            { q: "22. The enzyme that stitches Okazaki fragments together (along the lagging strand):", o: ["DNA Polymerase II", "DNA Ligase", "Topoisomerase", "Holoenzyme"], a: 1, r: "إنزيم الربط (DNA Ligase) هو الذي يربط قطع أوكازاكي بروابط فوسفاتية." },
+            { q: "23. Introns are removed from the primary RNA transcript by:", o: ["A-tailing", "G-capping", "Restriction endonuclease", "Spliceosomes"], a: 3, r: "الجسيم اللاحم (Spliceosome) هو المسؤول عن قص الإنترونات غير المشفرة وربط الإكسونات." },
+            { q: "24. Cause the ribosome, the mRNA, and the new polypeptide to separate and terminate translation:", o: ["tRNA", "UTR", "Release factors", "Chaperone"], a: 2, r: "عوامل الإطلاق (Release factors) ترتبط بكودون الوقف وتُنهي عملية الترجمة." },
+            { q: "25. Which enzyme is used by retroviruses to transcribe virus RNA into DNA?", o: ["RNA polymerase", "Reverse transcriptase", "Restriction nuclease", "Methylase"], a: 1, r: "إنزيم النسخ العكسي (Reverse transcriptase) يحول الـ RNA الفيروسي إلى DNA ليُدمج في الجينوم." },
+            { q: "26. In a DNA molecule, if there is 31% guanine, how much thymine is present?", o: ["31%", "19%", "69%", "11%"], a: 1, r: "إذا كان الـ G=31%، إذن C=31% (المجموع 62%). يتبقى 38% لـ A و T معاً، فيكون نصيب الثايمين (T) النصف وهو 19%." },
+            { q: "27. In a DNA molecule, if there is 26% thymine, how much cytosine is present?", o: ["24%", "26%", "48%", "74%"], a: 0, r: "T=26% إذن A=26% (المجموع 52%). يتبقى 48% تقسم على G و C. إذن السيتوزين (C) = 24%." },
+            { q: "28. A promoter is a:", o: ["Binding site for DNA polymerase", "Start signal for transcription", "Binding site for RNA polymerase", "Start signal for translation"], a: 2, r: "المحفز (Promoter) هو منطقة على الـ DNA يرتبط بها إنزيم RNA polymerase لبدء عملية النسخ." },
+            { q: "29. cDNA refers to:", o: ["DNA with both introns and exons", "Cloned DNA", "DNA with only introns", "DNA with only exons that can be cloned"], a: 3, r: "الـ cDNA يُصنع باستخدام إنزيم النسخ العكسي من الـ mRNA الناضج، لذلك لا يحتوي على إنترونات (يحتوي على إكسونات فقط)." },
+            { q: "30. The nonbranching helical structure of starch is called:", o: ["Amylose", "Dextrin", "Amylopectin", "Amino sugars"], a: 0, r: "الأميلوز هو الجزء الخطي (غير المتفرع) من النشا النباتي." },
+
+            // --- True / False (Formatted as 2 options) ---
+            { q: "31. For synthesis of a lagging strand, each fragment (Okazaki) must be primed separately.", o: ["True", "False"], a: 0, r: "صحيح، لأن بوليميراز الـ DNA يحتاج لنهاية 3' حرة لكل قطعة، لذا يتطلب الشريط المتأخر بوادئ RNA متعددة." },
+            { q: "32. mRNA post-transcriptional modification occurs in prokaryotes.", o: ["True", "False"], a: 1, r: "خطأ. التعديلات اللاحقة للنسخ (زي قص الإنترونات) تحدث في حقيقيات النواة (Eukaryotes) فقط." },
+            { q: "33. Polycistronic mRNA exists only in prokaryotes.", o: ["True", "False"], a: 0, r: "صحيح، البكتيريا تنتج mRNA يحمل شفرات لأكثر من بروتين (Polycistronic)." },
+            { q: "34. The promotor region exists on both DNA and mRNA transcript.", o: ["True", "False"], a: 1, r: "خطأ. منطقة المحفز موجودة على الـ DNA فقط لتوجيه الإنزيم، ولا يتم نسخها في الـ mRNA." },
+            { q: "35. Dolly sheep was the first cloned animal.", o: ["True", "False"], a: 0, r: "صحيح، النعجة دوللي هي أول حيوان ثديي يتم استنساخه من خلية جسدية بالغة." },
+            { q: "36. The last amino acid in a polypeptide is called the 'N-terminal'.", o: ["True", "False"], a: 1, r: "خطأ. الحمض الأميني الأخير يُسمى الطرف الكربوكسيلي (C-terminal)، بينما الأول هو الـ N-terminal." },
+            { q: "37. DNA replication takes place during the M phase of cell division.", o: ["True", "False"], a: 1, r: "خطأ. تضاعف الـ DNA يحدث في الطور البيني وتحديداً في مرحلة الـ S phase." },
+            { q: "38. In PCR, MgCl2 is the best buffer/cofactor for Taq polymerase.", o: ["True", "False"], a: 0, r: "صحيح، أيونات الماغنيسيوم ضرورية جداً كعامل مساعد لعمل إنزيم الـ Taq polymerase." },
+            { q: "39. The number of DNA molecules following 8 PCR cycles is 256.", o: ["True", "False"], a: 0, r: "صحيح، باستخدام معادلة 2 أس n، فإن 2^8 تساوي 256 جزيء." },
+            { q: "40. In DNA structure, purines or pyrimidines project inward toward the axis of the helix.", o: ["True", "False"], a: 0, r: "صحيح، القواعد النيتروجينية تكون للداخل لتكوين الروابط الهيدروجينية (درجات السلم)، والسكر والفوسفات للخارج." },
+            { q: "41. Conservative replication proved to be the right way to explain replication.", o: ["True", "False"], a: 1, r: "خطأ. التضاعف يحدث بالطريقة شبه المحافظة (Semi-conservative)." },
+            { q: "42. The 64 possible codons of the genetic code all specify amino acids.", o: ["True", "False"], a: 1, r: "خطأ. هناك 3 كودونات وقف لا تشفر لأي أحماض أمينية، لذا 61 كودوناً فقط هي التي تشفر." },
+            { q: "43. Telomerase performs its function in all prokaryotic cells.", o: ["True", "False"], a: 1, r: "خطأ. التيلوميراز يعمل على الأطراف الخطية للكروموسومات، والبكتيريا كروموسوماتها دائرية لا تحتوي على تيلوميرات." },
+            { q: "44. Taq polymerase was extracted from thermal fungi.", o: ["True", "False"], a: 1, r: "خطأ. تم استخلاصه من البكتيريا المحبة للحرارة (Thermus aquaticus) وليس الفطريات." },
+            { q: "45. Spontaneous generation theory hypothesized that non-living material can produce life.", o: ["True", "False"], a: 0, r: "صحيح، هذه النظرية الخاطئة كانت تفترض نشوء الكائنات من مواد غير حية، وتم دحضها بواسطة باستير." },
+            { q: "46. DNA fragments can hybridize with plasmids that have been cut by the same restriction enzyme.", o: ["True", "False"], a: 0, r: "صحيح، لأن القطع بنفس الإنزيم يُنتج 'نهايات لاصقة' متوافقة (Sticky ends)." },
+            { q: "47. Any somatic cell can produce all types of proteins.", o: ["True", "False"], a: 1, r: "خطأ. رغم احتواء جميع الخلايا الجسدية على نفس الجينوم، إلا أن هناك 'تنظيم جيني' يسمح بإنتاج بروتينات محددة لكل نسيج (Cell differentiation)." },
+            { q: "48. The negative charge in a DNA molecule is due to the deoxyribose sugar.", o: ["True", "False"], a: 1, r: "خطأ. الشحنة السالبة ترجع لمجموعات الفوسفات (Phosphate groups) في هيكل الـ DNA." },
+            { q: "49. Pyrimidines include thymine (T), cytosine (C) and uracil (U).", o: ["True", "False"], a: 0, r: "صحيح، هذه هي القواعد النيتروجينية أحادية الحلقة (البريميدينات)." },
+            { q: "50. In eukaryotes, transcription and translation may take place together at the same time.", o: ["True", "False"], a: 1, r: "خطأ. هذا يحدث في بدائيات النواة (Prokaryotes) فقط لعدم وجود غلاف نووي يفصل العمليتين." }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const rationaleContainer = document.getElementById('rationale-container');
+        const rationaleText = document.getElementById('rationale-text');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const questionTracker = document.getElementById('question-tracker');
+        const correctTracker = document.getElementById('correct-tracker');
+        const wrongTracker = document.getElementById('wrong-tracker');
+        const quizContent = document.getElementById('quiz-content');
+        const resultContainer = document.getElementById('result-container');
+        const finalScore = document.getElementById('final-score');
+        const finalCorrect = document.getElementById('final-correct');
+        const finalWrong = document.getElementById('final-wrong');
+
+        function updateStats() {
+            let correct = 0;
+            let wrong = 0;
+            
+            for(let i = 0; i < questions.length; i++) {
+                if(userAnswers[i] !== null) {
+                    if(userAnswers[i] === questions[i].a) {
+                        correct++;
+                    } else {
+                        wrong++;
+                    }
+                }
+            }
+            
+            correctTracker.textContent = `✅ Correct: ${correct}`;
+            wrongTracker.textContent = `❌ Wrong: ${wrong}`;
+            return { correct, wrong };
+        }
+
+        function loadQuestion() {
+            rationaleContainer.classList.remove('show');
+            optionsContainer.innerHTML = '';
+            
+            questionTracker.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            updateStats();
+            
+            const q = questions[currentQuestion];
+            questionText.textContent = q.q;
+
+            if(currentQuestion > 0) {
+                prevBtn.classList.add('show');
+            } else {
+                prevBtn.classList.remove('show');
+            }
+
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = 'Show Results ➔';
+            } else {
+                nextBtn.textContent = 'Next Question ➔';
+            }
+
+            q.o.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                
+                if(userAnswers[currentQuestion] !== null) {
+                    btn.disabled = true;
+                    if(index === q.a) {
+                        btn.classList.add('correct');
+                    } else if (index === userAnswers[currentQuestion]) {
+                        btn.classList.add('wrong');
+                    }
+                } else {
+                    btn.onclick = () => checkAnswer(index, btn);
+                }
+                
+                optionsContainer.appendChild(btn);
+            });
+
+            if(userAnswers[currentQuestion] !== null) {
+                rationaleText.textContent = q.r;
+                rationaleContainer.classList.add('show');
+                nextBtn.classList.add('show');
+            } else {
+                nextBtn.classList.remove('show');
+            }
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            userAnswers[currentQuestion] = selectedIndex;
+            
+            const q = questions[currentQuestion];
+            const allBtns = optionsContainer.querySelectorAll('.option-btn');
+            
+            allBtns.forEach(btn => btn.disabled = true);
+
+            if (selectedIndex === q.a) {
+                btnElement.classList.add('correct');
+            } else {
+                btnElement.classList.add('wrong');
+                allBtns[q.a].classList.add('correct');
+            }
+
+            updateStats();
+            rationaleText.textContent = q.r;
+            rationaleContainer.classList.add('show');
+            nextBtn.classList.add('show');
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizContent.style.display = 'none';
+            resultContainer.classList.add('show');
+            
+            const stats = updateStats();
+            finalScore.textContent = stats.correct;
+            finalCorrect.textContent = stats.correct;
+            finalWrong.textContent = stats.wrong;
+        }
+
+        // بدء الاختبار
+        loadQuestion();
+    </script>
+</body>
+</html>
