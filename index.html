@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -193,14 +192,39 @@
             <div class="coming-overlay"><span>🔒 قريباً</span></div>
         </div>
 
-        <div class="subject-card coming-soon">
+        <!-- Electronics Card -->
+        <div class="subject-card active-subject" onclick="openSubject('electronics')">
+            <div class="card-glow"></div>
             <div class="card-header">
                 <div class="subject-icon">🔌</div>
-                <div class="subject-badge soon-badge">قريباً</div>
+                <div class="subject-badge">متاح</div>
             </div>
             <h3 class="subject-name">Electronics</h3>
             <p class="subject-ar">الإلكترونيات</p>
-            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+            <p class="subject-desc">المقاومات، التيار، الجهد، وقانون أوم</p>
+            <div class="subject-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📝</span>
+                    <span>40 سؤال</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🎯</span>
+                    <span>1 كويز</span>
+                </div>
+            </div>
+            <div class="quiz-list">
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('electronics')">
+                    <span class="pill-icon">📋</span>
+                    <span>Electronics Quiz</span>
+                    <span class="pill-count">40 سؤال</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="open-btn" onclick="event.stopPropagation(); openSubject('electronics')">
+                    فتح المادة
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
         </div>
     </div>
 </section>
@@ -237,7 +261,8 @@
         'carbohydrates': 'exam.html',
         'amino-acids':   'Amino.html',
         'dna-rna':       'BIO.html',
-        'linear-algebra': 'linear_algebra.html'
+        'linear-algebra': 'linear_algebra.html',
+        'electronics':    'electronics.html'
     };
 
     function openQuiz(key) {
