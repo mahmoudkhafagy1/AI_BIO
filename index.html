@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
+<html lang="ar" dir="rtl"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI_BIO</title>
-    <meta name="description" content=" كلية الذكاء الاصطناعي - القسم الحيوي. بنوك أسئلة وكويزات تفاعلية.">
+    <title>Maze Tech Academy | كلية الذكاء الاصطناعي - القسم الحيوي</title>
+    <meta name="description" content="منصة تعليمية متخصصة لطلاب كلية الذكاء الاصطناعي - القسم الحيوي. بنوك أسئلة وكويزات تفاعلية.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&amp;family=Outfit:wght@400;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,8 +22,8 @@
         <div class="nav-logo">
             <div class="logo-icon">🧬</div>
             <div class="logo-text">
-                <span class="logo-main">AI</span>
-                <span class="logo-sub">BIO</span>
+                <span class="logo-main">Maze Tech</span>
+                <span class="logo-sub">Academy</span>
             </div>
         </div>
         <div class="nav-links">
@@ -38,13 +37,13 @@
 <section class="hero">
     <div class="hero-badge">🎓 كلية الذكاء الاصطناعي · القسم الحيوي</div>
     <h1 class="hero-title">
-        AI<br>
-        <span class="gradient-text">BIO</span>
+        منصة التعلم<br>
+        <span class="gradient-text">التفاعلية</span>
     </h1>
     <p class="hero-desc">بنوك أسئلة شاملة وكويزات تفاعلية لجميع مواد القسم الحيوي. تدرّب، اختبر نفسك، وتفوّق.</p>
     <div class="hero-stats">
         <div class="stat-item">
-            <span class="stat-num" id="total-q">310+</span>
+            <span class="stat-num" id="total-q">250+</span>
             <span class="stat-label">سؤال</span>
         </div>
         <div class="stat-divider"></div>
@@ -60,7 +59,7 @@
     </div>
     <a href="#subjects" class="cta-btn">
         <span>ابدأ الدراسة الآن</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
     </a>
 </section>
 
@@ -86,7 +85,7 @@
             <div class="subject-meta">
                 <div class="meta-item">
                     <span class="meta-icon">📝</span>
-                    <span>316 سؤال</span>
+                    <span>250 سؤال</span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-icon">🎯</span>
@@ -106,27 +105,52 @@
                 </div>
                 <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('dna-rna')">
                     <span class="pill-icon">🧬</span>
-                    <span>أسئلة DNA & RNA</span>
-                    <span class="pill-count">116 سؤال</span>
+                    <span>أسئلة DNA &amp; RNA</span>
+                    <span class="pill-count">50 سؤال</span>
                 </div>
             </div>
             <div class="card-footer">
                 <button class="open-btn" onclick="event.stopPropagation(); openSubject('biochem')">
                     فتح المادة
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
                 </button>
             </div>
         </div>
 
         <!-- Coming Soon Cards -->
-        <div class="subject-card coming-soon">
+        <!-- Linear Algebra Card -->
+        <div class="subject-card active-subject" onclick="openSubject('linear-algebra')">
+            <div class="card-glow"></div>
             <div class="card-header">
                 <div class="subject-icon">📐</div>
-                <div class="subject-badge soon-badge">قريباً</div>
+                <div class="subject-badge">متاح</div>
             </div>
             <h3 class="subject-name">Linear Algebra</h3>
             <p class="subject-ar">الجبر الخطي</p>
-            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+            <p class="subject-desc">مصفوفات، متجهات، وقيم ذاتية</p>
+            <div class="subject-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📝</span>
+                    <span>40 سؤال</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🎯</span>
+                    <span>1 كويز</span>
+                </div>
+            </div>
+            <div class="quiz-list">
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('linear-algebra')">
+                    <span class="pill-icon">📋</span>
+                    <span>Linear Algebra Quiz</span>
+                    <span class="pill-count">40 سؤال</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="open-btn" onclick="event.stopPropagation(); openSubject('linear-algebra')">
+                    فتح المادة
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
         </div>
 
         <div class="subject-card coming-soon">
@@ -154,7 +178,7 @@
                 <div class="subject-icon">🔬</div>
                 <div class="subject-badge soon-badge">قريباً</div>
             </div>
-            <h3 class="subject-name">Molecular & Cell Biology</h3>
+            <h3 class="subject-name">Molecular &amp; Cell Biology</h3>
             <p class="subject-ar">البيولوجيا الجزيئية والخلوية</p>
             <div class="coming-overlay"><span>🔒 قريباً</span></div>
         </div>
@@ -164,7 +188,7 @@
                 <div class="subject-icon">📊</div>
                 <div class="subject-badge soon-badge">قريباً</div>
             </div>
-            <h3 class="subject-name">Probability & Statistics</h3>
+            <h3 class="subject-name">Probability &amp; Statistics</h3>
             <p class="subject-ar">الاحتمالات والإحصاء</p>
             <div class="coming-overlay"><span>🔒 قريباً</span></div>
         </div>
@@ -185,8 +209,8 @@
 <section class="about-section" id="about">
     <div class="about-card">
         <div class="about-icon">🚀</div>
-        <h2>مصممة للتميز</h2>
-        <p> صنعت بكل حب </p>
+        <h2>منصة مصممة للتميز</h2>
+        <p>تم تصميم هذه المنصة خصيصاً لطلاب كلية الذكاء الاصطناعي - القسم الحيوي لمساعدتهم على المراجعة والتدريب على امتحانات المادة.</p>
         <div class="about-features">
             <div class="feature">✅ شرح تفصيلي لكل إجابة</div>
             <div class="feature">✅ تتبع النتائج الفورية</div>
@@ -197,7 +221,7 @@
 </section>
 
 <footer class="footer">
-    <p>🧬 AI_BIO · كلية الذكاء الاصطناعي - القسم الحيوي</p>
+    <p>🧬 Maze Tech Academy · كلية الذكاء الاصطناعي - القسم الحيوي</p>
 </footer>
 
 <!-- Quiz Modal -->
@@ -212,7 +236,8 @@
     const quizMap = {
         'carbohydrates': 'exam.html',
         'amino-acids':   'Amino.html',
-        'dna-rna':       'BIO.html'
+        'dna-rna':       'BIO.html',
+        'linear-algebra': 'linear_algebra.html'
     };
 
     function openQuiz(key) {
@@ -224,9 +249,7 @@
     }
 
     function openSubject(id) {
-        if (id === 'biochem') {
-            document.getElementById('subjects').scrollIntoView({ behavior: 'smooth' });
-        }
+        document.getElementById('subjects').scrollIntoView({ behavior: 'smooth' });
     }
 
     function closeModal() {
@@ -237,5 +260,6 @@
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 </script>
-</body>
-</html>
+
+
+</body></html>
