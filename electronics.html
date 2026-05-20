@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Tech - Electronics Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+        :root {
+            --dark-bg: #0b0f19;
+            --dark-card: #1a2235;
+            --neon-green: #00ffcc;
+            --neon-blue: #0088ff;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --correct-bg: rgba(34, 197, 94, 0.2);
+            --correct-border: #22c55e;
+            --wrong-bg: rgba(239, 68, 68, 0.2);
+            --wrong-border: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .ar-text {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .en-text {
+            direction: ltr;
+            text-align: left;
+        }
+
+        .quiz-container {
+            background-color: var(--dark-card);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.2);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .counters {
+            display: flex;
+            gap: 15px;
+            font-weight: bold;
+        }
+
+        .correct-text { color: var(--correct-border); }
+        .wrong-text { color: var(--wrong-border); }
+
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 136, 255, 0.3);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-btn.correct {
+            border-color: var(--correct-border);
+            background-color: var(--correct-bg);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+            opacity: 1;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--wrong-border);
+            background-color: var(--wrong-bg);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            opacity: 1;
+        }
+
+        .rationale {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(0, 255, 204, 0.1);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .rationale.show {
+            display: block;
+        }
+
+        .rationale-title {
+            color: var(--neon-green);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .nav-btn.show {
+            display: block;
+        }
+
+        #next-btn {
+            background-color: var(--neon-blue);
+            color: var(--text-light);
+        }
+
+        #next-btn:hover {
+            background-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.6);
+        }
+
+        #prev-btn {
+            background-color: #334155;
+            color: var(--text-light);
+        }
+
+        #prev-btn:hover {
+            background-color: #475569;
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-container">
+        <div class="header-line"></div>
+        <h1>Maze Tech - Electronics Quiz</h1>
+        
+        <div id="quiz-content">
+            <div class="stats en-text">
+                <span id="question-tracker">Question 1 of 40</span>
+                <div class="counters">
+                    <span id="correct-tracker" class="correct-text">✅ Correct: 0</span>
+                    <span id="wrong-tracker" class="wrong-text">❌ Wrong: 0</span>
+                </div>
+            </div>
+
+            <div class="question en-text" id="question-text"></div>
+            
+            <div class="options en-text" id="options-container"></div>
+
+            <div class="rationale ar-text" id="rationale-container">
+                <div class="rationale-title">💡 الشرح:</div>
+                <div id="rationale-text"></div>
+            </div>
+
+            <div class="nav-buttons en-text">
+                <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">⬅️ Previous</button>
+                <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Next Question ➔</button>
+            </div>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <h2 style="font-size: 32px; margin-bottom: 20px; color: white;">Exam Completed!</h2>
+            <div style="font-size: 24px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                <p>Final Score: <span id="final-score" style="color: var(--neon-blue); font-weight: bold;"></span> / 40</p>
+                <p class="correct-text">✅ Correct: <span id="final-correct"></span></p>
+                <p class="wrong-text">❌ Wrong: <span id="final-wrong"></span></p>
+            </div>
+            <button class="nav-btn show en-text" style="background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); width: 100%;" onclick="location.reload()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "1. Resistance is the property that:", o: ["Produces voltage", "Increases current", "Stores charge", "Opposes current flow"], a: 3, r: "المقاومة (Resistance) هي الخاصية التي تعيق أو تعارض تدفق التيار الكهربائي في الدائرة." },
+            { q: "2. Which instrument measures current?", o: ["Barometer", "Thermometer", "Ammeter", "Voltmeter"], a: 2, r: "جهاز الأميتر (Ammeter) يُستخدم لقياس شدة التيار الكهربائي في الدائرة، ويوصل على التوالي." },
+            { q: "3. Resistors connected in series have:", o: ["Infinite voltage", "No current", "Same voltage", "Same current"], a: 3, r: "في دوائر التوالي، يمر نفس التيار في جميع المقاومات دون تفرع." },
+            { q: "4. The unit of voltage is:", o: ["Volt", "Joule", "Ampere", "Ohm"], a: 0, r: "الفولت (Volt) هو وحدة قياس فرق الجهد الكهربائي." },
+            { q: "5. The unit of electric current is:", o: ["Ampere", "Ohm", "Volt", "Watt"], a: 0, r: "الأمبير (Ampere) هو وحدة قياس التيار الكهربائي." },
+            { q: "6. The unit of resistance is:", o: ["Farad", "Ohm", "Volt", "Ampere"], a: 1, r: "الأوم (Ohm) هو وحدة قياس المقاومة الكهربائية." },
+            { q: "7. Which instrument measures resistance?", o: ["Ammeter", "Wattmeter", "Ohmmeter", "Voltmeter"], a: 2, r: "جهاز الأوميتر (Ohmmeter) مخصص لقياس قيمة المقاومة الكهربائية." },
+            { q: "8. The color bands on a resistor indicate:", o: ["Voltage level", "Temperature", "Current capacity", "Resistance value"], a: 3, r: "الألوان الموجودة على المقاومة (Color bands) تستخدم كشفرة لمعرفة قيمة المقاومة بالأوم." },
+            { q: "9. Increasing voltage in a circuit will:", o: ["Remove resistance", "Decrease current", "Increase current", "Stop current"], a: 2, r: "حسب قانون أوم، بزيادة الجهد يزداد التيار (علاقة طردية) بافتراض ثبات المقاومة." },
+            { q: "10. Which instrument measures voltage?", o: ["Ohmmeter", "Galvanometer", "Ammeter", "Voltmeter"], a: 3, r: "جهاز الفولتميتر (Voltmeter) يستخدم لقياس فرق الجهد ويوصل على التوازي." },
+            { q: "11. A resistor is used to:", o: ["Limit current", "Generate power", "Increase voltage", "Store energy"], a: 0, r: "الوظيفة الأساسية للمقاومة هي الحد من (تقليل) شدة التيار المار في الدائرة." },
+            { q: "12. Voltage is defined as:", o: ["Rate of electron flow", "Electric potential difference", "Electrical resistance", "Energy loss"], a: 1, r: "الجهد (Voltage) هو فرق الجهد الكهربائي أو القوة الدافعة التي تحرك الإلكترونات." },
+            { q: "13. A conductor with very high resistance is called:", o: ["Transistor", "Capacitor", "Insulator", "Inductor"], a: 2, r: "المادة ذات المقاومة العالية جداً التي تمنع مرور التيار تسمى عازلاً (Insulator)." },
+            { q: "14. The symbol for resistance in formulas is:", o: ["V", "R", "P", "I"], a: 1, r: "يُرمز للمقاومة بالحرف R (اختصاراً لـ Resistance)." },
+            { q: "15. Resistors connected in parallel have:", o: ["Same current", "No voltage", "Same voltage", "Same resistance"], a: 2, r: "في التوصيل على التوازي، يكون فرق الجهد ثابتاً عبر جميع الفروع." },
+            { q: "16. Electric current is the flow of:", o: ["Electrons", "Protons", "Neutrons", "Photons"], a: 0, r: "التيار الكهربائي هو عبارة عن تدفق للشحنات السالبة (الإلكترونات) في الموصل." },
+            { q: "17. Power in an electrical circuit is calculated by:", o: ["P = V × I", "P = V / I", "P = I − V", "P = V + I"], a: 0, r: "القدرة الكهربائية (Power) تساوي حاصل ضرب الجهد في التيار." },
+            { q: "18. If voltage is 10V and resistance is 5Ω, the current is:", o: ["1 A", "5 A", "2 A", "10 A"], a: 2, r: "حسب قانون أوم (I = V/R): التيار = 10 / 5 = 2 أمبير." },
+            { q: "19. If resistance increases in a circuit, current will:", o: ["Stay the same", "Decrease", "Increase", "Disappear"], a: 1, r: "العلاقة بين المقاومة والتيار عكسية، فكلما زادت المقاومة قل التيار المار." },
+            { q: "20. Ohm’s Law states that:", o: ["I = V × R", "R = V × I", "V = I × R", "P = V × I"], a: 2, r: "قانون أوم ينص على أن الجهد يساوي التيار مضروباً في المقاومة (V = I × R)." },
+            { q: "21. In a series circuit, if one resistor fails (open circuit), the current:", o: ["Increases", "Becomes zero everywhere", "Remains constant", "Decreases slightly"], a: 1, r: "في دائرة التوالي، مسار التيار واحد فقط. إذا انقطع (Open circuit) ينعدم التيار بالكامل." },
+            { q: "22. If a 12 V battery is connected to a 6 Ω resistor, the current flowing through the circuit is:", o: ["2 A", "1 A", "0.5 A", "3 A"], a: 0, r: "بحساب قانون أوم: I = V/R -> 12 / 6 = 2 أمبير." },
+            { q: "23. According to Ohm's Law, what happens to current if voltage increases while resistance stays constant?", o: ["Current remains unchanged", "Current increases proportionally", "Current decreases", "Current becomes zero"], a: 1, r: "التيار يتناسب طردياً مع الجهد عند ثبوت المقاومة (يزداد بزيادته)." },
+            { q: "24. The total resistance in a series circuit is always:", o: ["Equal to the largest resistor", "Greater than any individual resistor", "Less than the smallest resistor", "Zero"], a: 1, r: "المقاومة المكافئة في التوالي هي مجموع المقاومات، لذا فهي دائماً أكبر من أي مقاومة مفردة فيها." },
+            { q: "25. If two resistors 10Ω and 20Ω are connected in parallel, the equivalent resistance is:", o: ["6.67 Ω", "15 Ω", "30 Ω", "10 Ω"], a: 0, r: "Req = (R1 × R2) / (R1 + R2) = (10 × 20) / (30) = 200 / 30 = 6.67 أوم." },
+            { q: "26. Which formula can be used to calculate electrical power in a resistor?", o: ["P = IV", "All of the above", "P = V²/R", "P = I²R"], a: 1, r: "جميع هذه القوانين صحيحة رياضياً ومستنتجة من قانون أوم لحساب القدرة (Power)." },
+            { q: "27. If three identical resistors R are connected in parallel, the equivalent resistance is:", o: ["R", "R²", "R/3", "3R"], a: 2, r: "عند توصيل مقاومات متماثلة على التوازي، المقاومة المكافئة تساوي قيمة إحداها مقسومة على عددها (R/n)." },
+            { q: "28. In a parallel circuit, if one branch fails (open), the total current:", o: ["Stops completely", "Becomes zero", "Increases", "Decreases but circuit still works"], a: 3, r: "في التوازي، كل فرع مستقل. إذا فُصل فرع، يقل التيار الكلي بمقدار تيار هذا الفرع، لكن باقي الدائرة تعمل." },
+            { q: "29. In a parallel circuit, the branch with smaller resistance carries:", o: ["Less current", "No current", "More current", "Equal current"], a: 2, r: "التيار يفضل المسار الأسهل، لذلك يمر التيار الأكبر في الفرع ذي المقاومة الأقل." },
+            { q: "30. Three resistors 4Ω, 6Ω, and 12Ω are connected in parallel. The equivalent resistance is closest to:", o: ["5 Ω", "2 Ω", "3 Ω", "4 Ω"], a: 1, r: "1/Req = 1/4 + 1/6 + 1/12 = 3/12 + 2/12 + 1/12 = 6/12. إذن Req = 12/6 = 2 أوم." },
+            { q: "31. In a series circuit, which quantity remains constant through all components?", o: ["Current", "Voltage", "Power", "Resistance"], a: 0, r: "في دوائر التوالي، مسار الإلكترونات واحد، لذا شدة التيار ثابتة في جميع المكونات." },
+            { q: "32. If four 8Ω resistors are connected in parallel, the equivalent resistance is:", o: ["2 Ω", "16 Ω", "4 Ω", "8 Ω"], a: 0, r: "المقاومات متساوية، إذن المكافئة = قيمة الواحدة / عددها = 8 / 4 = 2 أوم." },
+            { q: "33. If the resistance in a circuit doubles while voltage remains constant, the current will:", o: ["Double", "Become zero", "Halve", "Remain constant"], a: 2, r: "العلاقة عكسية؛ إذا تضاعفت المقاومة، سيقل التيار إلى النصف (Halve)." },
+            { q: "34. A 24 V source supplies 3 A current in a circuit. The total resistance is:", o: ["12 Ω", "8 Ω", "72 Ω", "6 Ω"], a: 1, r: "حسب قانون أوم (R = V/I): المقاومة = 24 / 3 = 8 أوم." },
+            { q: "35. In a parallel circuit, the voltage across each branch is:", o: ["Different", "Equal to the supply voltage", "Zero", "Increasing"], a: 1, r: "في التوصيل على التوازي، جميع الفروع تتصل بنفس نقطتي البداية والنهاية، لذا الجهد متساوٍ ويساوي جهد المصدر." },
+            { q: "36. If voltage across a resistor is 20 V and the current is 4 A, what is the resistance?", o: ["10 Ω", "2 Ω", "5 Ω", "4 Ω"], a: 2, r: "المقاومة = الجهد ÷ التيار -> 20 / 4 = 5 أوم." },
+            { q: "37. Three resistors 2Ω, 3Ω, and 5Ω are connected in series. The total resistance is:", o: ["5 Ω", "15 Ω", "8 Ω", "10 Ω"], a: 3, r: "في التوالي نجمع القيم مباشرة: 2 + 3 + 5 = 10 أوم." },
+            { q: "38. A circuit contains two resistors 4Ω and 8Ω in series connected to 12 V. The circuit current is:", o: ["1.5 A", "2 A", "0.5 A", "1 A"], a: 3, r: "المقاومة الكلية = 12 أوم. الجهد = 12 فولت. إذن التيار = 12 / 12 = 1 أمبير." },
+            { q: "39. Which statement best describes the total resistance in a parallel circuit?", o: ["It is greater than the largest resistor", "It is equal to the average resistance", "It is smaller than the smallest resistor", "It equals the sum of all resistances"], a: 2, r: "في التوازي، المقاومة المكافئة دائماً تكون أصغر من أصغر مقاومة في الدائرة." },
+            { q: "40. If the supply voltage increases while resistance remains constant, current will:", o: ["Become zero", "Decrease", "Stay the same", "Increase proportionally"], a: 3, r: "بسبب التناسب الطردي في قانون أوم، أي زيادة في الجهد يقابلها زيادة في التيار إذا ظلت المقاومة ثابتة." }
+        ];
+
+        let currentQuestion = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+
+        function loadQuestion() {
+            document.getElementById('rationale-container').classList.remove('show');
+            document.getElementById('question-tracker').innerText = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('question-text').innerText = questions[currentQuestion].q;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            questions[currentQuestion].o.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectAnswer(index);
+                
+                if (userAnswers[currentQuestion] !== null) {
+                    btn.disabled = true;
+                    if (index === questions[currentQuestion].a) {
+                        btn.classList.add('correct');
+                    } else if (index === userAnswers[currentQuestion]) {
+                        btn.classList.add('wrong');
+                    }
+                }
+                
+                optionsContainer.appendChild(btn);
+            });
+            
+            if (userAnswers[currentQuestion] !== null) {
+                document.getElementById('rationale-text').innerText = questions[currentQuestion].r;
+                document.getElementById('rationale-container').classList.add('show');
+            }
+            
+            document.getElementById('prev-btn').style.display = currentQuestion > 0 ? 'block' : 'none';
+            document.getElementById('prev-btn').classList.add('show');
+            
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.classList.add('show');
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.innerText = 'Finish Exam ➔';
+            } else {
+                nextBtn.innerText = 'Next Question ➔';
+            }
+        }
+
+        function selectAnswer(index) {
+            if (userAnswers[currentQuestion] !== null) return;
+            
+            userAnswers[currentQuestion] = index;
+            const correctIndex = questions[currentQuestion].a;
+            const btns = document.querySelectorAll('.option-btn');
+            
+            btns.forEach(btn => btn.disabled = true);
+            btns[correctIndex].classList.add('correct');
+            
+            if (index === correctIndex) {
+                correctCount++;
+            } else {
+                btns[index].classList.add('wrong');
+                wrongCount++;
+            }
+            
+            document.getElementById('correct-tracker').innerText = `✅ Correct: ${correctCount}`;
+            document.getElementById('wrong-tracker').innerText = `❌ Wrong: ${wrongCount}`;
+            
+            document.getElementById('rationale-text').innerText = questions[currentQuestion].r;
+            document.getElementById('rationale-container').classList.add('show');
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-content').style.display = 'none';
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.classList.add('show');
+            
+            document.getElementById('final-score').innerText = correctCount;
+            document.getElementById('final-correct').innerText = correctCount;
+            document.getElementById('final-wrong').innerText = wrongCount;
+        }
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>
