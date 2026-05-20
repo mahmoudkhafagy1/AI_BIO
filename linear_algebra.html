@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Tech - Linear Algebra Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+        :root {
+            --dark-bg: #0b0f19;
+            --dark-card: #1a2235;
+            --neon-green: #00ffcc;
+            --neon-blue: #0088ff;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --correct-bg: rgba(34, 197, 94, 0.2);
+            --correct-border: #22c55e;
+            --wrong-bg: rgba(239, 68, 68, 0.2);
+            --wrong-border: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .ar-text {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .en-text {
+            direction: ltr;
+            text-align: left;
+        }
+
+        .quiz-container {
+            background-color: var(--dark-card);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.2);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .counters {
+            display: flex;
+            gap: 15px;
+            font-weight: bold;
+        }
+
+        .correct-text { color: var(--correct-border); }
+        .wrong-text { color: var(--wrong-border); }
+
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 136, 255, 0.3);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-btn.correct {
+            border-color: var(--correct-border);
+            background-color: var(--correct-bg);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+            opacity: 1;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--wrong-border);
+            background-color: var(--wrong-bg);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            opacity: 1;
+        }
+
+        .rationale {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(0, 255, 204, 0.1);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .rationale.show {
+            display: block;
+        }
+
+        .rationale-title {
+            color: var(--neon-green);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .nav-btn.show {
+            display: block;
+        }
+
+        #next-btn {
+            background-color: var(--neon-blue);
+            color: var(--text-light);
+        }
+
+        #next-btn:hover {
+            background-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.6);
+        }
+
+        #prev-btn {
+            background-color: #334155;
+            color: var(--text-light);
+        }
+
+        #prev-btn:hover {
+            background-color: #475569;
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-container">
+        <div class="header-line"></div>
+        <h1>Maze Tech - Linear Algebra Quiz</h1>
+        
+        <div id="quiz-content">
+            <div class="stats en-text">
+                <span id="question-tracker">Question 1 of 40</span>
+                <div class="counters">
+                    <span id="correct-tracker" class="correct-text">✅ Correct: 0</span>
+                    <span id="wrong-tracker" class="wrong-text">❌ Wrong: 0</span>
+                </div>
+            </div>
+
+            <div class="question en-text" id="question-text"></div>
+            
+            <div class="options en-text" id="options-container"></div>
+
+            <div class="rationale ar-text" id="rationale-container">
+                <div class="rationale-title">💡 الشرح:</div>
+                <div id="rationale-text"></div>
+            </div>
+
+            <div class="nav-buttons en-text">
+                <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">⬅️ Previous</button>
+                <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Next Question ➔</button>
+            </div>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <h2 style="font-size: 32px; margin-bottom: 20px; color: white;">Exam Completed!</h2>
+            <div style="font-size: 24px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                <p>Final Score: <span id="final-score" style="color: var(--neon-blue); font-weight: bold;"></span> / 40</p>
+                <p class="correct-text">✅ Correct: <span id="final-correct"></span></p>
+                <p class="wrong-text">❌ Wrong: <span id="final-wrong"></span></p>
+            </div>
+            <button class="nav-btn show en-text" style="background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); width: 100%;" onclick="location.reload()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "1. Which field heavily relies on linear algebra?", o: ["Computer graphics", "Physics", "Machine learning", "All of the above"], a: 3, r: "الجبر الخطي هو الأساس الرياضي في مجالات الجرافيكس، الفيزياء، وتعلم الآلة." },
+            { q: "2. Which concept is NOT related to linear algebra?", o: ["Matrix inversion", "Gaussian elimination", "Fourier Transform", "Eigenvectors"], a: 2, r: "تحويل فورييه يرتبط بالتحليل الدالي ومعالجة الإشارات وليس الجبر الخطي بشكل مباشر." },
+            { q: "3. In which field is the concept of eigenvalues used?", o: ["Quantum Computing", "Machine Learning", "Physics", "All of the above"], a: 3, r: "القيم الذاتية لها تطبيقات واسعة في ميكانيكا الكم، خوارزميات تعلم الآلة، والفيزياء." },
+            { q: "4. True or False: The sum of the eigenvalues of a matrix equals its trace (sum of diagonal elements).", o: ["True", "False"], a: 0, r: "من الخصائص الأساسية للمصفوفات المربعة أن مجموع قيمها الذاتية يساوي مجموع عناصر قطرها الرئيسي." },
+            { q: "5. What is the characteristic polynomial of a matrix A?", o: ["A - λI", "λA - I", "det(A - λI)", "A + λI"], a: 2, r: "تُحسب كثيرة الحدود المميزة بإيجاد محدد (A - λI)." },
+            { q: "6. What is linear algebra primarily concerned with?", o: ["Numbers and probability", "Calculus and differentiation", "Geometry and topology", "Vectors and matrices"], a: 3, r: "الجبر الخطي يدرس الفضاءات الاتجاهية، المتجهات، والمصفوفات." },
+            { q: "7. What is an application of eigenvalues and eigenvectors?", o: ["Finding limits in calculus", "PageRank algorithm", "Solving quadratic equations", "Evaluating definite integrals"], a: 1, r: "خوارزمية PageRank الخاصة بجوجل تعتمد بشكل أساسي على حساب المتجهات الذاتية." },
+            { q: "8. What is the equation used to find eigenvalues?", o: ["A + λI = 0", "Aλ = 0", "Ax = xA", "det(A - λI) = 0"], a: 3, r: "لإيجاد القيم الذاتية، يجب أن ينعدم محدد المصفوفة (A - λI)." },
+            { q: "9. True or False: Eigenvalues are only defined for square matrices.", o: ["True", "False"], a: 0, r: "المعادلة المميزة تتطلب حساب المحدد، والمحددات مُعرفة فقط للمصفوفات المربعة." },
+            { q: "10. What is an eigenvalue?", o: ["A matrix determinant", "A matrix inverse", "A scalar that scales an eigenvector", "A random number"], a: 2, r: "القيمة الذاتية هي رقم (كمية قياسية) يحدد مقدار التمدد أو الانكماش للمتجه الذاتي." },
+            { q: "11. What is the eigenvalue equation?", o: ["Aλ = x", "A + λx = 0", "Ax = λx", "λx = A"], a: 2, r: "تأثير المصفوفة A على المتجه الذاتي x يعادل ضرب المتجه في القيمة الذاتية λ." },
+            { q: "12. Which of the following is a real-world application of eigenvalues?", o: ["Google PageRank", "Image processing", "Vibration analysis", "All of the above"], a: 3, r: "كل هذه التطبيقات تعتمد بشكل أساسي على تحليل القيم الذاتية لحل المشاكل الهندسية والبرمجية." },
+            { q: "13. What is a basis in linear algebra?", o: ["A set of dependent vectors", "A random collection of vectors", "A set of linearly independent vectors that span a vector space", "A zero vector"], a: 2, r: "الأساس (Basis) هو مجموعة متجهات مستقلة خطياً وتستطيع توليد (span) الفضاء بالكامل." },
+            { q: "14. Which mathematical concept is used to find eigenvectors?", o: ["Gaussian elimination", "Fourier transform", "Matrix addition", "Solving (A - λI)x = 0"], a: 3, r: "بعد معرفة القيمة الذاتية λ، نقوم بحل هذا النظام المتجانس لإيجاد المتجه x." },
+            { q: "15. True or False: The eigenvector of a matrix can be the zero vector.", o: ["True", "False"], a: 1, r: "خطأ، التعريف الرياضي ينص على أن المتجه الذاتي يجب أن يكون متجهاً غير صفري." },
+            { q: "16. What is an eigenvector?", o: ["A zero vector", "A diagonal matrix", "A vector that does not change direction under transformation", "A unit vector"], a: 2, r: "المتجه الذاتي يحافظ على اتجاهه عند تطبيق التحويل الخطي عليه، ويتغير طوله فقط." },
+            { q: "17. What is the primary use of eigenvalues?", o: ["Adding matrices", "Solving non-linear equations", "Describing how linear transformations affect vectors", "Finding vector length"], a: 2, r: "تُستخدم القيم الذاتية لوصف سلوك التحويلات الخطية وتأثيرها على المتجهات بتبسيط." },
+            { q: "18. The eigenvalue equation results in a system of:", o: ["Random numbers", "Nonlinear equations", "Quadratic equations", "Linear equations"], a: 3, r: "المعادلة تؤدي إلى نظام من المعادلات الخطية المتجانسة التي نحلها لإيجاد المتجه الذاتي." },
+            { q: "19. True or False: A system of linear equations can be solved using matrix methods.", o: ["True", "False"], a: 0, r: "المصفوفات هي الأداة الأساسية لحل أنظمة المعادلات الخطية بكفاءة (مثل الحذف الغاوسي)." },
+            { q: "20. True or False: Eigenvectors change direction after a transformation.", o: ["True", "False"], a: 1, r: "خطأ، من أهم خصائص المتجه الذاتي أنه لا يغير اتجاهه، بل يتمدد أو ينكمش فقط." },
+            { q: "21. True or False: Eigenvectors of different eigenvalues are always orthogonal.", o: ["True", "False"], a: 1, r: "خطأ، هذا الشرط يتحقق دائماً في المصفوفات المتماثلة (Symmetric) فقط، وليس في كل المصفوفات." },
+            { q: "22. What is the first step in computing eigenvalues?", o: ["Solve (A - λI)x = 0", "Perform Gaussian elimination", "Find the roots of the characteristic equation", "Compute the determinant of A"], a: 2, r: "الخطوة الأولى هي إيجاد جذور المعادلة المميزة عن طريق حل det(A - λI) = 0." },
+            { q: "23. True or False: In quantum mechanics, eigenvalues represent measurable quantities like energy levels.", o: ["True", "False"], a: 0, r: "صحيح، في ميكانيكا الكم، الحالات الذاتية والقيم الذاتية تمثل مستويات الطاقة والمقادير القابلة للقياس." },
+            { q: "24. What does λ represent in the eigenvalue equation Ax = λx?", o: ["A matrix determinant", "A scalar eigenvalue", "A unit vector", "A zero vector"], a: 1, r: "الرمز λ يمثل القيمة الذاتية، وهي كمية قياسية (رقم)." },
+            { q: "25. True or False: Eigenvectors corresponding to the same eigenvalue are unique.", o: ["True", "False"], a: 1, r: "خطأ، أي مضاعف للمتجه الذاتي يعتبر أيضاً متجه ذاتي لنفس القيمة، لذا فهي ليست وحيدة." },
+            { q: "26. Adding a multiple of one row to another row is called:", o: ["Elimination", "Matrix swap", "Row replacement", "Replacement"], a: 2, r: "هذه العملية تسمى استبدال الصفوف (Row replacement) وتستخدم في تبسيط المصفوفات." },
+            { q: "27. Which method is commonly used to solve systems of equations?", o: ["Elimination", "Differentiation", "Substitution", "Elimination and Substitution"], a: 3, r: "الحذف والتعويض هما الطريقتان الأساسيتان لحل أنظمة المعادلات جبرياً." },
+            { q: "28. A system with no solution is called:", o: ["Consistent", "Dependent", "Linear", "Inconsistent"], a: 3, r: "النظام غير المتوافق (Inconsistent) هو النظام الذي لا يحتوي على أي حل يرضي جميع المعادلات." },
+            { q: "29. Which field heavily relies on linear algebra?", o: ["Machine learning", "Computer graphics", "Physics", "All of the above"], a: 3, r: "سؤال مكرر للأهمية: الجبر الخطي يدخل في تعلم الآلة والفيزياء والجرافيكس." },
+            { q: "30. In which field is the concept of eigenvalues used?", o: ["Physics", "Machine Learning", "Quantum Computing", "All of the above"], a: 3, r: "سؤال مكرر للأهمية: القيم الذاتية تستخدم في مجالات علمية دقيقة متعددة." },
+            { q: "31. Solving a system of equations means finding:", o: ["Only x value", "Only y value", "Only one solution", "The solution set"], a: 3, r: "الحل يعني إيجاد مجموعة الحلول الكاملة (The solution set) التي تحقق جميع المعادلات معاً." },
+            { q: "32. True or False: A system of linear equations can be solved using matrix methods.", o: ["True", "False"], a: 0, r: "صحيح، طرق مثل معكوس المصفوفة أو حذف غاوس تستخدم لحل هذه الأنظمة." },
+            { q: "33. If a system is consistent, it has:", o: ["No solution", "Exactly two solutions", "Only infinite solutions", "At least one solution"], a: 3, r: "النظام المتوافق (Consistent) إما أن يكون له حل وحيد أو عدد لانهائي من الحلول." },
+            { q: "34. The eigenvalue equation results in a system of:", o: ["Random numbers", "Quadratic equations", "Nonlinear equations", "Linear equations"], a: 3, r: "سؤال مكرر: المعادلة تؤدي لنظام من المعادلات الخطية." },
+            { q: "35. What is the equation used to find eigenvalues?", o: ["A + λI = 0", "Aλ = 0", "Ax = xA", "det(A - λI) = 0"], a: 3, r: "سؤال مكرر لتأكيد المعادلة الأساسية للقيم الذاتية." },
+            { q: "36. Interchanging two rows in a matrix is called:", o: ["Rotation", "Shift", "Reduction", "Swap"], a: 3, r: "تبديل صفين ببعضهما يُعرف بعملية الـ Swap." },
+            { q: "37. Which method is used to compute eigenvalues for large matrices?", o: ["Matrix multiplication", "Gaussian elimination", "Determinant calculation", "Power Iteration Method"], a: 3, r: "طريقة القوة التكرارية (Power Iteration) تستخدم برمجياً لإيجاد القيم الذاتية للمصفوفات الضخمة بكفاءة." },
+            { q: "38. Which of the following methods is used to compute eigenvalues?", o: ["Integration", "Matrix multiplication", "Gaussian elimination", "Determinant approach"], a: 3, r: "نظرياً، إيجاد المحددات (Determinant approach) هو الطريقة الكلاسيكية لحساب القيم الذاتية." },
+            { q: "39. A solution of a system of linear equations is:", o: ["A number", "A vector only", "A matrix", "A list of numbers satisfying all equations"], a: 3, r: "الحل هو مجموعة (قائمة) من الأرقام للمتغيرات تجعل كل معادلات النظام صحيحة." },
+            { q: "40. Which of the following is a real-world application of eigenvalues?", o: ["Image processing", "Google PageRank", "Vibration analysis", "All of the above"], a: 3, r: "سؤال مكرر للتأكيد على أهمية القيم الذاتية في الحياة الواقعية والبرمجة." }
+        ];
+
+        let currentQuestion = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+
+        function loadQuestion() {
+            // إخفاء الشرح
+            document.getElementById('rationale-container').classList.remove('show');
+            
+            // تحديث العداد
+            document.getElementById('question-tracker').innerText = `Question ${currentQuestion + 1} of ${questions.length}`;
+            
+            // نص السؤال
+            document.getElementById('question-text').innerText = questions[currentQuestion].q;
+            
+            // الخيارات
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            questions[currentQuestion].o.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectAnswer(index);
+                
+                // إذا تم الإجابة مسبقاً
+                if (userAnswers[currentQuestion] !== null) {
+                    btn.disabled = true;
+                    if (index === questions[currentQuestion].a) {
+                        btn.classList.add('correct');
+                    } else if (index === userAnswers[currentQuestion]) {
+                        btn.classList.add('wrong');
+                    }
+                }
+                
+                optionsContainer.appendChild(btn);
+            });
+            
+            // إظهار الشرح لو تمت الإجابة
+            if (userAnswers[currentQuestion] !== null) {
+                document.getElementById('rationale-text').innerText = questions[currentQuestion].r;
+                document.getElementById('rationale-container').classList.add('show');
+            }
+            
+            // أزرار التنقل
+            document.getElementById('prev-btn').style.display = currentQuestion > 0 ? 'block' : 'none';
+            document.getElementById('prev-btn').classList.add('show');
+            
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.classList.add('show');
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.innerText = 'Finish Exam ➔';
+            } else {
+                nextBtn.innerText = 'Next Question ➔';
+            }
+        }
+
+        function selectAnswer(index) {
+            if (userAnswers[currentQuestion] !== null) return;
+            
+            userAnswers[currentQuestion] = index;
+            const correctIndex = questions[currentQuestion].a;
+            const btns = document.querySelectorAll('.option-btn');
+            
+            btns.forEach(btn => btn.disabled = true);
+            btns[correctIndex].classList.add('correct');
+            
+            if (index === correctIndex) {
+                correctCount++;
+            } else {
+                btns[index].classList.add('wrong');
+                wrongCount++;
+            }
+            
+            // تحديث إحصائيات الإجابات
+            document.getElementById('correct-tracker').innerText = `✅ Correct: ${correctCount}`;
+            document.getElementById('wrong-tracker').innerText = `❌ Wrong: ${wrongCount}`;
+            
+            // إظهار الشرح
+            document.getElementById('rationale-text').innerText = questions[currentQuestion].r;
+            document.getElementById('rationale-container').classList.add('show');
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-content').style.display = 'none';
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.classList.add('show');
+            
+            document.getElementById('final-score').innerText = correctCount;
+            document.getElementById('final-correct').innerText = correctCount;
+            document.getElementById('final-wrong').innerText = wrongCount;
+        }
+
+        // تشغيل الاختبار لأول مرة
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>
