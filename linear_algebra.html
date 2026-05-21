@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maze Tech - Comprehensive Exam (120 Questions)</title>
+    <title>AI_BIO</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
 
@@ -228,11 +228,11 @@
 
     <div class="quiz-container" id="quiz-container">
         <div class="header-line"></div>
-        <h1>Maze Tech - Comprehensive Exam (120 Qs)</h1>
+        <h1> Linear Algebra</h1>
         
         <div id="quiz-content">
             <div class="stats en-text">
-                <span id="question-tracker">Question 1 of 120</span>
+                <span id="question-tracker">Question 1 of 136</span>
                 <div class="counters">
                     <span id="correct-tracker" class="correct-text">✅ Correct: 0</span>
                     <span id="wrong-tracker" class="wrong-text">❌ Wrong: 0</span>
@@ -257,7 +257,7 @@
         <div class="result-container" id="result-container">
             <h2 style="font-size: 32px; margin-bottom: 20px; color: white;">Exam Completed!</h2>
             <div style="font-size: 24px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
-                <p>Final Score: <span id="final-score" style="color: var(--neon-blue); font-weight: bold;"></span> / 120</p>
+                <p>Final Score: <span id="final-score" style="color: var(--neon-blue); font-weight: bold;"></span> / 136</p>
                 <p class="correct-text">✅ Correct: <span id="final-correct"></span></p>
                 <p class="wrong-text">❌ Wrong: <span id="final-wrong"></span></p>
             </div>
@@ -267,7 +267,7 @@
 
     <script>
         const questions = [
-            // ================= SECTION 1: LINEAR ALGEBRA QUIZZES 1 & 2 (40 Questions) =================
+            // ================= الجزء الأول: 40 سؤال من كويزات الفيديو (الجبر الخطي فقط) =================
             { q: "1. Which field heavily relies on linear algebra?", o: ["Computer graphics", "Physics", "Machine learning", "All of the above"], a: 3, r: "الجبر الخطي هو الأساس الرياضي في مجالات الجرافيكس، الفيزياء، وتعلم الآلة." },
             { q: "2. Which concept is NOT related to linear algebra?", o: ["Matrix inversion", "Gaussian elimination", "Fourier Transform", "Eigenvectors"], a: 2, r: "تحويل فورييه يرتبط بالتحليل الدالي ومعالجة الإشارات وليس الجبر الخطي بشكل مباشر." },
             { q: "3. In which field is the concept of eigenvalues used?", o: ["Quantum Computing", "Machine Learning", "Physics", "All of the above"], a: 3, r: "القيم الذاتية لها تطبيقات واسعة في ميكانيكا الكم، خوارزميات تعلم الآلة، والفيزياء." },
@@ -309,89 +309,107 @@
             { q: "39. A solution of a system of linear equations is:", o: ["A number", "A vector only", "A matrix", "A list of numbers satisfying all equations"], a: 3, r: "الحل هو مجموعة (قائمة) من الأرقام للمتغيرات تجعل كل معادلات النظام صحيحة." },
             { q: "40. Which of the following is a real-world application of eigenvalues?", o: ["Image processing", "Google PageRank", "Vibration analysis", "All of the above"], a: 3, r: "تأكيد على أهمية القيم الذاتية في الحياة الواقعية والبرمجة." },
 
-            // ================= SECTION 2: ELECTRONICS QUIZZES 1 & 2 (40 Questions) =================
-            { q: "41. Resistance is the property that:", o: ["Produces voltage", "Increases current", "Stores charge", "Opposes current flow"], a: 3, r: "المقاومة (Resistance) هي الخاصية التي تعيق أو تعارض تدفق التيار الكهربائي في الدائرة." },
-            { q: "42. Which instrument measures current?", o: ["Barometer", "Thermometer", "Ammeter", "Voltmeter"], a: 2, r: "جهاز الأميتر (Ammeter) يُستخدم لقياس شدة التيار الكهربائي في الدائرة، ويوصل على التوالي." },
-            { q: "43. Resistors connected in series have:", o: ["Infinite voltage", "No current", "Same voltage", "Same current"], a: 3, r: "في دوائر التوالي، يمر نفس التيار في جميع المقاومات دون تفرع." },
-            { q: "44. The unit of voltage is:", o: ["Volt", "Joule", "Ampere", "Ohm"], a: 0, r: "الفولت (Volt) هو وحدة قياس فرق الجهد الكهربائي." },
-            { q: "45. The unit of electric current is:", o: ["Ampere", "Ohm", "Volt", "Watt"], a: 0, r: "الأمبير (Ampere) هو وحدة قياس التيار الكهربائي." },
-            { q: "46. The unit of resistance is:", o: ["Farad", "Ohm", "Volt", "Ampere"], a: 1, r: "الأوم (Ohm) هو وحدة قياس المقاومة الكهربائية." },
-            { q: "47. Which instrument measures resistance?", o: ["Ammeter", "Wattmeter", "Ohmmeter", "Voltmeter"], a: 2, r: "جهاز الأوميتر (Ohmmeter) مخصص لقياس قيمة المقاومة الكهربائية." },
-            { q: "48. The color bands on a resistor indicate:", o: ["Voltage level", "Temperature", "Current capacity", "Resistance value"], a: 3, r: "الألوان الموجودة على المقاومة (Color bands) تستخدم كشفرة لمعرفة قيمة المقاومة بالأوم." },
-            { q: "49. Increasing voltage in a circuit will:", o: ["Remove resistance", "Decrease current", "Increase current", "Stop current"], a: 2, r: "حسب قانون أوم، بزيادة الجهد يزداد التيار (علاقة طردية) بافتراض ثبات المقاومة." },
-            { q: "50. Which instrument measures voltage?", o: ["Ohmmeter", "Galvanometer", "Ammeter", "Voltmeter"], a: 3, r: "جهاز الفولتميتر (Voltmeter) يستخدم لقياس فرق الجهد ويوصل على التوازي." },
-            { q: "51. A resistor is used to:", o: ["Limit current", "Generate power", "Increase voltage", "Store energy"], a: 0, r: "الوظيفة الأساسية للمقاومة هي الحد من (تقليل) شدة التيار المار في الدائرة." },
-            { q: "52. Voltage is defined as:", o: ["Rate of electron flow", "Electric potential difference", "Electrical resistance", "Energy loss"], a: 1, r: "الجهد (Voltage) هو فرق الجهد الكهربائي أو القوة الدافعة التي تحرك الإلكترونات." },
-            { q: "53. A conductor with very high resistance is called:", o: ["Transistor", "Capacitor", "Insulator", "Inductor"], a: 2, r: "المادة ذات المقاومة العالية جداً التي تمنع مرور التيار تسمى عازلاً (Insulator)." },
-            { q: "54. The symbol for resistance in formulas is:", o: ["V", "R", "P", "I"], a: 1, r: "يُرمز للمقاومة بالحرف R (اختصاراً لـ Resistance)." },
-            { q: "55. Resistors connected in parallel have:", o: ["Same current", "No voltage", "Same voltage", "Same resistance"], a: 2, r: "في التوصيل على التوازي، يكون فرق الجهد ثابتاً عبر جميع الفروع." },
-            { q: "56. Electric current is the flow of:", o: ["Electrons", "Protons", "Neutrons", "Photons"], a: 0, r: "التيار الكهربائي هو عبارة عن تدفق للشحنات السالبة (الإلكترونات) في الموصل." },
-            { q: "57. Power in an electrical circuit is calculated by:", o: ["P = V × I", "P = V / I", "P = I − V", "P = V + I"], a: 0, r: "القدرة الكهربائية (Power) تساوي حاصل ضرب الجهد في التيار." },
-            { q: "58. If voltage is 10V and resistance is 5Ω, the current is:", o: ["1 A", "5 A", "2 A", "10 A"], a: 2, r: "حسب قانون أوم (I = V/R): التيار = 10 / 5 = 2 أمبير." },
-            { q: "59. If resistance increases in a circuit, current will:", o: ["Stay the same", "Decrease", "Increase", "Disappear"], a: 1, r: "العلاقة بين المقاومة والتيار عكسية، فكلما زادت المقاومة قل التيار المار." },
-            { q: "60. Ohm’s Law states that:", o: ["I = V × R", "R = V × I", "V = I × R", "P = V × I"], a: 2, r: "قانون أوم ينص على أن الجهد يساوي التيار مضروباً في المقاومة (V = I × R)." },
-            { q: "61. In a series circuit, if one resistor fails (open circuit), the current:", o: ["Increases", "Becomes zero everywhere", "Remains constant", "Decreases slightly"], a: 1, r: "في دائرة التوالي، مسار التيار واحد فقط. إذا انقطع (Open circuit) ينعدم التيار بالكامل." },
-            { q: "62. If a 12 V battery is connected to a 6 Ω resistor, the current flowing through the circuit is:", o: ["2 A", "1 A", "0.5 A", "3 A"], a: 0, r: "بحساب قانون أوم: I = V/R -> 12 / 6 = 2 أمبير." },
-            { q: "63. According to Ohm's Law, what happens to current if voltage increases while resistance stays constant?", o: ["Current remains unchanged", "Current increases proportionally", "Current decreases", "Current becomes zero"], a: 1, r: "التيار يتناسب طردياً مع الجهد عند ثبوت المقاومة (يزداد بزيادته)." },
-            { q: "64. The total resistance in a series circuit is always:", o: ["Equal to the largest resistor", "Greater than any individual resistor", "Less than the smallest resistor", "Zero"], a: 1, r: "المقاومة المكافئة في التوالي هي مجموع المقاومات، لذا فهي دائماً أكبر من أي مقاومة مفردة فيها." },
-            { q: "65. If two resistors 10Ω and 20Ω are connected in parallel, the equivalent resistance is:", o: ["6.67 Ω", "15 Ω", "30 Ω", "10 Ω"], a: 0, r: "Req = (R1 × R2) / (R1 + R2) = (10 × 20) / (30) = 200 / 30 = 6.67 أوم." },
-            { q: "66. Which formula can be used to calculate electrical power in a resistor?", o: ["P = IV", "All of the above", "P = V²/R", "P = I²R"], a: 1, r: "جميع هذه القوانين صحيحة رياضياً ومستنتجة من قانون أوم لحساب القدرة (Power)." },
-            { q: "67. If three identical resistors R are connected in parallel, the equivalent resistance is:", o: ["R", "R²", "R/3", "3R"], a: 2, r: "عند توصيل مقاومات متماثلة على التوازي، المقاومة المكافئة تساوي قيمة إحداها مقسومة على عددها (R/n)." },
-            { q: "68. In a parallel circuit, if one branch fails (open), the total current:", o: ["Stops completely", "Becomes zero", "Increases", "Decreases but circuit still works"], a: 3, r: "في التوازي، كل فرع مستقل. إذا فُصل فرع، يقل التيار الكلي بمقدار تيار هذا الفرع، لكن باقي الدائرة تعمل." },
-            { q: "69. In a parallel circuit, the branch with smaller resistance carries:", o: ["Less current", "No current", "More current", "Equal current"], a: 2, r: "التيار يفضل المسار الأسهل، لذلك يمر التيار الأكبر في الفرع ذي المقاومة الأقل." },
-            { q: "70. Three resistors 4Ω, 6Ω, and 12Ω are connected in parallel. The equivalent resistance is closest to:", o: ["5 Ω", "2 Ω", "3 Ω", "4 Ω"], a: 1, r: "1/Req = 1/4 + 1/6 + 1/12 = 3/12 + 2/12 + 1/12 = 6/12. إذن Req = 12/6 = 2 أوم." },
-            { q: "71. In a series circuit, which quantity remains constant through all components?", o: ["Current", "Voltage", "Power", "Resistance"], a: 0, r: "في دوائر التوالي، مسار الإلكترونات واحد، لذا شدة التيار ثابتة في جميع المكونات." },
-            { q: "72. If four 8Ω resistors are connected in parallel, the equivalent resistance is:", o: ["2 Ω", "16 Ω", "4 Ω", "8 Ω"], a: 0, r: "المقاومات متساوية، إذن المكافئة = قيمة الواحدة / عددها = 8 / 4 = 2 أوم." },
-            { q: "73. If the resistance in a circuit doubles while voltage remains constant, the current will:", o: ["Double", "Become zero", "Halve", "Remain constant"], a: 2, r: "العلاقة عكسية؛ إذا تضاعفت المقاومة، سيقل التيار إلى النصف (Halve)." },
-            { q: "74. A 24 V source supplies 3 A current in a circuit. The total resistance is:", o: ["12 Ω", "8 Ω", "72 Ω", "6 Ω"], a: 1, r: "حسب قانون أوم (R = V/I): المقاومة = 24 / 3 = 8 أوم." },
-            { q: "75. In a parallel circuit, the voltage across each branch is:", o: ["Different", "Equal to the supply voltage", "Zero", "Increasing"], a: 1, r: "في التوصيل على التوازي، جميع الفروع تتصل بنفس نقطتي البداية والنهاية، لذا الجهد متساوٍ ويساوي جهد المصدر." },
-            { q: "76. If voltage across a resistor is 20 V and the current is 4 A, what is the resistance?", o: ["10 Ω", "2 Ω", "5 Ω", "4 Ω"], a: 2, r: "المقاومة = الجهد ÷ التيار -> 20 / 4 = 5 أوم." },
-            { q: "77. Three resistors 2Ω, 3Ω, and 5Ω are connected in series. The total resistance is:", o: ["5 Ω", "15 Ω", "8 Ω", "10 Ω"], a: 3, r: "في التوالي نجمع القيم مباشرة: 2 + 3 + 5 = 10 أوم." },
-            { q: "78. A circuit contains two resistors 4Ω and 8Ω in series connected to 12 V. The circuit current is:", o: ["1.5 A", "2 A", "0.5 A", "1 A"], a: 3, r: "المقاومة الكلية = 12 أوم. الجهد = 12 فولت. إذن التيار = 12 / 12 = 1 أمبير." },
-            { q: "79. Which statement best describes the total resistance in a parallel circuit?", o: ["It is greater than the largest resistor", "It is equal to the average resistance", "It is smaller than the smallest resistor", "It equals the sum of all resistances"], a: 2, r: "في التوازي، المقاومة المكافئة دائماً تكون أصغر من أصغر مقاومة في الدائرة." },
-            { q: "80. If the supply voltage increases while resistance remains constant, current will:", o: ["Become zero", "Decrease", "Stay the same", "Increase proportionally"], a: 3, r: "بسبب التناسب الطردي في قانون أوم، أي زيادة في الجهد يقابلها زيادة في التيار إذا ظلت المقاومة ثابتة." },
+            // ================= الجزء الثاني: 40 سؤال من امتحان الفاينل بالصور =================
+            { q: "41. A matrix X for solving the equation 3X + A = B, where A = [1, -2; 0, 3], B = [-3, 4; 2, 1] is:", o: ["[ -4/3, 2 ; 2/3, -2/3 ]", "[ -4/3, 2 ; 3, -2/3 ]", "[ 4/3, 2 ; 2/3, -2/3 ]", "[ 4/3, 2 ; 3, 3 ]"], a: 0, r: "بحساب 3X = B - A ينتج المصفوفة [-4, 6 ; 2, -2]. بالقسمة على 3 لكل عنصر نحصل على الخيار الأول." },
+            { q: "42. Which of the vectors below are scalar multiples of z = (1/2, -2/3, 3/4)?", o: ["u = (-1, 4/3, -3/2)", "v = (6, -4, 9)", "w = (12, 0, 9)", "None of these"], a: 0, r: "بضرب المتجه z في المعامل القياسي (-2) نحصل تماماً على المتجه u." },
+            { q: "43. The value of the determinant | 1+x, 1, 1 | 1, 1+x, 1 | 1, 1, 1+x | equal to:", o: ["x²(x+3)", "x³", "3x³", "0"], a: 0, r: "بتبسيط المحدد (بإضافة الأعمدة وطرح الصفوف) ينتج المقدار x²(x+3)." },
+            { q: "44. The eigenvalues of the matrix A = [1, 4; 2, 3] are:", o: ["-1, 5", "1, 5", "5, -1", "5, 1"], a: 2, r: "مجموع القيم الذاتية يساوي أثر المصفوفة (1+3=4)، وحاصل ضربهم يساوي المحدد (3-8=-5). القيمتان اللتان تحققان ذلك هما 5 و -1." },
+            { q: "45. The inverse matrix of A, where A = [1, -2; 0, 3] is:", o: ["[1, 0; 2, 3]", "[1, 0; -2/3, 1/3]", "[1, -2/3; 0, 1/3]", "[1, 2/3; 0, 1/3]"], a: 3, r: "معكوس المصفوفة 2x2 يُحسب بتبديل عناصر القطر الرئيسي وعكس إشارة القطر الآخر، ثم القسمة على المحدد (وهو 3)." },
+            { q: "46. The set of vectors S = {(1,2), (2,4)} is ............... in R²", o: ["Linearly dependent", "Linearly independent", "Neither linearly dependent nor linearly independent", "None of these"], a: 0, r: "بما أن المتجه الثاني هو مضاعف للمتجه الأول (2 × (1,2) = (2,4))، فالمجموعة مرتبطة خطياً (Linearly dependent)." },
+            { q: "47. If A, B are matrices, where A = [2, 1, -2; -1, 0, 3; 0, -2, 1], B = [3, 1; 2, -1; 3, 0], then (AB)^T equal to:", o: ["[2, 6, -1 ; 1, -1, 2]", "[2, 6, 1 ; 1, -1, 2]", "[2, 6, -1 ; 1, 1, 2]", "[2, 6, -1 ; -1, -1, -2]"], a: 0, r: "بعد ضرب المصفوفتين A و B، نقوم بعملية التدوير (Transpose) بتبديل الصفوف بالأعمدة لنحصل على الخيار الأول." },
+            { q: "48. A system of linear equations x - 2y + 3z = 9 , y + 3z = 5 , z = 2 has a solution (x, y, z) = .........", o: ["(1, -1, 2)", "(-1, 1, 2)", "(1, 1, 2)", "(11, -1, 2)"], a: 0, r: "بالتعويض العكسي: z=2، إذن y + 6 = 5 ومنها y = -1. بالتعويض في المعادلة الأولى نجد أن x = 1." },
+            { q: "49. If A, B are matrices, where A = [1, 0; 0, 0] , B = [0, 0; 0, 1] , then A+B is called........", o: ["singular", "nonsingular", "neither singular nor nonsingular", "None of these"], a: 1, r: "جمع المصفوفتين يعطي مصفوفة الوحدة I. محدد مصفوفة الوحدة = 1 (لا يساوي صفر)، إذن هي غير شاذة (nonsingular)." },
+            { q: "50. If A = [beta, 0; 1, 1] and B = [1, 0; 5, 1] such that A² = B, then beta equal to .......", o: ["1", "-1", "4", "None of these"], a: 3, r: "بتربيع المصفوفة A ومساواتها بـ B نجد تناقضاً (beta² = 1 بينما beta+1 = 5)، لذا لا توجد قيمة لـ beta تحقق المعادلة." },
+            { q: "51. The eigenvector corresponding the eigenvalue λ=5 of the matrix A = [1, 4; 2, 3] is .........", o: ["[-1; 1]", "[1; 1]", "[1; 0]", "None of these"], a: 1, r: "بحل النظام (A - 5I)X = 0 ينتج المعادلة -4x + 4y = 0، مما يعني x = y، المتجه [1; 1] يحقق ذلك." },
+            { q: "52. Which of the vectors below are scalar multiples of z = (3, 2, -5)", o: ["u = (2, 4/3, -10/3)", "v = (6, 4, 10)", "w = (-6, -4, 10)", "None of these"], a: 0, r: "بضرب المتجه z في (2/3) نحصل تماماً على المتجه u." },
+            { q: "53. If A and B are matrices, then (A^T B^T)^T = .........", o: ["B^T A^T", "A B", "(B A)^T", "B A"], a: 3, r: "حسب خصائص المصفوفات، مدور حاصل الضرب يساوي حاصل ضرب المدورات بترتيب عكسي، لذا ينتج B A." },
+            { q: "54. The set of vectors M = {(1,2,3), (0,1,2), (-2,0,1)} is ............... in R³", o: ["Linearly dependent", "Linearly independent", "Neither linearly dependent nor linearly independent", "None of these"], a: 1, r: "بحساب محدد المصفوفة المكونة من هذه المتجهات نجد أنه لا يساوي صفراً، إذن هي مستقلة خطياً." },
+            { q: "55. A value of c for which the system of equations is consistent: x+y=1 , (c-2)x+(c+4)y=6 , (c+2)²x+(c+4)²y=36 is .........", o: ["1", "2", "-2", "None of these"], a: 1, r: "بالتعويض بـ c=2 نجد أن المعادلات تتوافق وتتقاطع عند النقطة (0, 1)." },
+            { q: "56. The eigenvalues of the matrix A = [1, 2, -2; 1, 2, 1; -1, -1, 0] are ...........", o: ["-1, 1, 3", "1, 1, 3", "1, 1, -3", "None of these"], a: 0, r: "مجموع القيم الذاتية يجب أن يساوي الأثر (Trace = 3) وحاصل ضربها يساوي المحدد (-3). الخيار الأول هو الوحيد الذي يحقق ذلك." },
+            { q: "57. The value of the matrix A = [2, 3, -1; 0, -1, 2; 0, 0, 3] equal to......... (meaning Determinant)", o: ["-6", "6", "1/6", "None of these"], a: 0, r: "محدد المصفوفة المثلثية العليا يساوي حاصل ضرب عناصر قطرها الرئيسي (2 × -1 × 3 = -6)." },
+            { q: "58. If the determinant | a+x, a, x | a-x, a, x | a-x, a, -x | = 0, then x equal to.........", o: ["0", "2a", "a", "3a"], a: 0, r: "بتبسيط المحدد نجد أنه يساوي -4ax² = 0، وبالتالي x = 0." },
+            { q: "59. If A and B are matrices, then (A^T + B)^T = .........", o: ["A + B^T", "B + A^T", "A^T + B^T", "None of these"], a: 0, r: "مدور المجموع يساوي مجموع المدورات، ومدور المدور يرجع المصفوفة لأصلها، إذن النتيجة A + B^T." },
+            { q: "60. The eigenvector corresponding the eigenvalue λ=1 of the matrix A = [1, 2, -2; 1, 2, 1; -1, -1, 0] is .........", o: ["[-2; 1; 1]", "[2; -1; 1]", "[-2; 1; -1]", "None of these"], a: 0, r: "بحل النظام المتجانس (A - I)X = 0 نجد أن المتجه هو [-2; 1; 1]." },
+            { q: "61. If determinant | a+x, a-x, a-x | a-x, a+x, a-x | a-x, a-x, a+x | = 0, then x equal to.........", o: ["0", "2a", "a", "3a"], a: 3, r: "بجمع جميع الأعمدة على العمود الأول نجد أن (3a-x) عامل مشترك، بمساواته بالصفر ينتج x = 3a." },
+            { q: "62. If the matrix A = [1, 3; 0, -2; -2, -1], then AA^T equal to .........", o: ["[10, -6, -5; -6, 4, 2; -5, 2, 5]", "[10, -6, -5; 6, 4, 2; 5, 2, 5]", "[10, 6, -5; -6, 4, 2; -5, 2, 5]", "[10, -6, 5; -6, 4, 2; -5, 2, 5]"], a: 0, r: "بضرب المصفوفة A في مدورها A^T ينتج مصفوفة 3x3 قيمها مطابقة للخيار الأول." },
+            { q: "63. The eigenvector corresponding the eigenvalue λ=-1 of the matrix A = [1, 4; 2, 3] is .........", o: ["[2; 1]", "[-2; 1]", "[2; -1]", "None of these"], a: 1, r: "بحل النظام (A + I)X = 0 ينتج 2x + 4y = 0، مما يعني x = -2y. المتجه [-2; 1] يحقق ذلك." },
+            { q: "64. The eigenvector corresponding the eigenvalue λ=-1 of the matrix A = [1, 2, -2; 1, 2, 1; -1, -1, 0] is .........", o: ["[-2; -1; 1]", "[2; -1; 1]", "[-2; 1; 1]", "None of these"], a: 1, r: "بحل النظام (A + I)X = 0 نستنتج أن المتجه الذي يرضي جميع المعادلات هو [2; -1; 1]." },
+            { q: "65. The eigenvector corresponding the eigenvalue λ=3 of the matrix A = [1, 2, -2; 1, 2, 1; -1, -1, 0] is .........", o: ["[-2; -1; 1]", "[2; -1; 1]", "[-2; 1; 1]", "None of these"], a: 0, r: "بحل النظام (A - 3I)X = 0، المتجه الناتج هو [-2; -1; 1]." },
+            { q: "66. True/False: The product of the lower triangular matrices is not lower triangular matrix.", o: ["True", "False"], a: 1, r: "خطأ. حاصل ضرب أي مصفوفتين مثلثيتين سفليتين ينتج دائماً مصفوفة مثلثية سفلية." },
+            { q: "67. True/False: The inverse of the matrix exists, it is not unique.", o: ["True", "False"], a: 1, r: "خطأ. المعكوس الضربي للمصفوفة (إن وُجد) يكون دائماً فريداً (Unique)." },
+            { q: "68. True/False: The product of matrices satisfies the commutative law.", o: ["True", "False"], a: 1, r: "خطأ. ضرب المصفوفات بشكل عام ليس إبدالياً (AB لا تساوي BA دائماً)." },
+            { q: "69. True/False: A square matrix of size nxn can be written as the product of a lower triangular matrix and an upper triangular matrix.", o: ["True", "False"], a: 0, r: "صحيح. يُعرف هذا بتحليل LU (LU Decomposition)." },
+            { q: "70. True/False: The intersection of two subspaces of vector space is not subspace.", o: ["True", "False"], a: 1, r: "خطأ. تقاطع أي فضاءين جزئيين يشكل دائماً فضاءً جزئياً." },
+            { q: "71. True/False: The sum of matrices satisfies the commutative law, if the matrices have the same size.", o: ["True", "False"], a: 0, r: "صحيح. جمع المصفوفات عملية إبدالية (A+B = B+A)." },
+            { q: "72. True/False: The homogeneous system of equations has only trivial solution, if the matrix coefficient has invertible.", o: ["True", "False"], a: 0, r: "صحيح. إذا كانت مصفوفة المعاملات قابلة للانعكاس، فالحل الوحيد هو الحل الصفري البديهي." },
+            { q: "73. True/False: For a vector space Rⁿ, the additive identity is unique.", o: ["True", "False"], a: 0, r: "صحيح. المحايد الجمعي (المتجه الصفري) يكون دائماً فريداً في أي فضاء اتجاهي." },
+            { q: "74. True/False: The set of all integers with standard operations forms a vector space.", o: ["True", "False"], a: 1, r: "خطأ. مجموعة الأعداد الصحيحة ليست مغلقة تحت عملية الضرب القياسي بأعداد حقيقية." },
+            { q: "75. True/False: The union of two subspaces of vector space is a subspace.", o: ["True", "False"], a: 1, r: "خطأ. اتحاد فضاءين جزئيين لا يكون فضاءً جزئياً إلا إذا كان أحدهما محتوى بالكامل داخل الآخر." },
+            { q: "76. True/False: The non-homogeneous system of equations has an infinite solution, if the matrix coefficient has invertible.", o: ["True", "False"], a: 1, r: "خطأ. إذا كانت مصفوفة المعاملات قابلة للانعكاس، فإن النظام يكون له حل فريد (وحيد)." },
+            { q: "77. True/False: The set of all linear combinations of a vector space forms a subspace.", o: ["True", "False"], a: 0, r: "صحيح. الامتداد الخطي (Span) لمجموعة من المتجهات يشكل دائماً فضاءً جزئياً." },
+            { q: "78. True/False: The product of the upper triangular matrices is upper triangular matrix.", o: ["True", "False"], a: 0, r: "صحيح. ضرب مصفوفتين مثلثيتين عليويتين يعطي مصفوفة عليا." },
+            { q: "79. True/False: The sum of two square singular matrices is a non singular matrix.", o: ["True", "False"], a: 1, r: "خطأ. ليس بالضرورة (المصفوفة الصفرية + المصفوفة الصفرية = مصفوفة صفرية وهي شاذة)." },
+            { q: "80. True/False: A square matrix of size nxn cannot be written as the product of elementary matrices, if it invertible.", o: ["True", "False"], a: 1, r: "خطأ. العكس هو الصحيح؛ المصفوفة القابلة للانعكاس يمكن دائماً كتابتها كحاصل ضرب لمصفوفات أولية." },
 
-            // ================= SECTION 3: LINEAR ALGEBRA FINAL EXAM (40 Questions) =================
-            { q: "81. A matrix X for solving the equation 3X + A = B, where A = [1, -2; 0, 3], B = [-3, 4; 2, 1] is:", o: ["[ -4/3, 2 ; 2/3, -2/3 ]", "[ -4/3, 2 ; 3, -2/3 ]", "[ 4/3, 2 ; 2/3, -2/3 ]", "[ 4/3, 2 ; 3, 3 ]"], a: 0, r: "بحساب 3X = B - A ينتج المصفوفة [-4, 6 ; 2, -2]. بالقسمة على 3 لكل عنصر نحصل على الخيار الأول." },
-            { q: "82. Which of the vectors below are scalar multiples of z = (1/2, -2/3, 3/4)?", o: ["u = (-1, 4/3, -3/2)", "v = (6, -4, 9)", "w = (12, 0, 9)", "None of these"], a: 0, r: "بضرب المتجه z في المعامل القياسي (-2) نحصل تماماً على المتجه u." },
-            { q: "83. The value of the determinant | 1+x, 1, 1 | 1, 1+x, 1 | 1, 1, 1+x | equal to:", o: ["x²(x+3)", "x³", "3x³", "0"], a: 0, r: "بتبسيط المحدد (بإضافة الأعمدة وطرح الصفوف) ينتج المقدار x²(x+3)." },
-            { q: "84. The eigenvalues of the matrix A = [1, 4; 2, 3] are:", o: ["-1, 5", "1, 5", "5, -1", "5, 1"], a: 2, r: "مجموع القيم الذاتية يساوي أثر المصفوفة (1+3=4)، وحاصل ضربهم يساوي المحدد (3-8=-5). القيمتان اللتان تحققان ذلك هما 5 و -1." },
-            { q: "85. The inverse matrix of A, where A = [1, -2; 0, 3] is:", o: ["[1, 0; 2, 3]", "[1, 0; -2/3, 1/3]", "[1, -2/3; 0, 1/3]", "[1, 2/3; 0, 1/3]"], a: 3, r: "معكوس المصفوفة 2x2 يُحسب بتبديل عناصر القطر الرئيسي وعكس إشارة القطر الآخر، ثم القسمة على المحدد (وهو 3)." },
-            { q: "86. The set of vectors S = {(1,2), (2,4)} is ............... in R²", o: ["Linearly dependent", "Linearly independent", "Neither linearly dependent nor linearly independent", "None of these"], a: 0, r: "بما أن المتجه الثاني هو مضاعف للمتجه الأول (2 × (1,2) = (2,4))، فالمجموعة مرتبطة خطياً (Linearly dependent)." },
-            { q: "87. If A, B are matrices, where A = [2, 1, -2; -1, 0, 3; 0, -2, 1], B = [3, 1; 2, -1; 3, 0], then (AB)^T equal to:", o: ["[2, 6, -1 ; 1, -1, 2]", "[2, 6, 1 ; 1, -1, 2]", "[2, 6, -1 ; 1, 1, 2]", "[2, 6, -1 ; -1, -1, -2]"], a: 0, r: "بعد ضرب المصفوفتين A و B، نقوم بعملية التدوير (Transpose) بتبديل الصفوف بالأعمدة لنحصل على الخيار الأول." },
-            { q: "88. A system of linear equations x - 2y + 3z = 9 , y + 3z = 5 , z = 2 has a solution (x, y, z) = .........", o: ["(1, -1, 2)", "(-1, 1, 2)", "(1, 1, 2)", "(11, -1, 2)"], a: 0, r: "بالتعويض العكسي: z=2، إذن y + 6 = 5 ومنها y = -1. بالتعويض في المعادلة الأولى نجد أن x = 1." },
-            { q: "89. If A, B are matrices, where A = [1, 0; 0, 0] , B = [0, 0; 0, 1] , then A+B is called........", o: ["singular", "nonsingular", "neither singular nor nonsingular", "None of these"], a: 1, r: "جمع المصفوفتين يعطي مصفوفة الوحدة I. محدد مصفوفة الوحدة = 1 (لا يساوي صفر)، إذن هي غير شاذة (nonsingular)." },
-            { q: "90. If A = [beta, 0; 1, 1] and B = [1, 0; 5, 1] such that A² = B, then beta equal to .......", o: ["1", "-1", "4", "None of these"], a: 3, r: "بتربيع المصفوفة A ومساواتها بـ B نجد تناقضاً (beta² = 1 بينما beta+1 = 5)، لذا لا توجد قيمة لـ beta تحقق المعادلة." },
-            { q: "91. The eigenvector corresponding the eigenvalue λ=5 of the matrix A = [1, 4; 2, 3] is .........", o: ["[-1; 1]", "[1; 1]", "[1; 0]", "None of these"], a: 1, r: "بحل النظام (A - 5I)X = 0 ينتج المعادلة -4x + 4y = 0، مما يعني x = y، المتجه [1; 1] يحقق ذلك." },
-            { q: "92. Which of the vectors below are scalar multiples of z = (3, 2, -5)", o: ["u = (2, 4/3, -10/3)", "v = (6, 4, 10)", "w = (-6, -4, 10)", "None of these"], a: 0, r: "بضرب المتجه z في (2/3) نحصل تماماً على المتجه u." },
-            { q: "93. If A and B are matrices, then (A^T B^T)^T = .........", o: ["B^T A^T", "A B", "(B A)^T", "B A"], a: 3, r: "حسب خصائص المصفوفات، مدور حاصل الضرب يساوي حاصل ضرب المدورات بترتيب عكسي، لذا ينتج B A." },
-            { q: "94. The set of vectors M = {(1,2,3), (0,1,2), (-2,0,1)} is ............... in R³", o: ["Linearly dependent", "Linearly independent", "Neither linearly dependent nor linearly independent", "None of these"], a: 1, r: "بحساب محدد المصفوفة المكونة من هذه المتجهات نجد أنه لا يساوي صفراً، إذن هي مستقلة خطياً." },
-            { q: "95. A value of c for which the system of equations is consistent: x+y=1 , (c-2)x+(c+4)y=6 , (c+2)²x+(c+4)²y=36 is .........", o: ["1", "2", "-2", "None of these"], a: 1, r: "بالتعويض بـ c=2 نجد أن المعادلات تتوافق وتتقاطع عند النقطة (0, 1)." },
-            { q: "96. The eigenvalues of the matrix A = [1, 2, -2; 1, 2, 1; -1, -1, 0] are ...........", o: ["-1, 1, 3", "1, 1, 3", "1, 1, -3", "None of these"], a: 0, r: "مجموع القيم الذاتية يجب أن يساوي الأثر (Trace = 3) وحاصل ضربها يساوي المحدد (-3). الخيار الأول هو الوحيد الذي يحقق ذلك." },
-            { q: "97. The value of the matrix A = [2, 3, -1; 0, -1, 2; 0, 0, 3] equal to......... (meaning Determinant)", o: ["-6", "6", "1/6", "None of these"], a: 0, r: "محدد المصفوفة المثلثية العليا يساوي حاصل ضرب عناصر قطرها الرئيسي (2 × -1 × 3 = -6)." },
-            { q: "98. If the determinant | a+x, a, x | a-x, a, x | a-x, a, -x | = 0, then x equal to.........", o: ["0", "2a", "a", "3a"], a: 0, r: "بتبسيط المحدد نجد أنه يساوي -4ax² = 0، وبالتالي x = 0." },
-            { q: "99. If A and B are matrices, then (A^T + B)^T = .........", o: ["A + B^T", "B + A^T", "A^T + B^T", "None of these"], a: 0, r: "مدور المجموع يساوي مجموع المدورات، ومدور المدور يرجع المصفوفة لأصلها، إذن النتيجة A + B^T." },
-            { q: "100. The eigenvector corresponding the eigenvalue λ=1 of the matrix A = [1, 2, -2; 1, 2, 1; -1, -1, 0] is .........", o: ["[-2; 1; 1]", "[2; -1; 1]", "[-2; 1; -1]", "None of these"], a: 0, r: "بحل النظام المتجانس (A - I)X = 0 نجد أن المتجه هو [-2; 1; 1]." },
-            { q: "101. If determinant | a+x, a-x, a-x | a-x, a+x, a-x | a-x, a-x, a+x | = 0, then x equal to.........", o: ["0", "2a", "a", "3a"], a: 3, r: "بجمع جميع الأعمدة على العمود الأول نجد أن (3a-x) عامل مشترك، بمساواته بالصفر ينتج x = 3a." },
-            { q: "102. If the matrix A = [1, 3; 0, -2; -2, -1], then AA^T equal to .........", o: ["[10, -6, -5; -6, 4, 2; -5, 2, 5]", "[10, -6, -5; 6, 4, 2; 5, 2, 5]", "[10, 6, -5; -6, 4, 2; -5, 2, 5]", "[10, -6, 5; -6, 4, 2; -5, 2, 5]"], a: 0, r: "بضرب المصفوفة A في مدورها A^T ينتج مصفوفة 3x3 قيمها مطابقة للخيار الأول." },
-            { q: "103. The eigenvector corresponding the eigenvalue λ=-1 of the matrix A = [1, 4; 2, 3] is .........", o: ["[2; 1]", "[-2; 1]", "[2; -1]", "None of these"], a: 1, r: "بحل النظام (A + I)X = 0 ينتج 2x + 4y = 0، مما يعني x = -2y. المتجه [-2; 1] يحقق ذلك." },
-            { q: "104. The eigenvector corresponding the eigenvalue λ=-1 of the matrix A = [1, 2, -2; 1, 2, 1; -1, -1, 0] is .........", o: ["[-2; -1; 1]", "[2; -1; 1]", "[-2; 1; 1]", "None of these"], a: 1, r: "بحل النظام (A + I)X = 0 نستنتج أن المتجه الذي يرضي جميع المعادلات هو [2; -1; 1]." },
-            { q: "105. The eigenvector corresponding the eigenvalue λ=3 of the matrix A = [1, 2, -2; 1, 2, 1; -1, -1, 0] is .........", o: ["[-2; -1; 1]", "[2; -1; 1]", "[-2; 1; 1]", "None of these"], a: 0, r: "بحل النظام (A - 3I)X = 0، المتجه الناتج هو [-2; -1; 1]." },
-            { q: "106. True/False: The product of the lower triangular matrices is not lower triangular matrix.", o: ["True", "False"], a: 1, r: "خطأ. حاصل ضرب أي مصفوفتين مثلثيتين سفليتين ينتج دائماً مصفوفة مثلثية سفلية." },
-            { q: "107. True/False: The inverse of the matrix exists, it is not unique.", o: ["True", "False"], a: 1, r: "خطأ. المعكوس الضربي للمصفوفة (إن وُجد) يكون دائماً فريداً (Unique)." },
-            { q: "108. True/False: The product of matrices satisfies the commutative law.", o: ["True", "False"], a: 1, r: "خطأ. ضرب المصفوفات بشكل عام ليس إبدالياً (AB لا تساوي BA دائماً)." },
-            { q: "109. True/False: A square matrix of size nxn can be written as the product of a lower triangular matrix and an upper triangular matrix.", o: ["True", "False"], a: 0, r: "صحيح. يُعرف هذا بتحليل LU (LU Decomposition)." },
-            { q: "110. True/False: The intersection of two subspaces of vector space is not subspace.", o: ["True", "False"], a: 1, r: "خطأ. تقاطع أي فضاءين جزئيين يشكل دائماً فضاءً جزئياً." },
-            { q: "111. True/False: The sum of matrices satisfies the commutative law, if the matrices have the same size.", o: ["True", "False"], a: 0, r: "صحيح. جمع المصفوفات عملية إبدالية (A+B = B+A)." },
-            { q: "112. True/False: The homogeneous system of equations has only trivial solution, if the matrix coefficient has invertible.", o: ["True", "False"], a: 0, r: "صحيح. إذا كانت مصفوفة المعاملات قابلة للانعكاس، فالحل الوحيد هو الحل الصفري البديهي." },
-            { q: "113. True/False: For a vector space Rⁿ, the additive identity is unique.", o: ["True", "False"], a: 0, r: "صحيح. المحايد الجمعي (المتجه الصفري) يكون دائماً فريداً في أي فضاء اتجاهي." },
-            { q: "114. True/False: The set of all integers with standard operations forms a vector space.", o: ["True", "False"], a: 1, r: "خطأ. مجموعة الأعداد الصحيحة ليست مغلقة تحت عملية الضرب القياسي بأعداد حقيقية." },
-            { q: "115. True/False: The union of two subspaces of vector space is a subspace.", o: ["True", "False"], a: 1, r: "خطأ. اتحاد فضاءين جزئيين لا يكون فضاءً جزئياً إلا إذا كان أحدهما محتوى بالكامل داخل الآخر." },
-            { q: "116. True/False: The non-homogeneous system of equations has an infinite solution, if the matrix coefficient has invertible.", o: ["True", "False"], a: 1, r: "خطأ. إذا كانت مصفوفة المعاملات قابلة للانعكاس، فإن النظام يكون له حل فريد (وحيد)." },
-            { q: "117. True/False: The set of all linear combinations of a vector space forms a subspace.", o: ["True", "False"], a: 0, r: "صحيح. الامتداد الخطي (Span) لمجموعة من المتجهات يشكل دائماً فضاءً جزئياً." },
-            { q: "118. True/False: The product of the upper triangular matrices is upper triangular matrix.", o: ["True", "False"], a: 0, r: "صحيح. ضرب مصفوفتين مثلثيتين عليويتين يعطي مصفوفة عليا." },
-            { q: "119. True/False: The sum of two square singular matrices is a non singular matrix.", o: ["True", "False"], a: 1, r: "خطأ. ليس بالضرورة (المصفوفة الصفرية + المصفوفة الصفرية = مصفوفة صفرية وهي شاذة)." },
-            { q: "120. True/False: A square matrix of size nxn cannot be written as the product of elementary matrices, if it invertible.", o: ["True", "False"], a: 1, r: "خطأ. العكس هو الصحيح؛ المصفوفة القابلة للانعكاس يمكن دائماً كتابتها كحاصل ضرب لمصفوفات أولية." }
+            // ================= الجزء الثالث: 36 سؤال من ملف Linear_Algebra_Full_Question_Bank =================
+            { q: "81. The imaginary unit i is defined as:", o: ["√1", "√-1", "-1", "0"], a: 1, r: "الوحدة التخيلية i تُعرف رياضياً بأنها الجذر التربيعي للعدد -1." },
+            { q: "82. A complex number consists of:", o: ["Only real part", "Only imaginary part", "Real and imaginary parts", "Magnitude only"], a: 2, r: "العدد المركب يتكون دائماً من جزء حقيقي وجزء تخيلي." },
+            { q: "83. The dot product of two vectors results in:", o: ["A vector", "A scalar", "A matrix", "A plane"], a: 1, r: "الضرب القياسي (Dot product) ينتج عنه كمية قياسية (رقم) وليس متجهاً." },
+            { q: "84. If the dot product of two non-zero vectors is zero, the vectors are:", o: ["Parallel", "Opposite", "Perpendicular", "Equal"], a: 2, r: "إذا كان الضرب القياسي لمتجهين غير صفريين يساوي صفراً، فإنهما متعامدان (الزاوية 90)." },
+            { q: "85. The cross product of two vectors gives:", o: ["Scalar", "Vector", "Matrix", "Tensor"], a: 1, r: "الضرب الاتجاهي (Cross product) ينتج عنه متجه جديد عمودي على المتجهين." },
+            { q: "86. The magnitude of the cross product represents:", o: ["Length", "Angle", "Area of parallelogram", "Distance"], a: 2, r: "مقدار الضرب الاتجاهي يمثل مساحة متوازي الأضلاع الذي ضلعه المتجهان." },
+            { q: "87. A matrix is invertible if and only if:", o: ["det(A)=0", "det(A)≠0", "A is rectangular", "A has equal rows"], a: 1, r: "المصفوفة تكون قابلة للانعكاس فقط إذا كان محددها لا يساوي صفراً." },
+            { q: "88. The identity matrix acts as:", o: ["Zero element", "Multiplicative identity", "Inverse matrix", "Transpose"], a: 1, r: "مصفوفة الوحدة تعمل كمحايد ضربي للمصفوفات." },
+            { q: "89. Eigenvalues are obtained by solving:", o: ["Ax=b", "A A", "det(A-λI)=0", "A+I"], a: 2, r: "القيم الذاتية تُحسب بجعل محدد (A - λI) يساوي صفراً." },
+            { q: "90. Eigenvectors corresponding to an eigenvalue are:", o: ["Unique", "Always zero", "Not unique", "Orthogonal always"], a: 2, r: "المتجهات الذاتية ليست فريدة، أي مضاعف للمتجه هو أيضاً متجه ذاتي." },
+            { q: "91. Uniform scaling means:", o: ["Sx ≠ Sy", "Sx=Sy", "Only x scaled", "Only y scaled"], a: 1, r: "التحجيم المنتظم يعني أن معامل التكبير/التصغير في محور X يساوي المعامل في محور Y." },
+            { q: "92. Translation in homogeneous coordinates uses:", o: ["2x2 matrix", "3x3 matrix", "Identity only", "Rotation matrix"], a: 1, r: "الانسحاب في الإحداثيات المتجانسة الثنائية الأبعاد يتطلب مصفوفة 3x3 للتمثيل بالضرب." },
+            { q: "93. Rotation matrix preserves:", o: ["Area only", "Length and angles", "Orientation only", "Position"], a: 1, r: "مصفوفة الدوران تحافظ على الأطوال والزوايا بين المتجهات دون تشويه." },
+            { q: "94. Order of composite transformations is:", o: ["Commutative", "Does not matter", "Important", "Always fixed"], a: 2, r: "ترتيب التحويلات مهم جداً لأن ضرب المصفوفات ليس إبدالياً." },
+            { q: "95. MediaPipe represents computation as:", o: ["Sequential code", "Pipeline graph", "Tree structure", "Linear list"], a: 1, r: "ميديا بايب تمثل العمليات الحسابية كـ Pipeline graph (رسم بياني خطي)." },
+            { q: "96. MediaPipe basic data unit is called:", o: ["Node", "Stream", "Packet", "Tensor"], a: 2, r: "الوحدة الأساسية للبيانات التي تنتقل في MediaPipe تسمى Packet." },
+            { q: "97. GPU is best suited for:", o: ["Sequential processing", "Parallel matrix operations", "Text processing", "File management"], a: 1, r: "كروت الشاشة (GPU) مصممة للعمليات المتوازية السريعة مثل ضرب المصفوفات." },
+            { q: "98. TPU is optimized mainly for:", o: ["Graphics rendering", "General computing", "Deep learning tensor operations", "Operating systems"], a: 2, r: "وحدات TPU مخصصة لتسريع عمليات الـ Tensors في نماذج التعلم العميق." },
+            { q: "99. True/False: The square root of a negative number is not defined in real numbers.", o: ["True", "False"], a: 0, r: "صحيح، لأن الأعداد الحقيقية لا تحتوي على جذور سالبة، بل تنتمي للأعداد التخيلية." },
+            { q: "100. True/False: i² = -1.", o: ["True", "False"], a: 0, r: "صحيح، هذا هو التعريف الأساسي للوحدة التخيلية." },
+            { q: "101. True/False: The dot product of perpendicular vectors is zero.", o: ["True", "False"], a: 0, r: "صحيح، لأن الزاوية 90 و cos(90) = 0." },
+            { q: "102. True/False: Cross product is defined in 2D only.", o: ["True", "False"], a: 1, r: "خطأ، الضرب الاتجاهي معرف بشكل أساسي في الفراغ ثلاثي الأبعاد (3D)." },
+            { q: "103. True/False: A singular matrix has an inverse.", o: ["True", "False"], a: 1, r: "خطأ، المصفوفة الشاذة (Singular) محددها صفر ولا يوجد لها معكوس." },
+            { q: "104. True/False: If det(A)=0 matrix A is not invertible.", o: ["True", "False"], a: 0, r: "صحيح، انعدام المحدد يعني عدم إمكانية إيجاد المعكوس." },
+            { q: "105. True/False: Eigenvalues are defined only for square matrices.", o: ["True", "False"], a: 0, r: "صحيح، لأن حسابها يتطلب إيجاد محدد المصفوفة." },
+            { q: "106. True/False: Eigenvectors can change direction after transformation.", o: ["True", "False"], a: 1, r: "خطأ، من خصائصها أنها لا تغير اتجاهها بل يتغير مقدارها فقط." },
+            { q: "107. True/False: Translation changes the shape of an object.", o: ["True", "False"], a: 1, r: "خطأ، الانسحاب يغير الموقع فقط ويحافظ على الشكل والأبعاد." },
+            { q: "108. True/False: Rotation preserves distances.", o: ["True", "False"], a: 0, r: "صحيح، الدوران هو تحويل صلب (Rigid) يحافظ على الأبعاد." },
+            { q: "109. True/False: Scaling with factor less than 1 shrinks the object.", o: ["True", "False"], a: 0, r: "صحيح، الضرب في كسر أقل من 1 يقلل الحجم." },
+            { q: "110. True/False: Homogeneous coordinates use an extra dimension.", o: ["True", "False"], a: 0, r: "صحيح، يتم إضافة إحداثي إضافي (1) لتسهيل ضرب مصفوفات الانسحاب." },
+            { q: "111. True/False: Order of matrix multiplication does not matter.", o: ["True", "False"], a: 1, r: "خطأ، ضرب المصفوفات غير إبدالي، فالترتيب يغير النتيجة تماماً." },
+            { q: "112. True/False: MediaPipe supports streaming data processing.", o: ["True", "False"], a: 0, r: "صحيح، هي مصممة لمعالجة تدفقات البيانات (Streams) مثل الفيديو المباشر." },
+            { q: "113. True/False: MediaPipe nodes are also called calculators.", o: ["True", "False"], a: 0, r: "صحيح، العقد التي تقوم بالعمليات الحسابية فيها تسمى Calculators." },
+            { q: "114. True/False: GPU has fewer cores than CPU.", o: ["True", "False"], a: 1, r: "خطأ، كروت الشاشة تحتوي على آلاف الأنوية الصغيرة مقارنة بأنوية المعالج القليلة." },
+            { q: "115. True/False: TPU is general-purpose hardware.", o: ["True", "False"], a: 1, r: "خطأ، الـ TPU مخصص حصرياً لتسريع عمليات التعلم الآلي والشبكات العصبية." },
+            { q: "116. True/False: Cross product direction follows the right-hand rule.", o: ["True", "False"], a: 0, r: "صحيح، اتجاه المتجه الناتج يحدد دائماً بقاعدة اليد اليمنى." },
+
+            // ================= الجزء الرابع: 20 سؤال من ملف Linear_Algebra_Advanced_Question_Bank =================
+            { q: "117. If A is an invertible matrix, which statement is always true?", o: ["A has dependent columns", "Ax=0 has a non-trivial solution", "rank(A) = number of columns of A", "det(A)=0"], a: 2, r: "المصفوفة القابلة للانعكاس يكون رتبتها (Rank) مساوياً لعدد أعمدتها (Full rank)." },
+            { q: "118. If λ is an eigenvalue of matrix A, then which is an eigenvalue of A⁻¹?", o: ["λ", "1/λ", "-λ", "λ²"], a: 1, r: "القيمة الذاتية لمعكوس المصفوفة هي مقلوب القيمة الذاتية للمصفوفة الأصلية (1/λ)." },
+            { q: "119. Two vectors have a dot product equal to the product of their magnitudes. The angle between them is:", o: ["0°", "90°", "180°", "45°"], a: 0, r: "بما أن cos(θ) = 1، إذن الزاوية بينهما 0 درجة (متوازيان في نفس الاتجاه)." },
+            { q: "120. The cross product of two parallel vectors is:", o: ["Maximum", "Minimum", "Zero vector", "Unit vector"], a: 2, r: "الضرب الاتجاهي لمتجهين متوازيين يساوي المتجه الصفري لأن sin(0) = 0." },
+            { q: "121. A 2D transformation that preserves shape but changes orientation is:", o: ["Scaling", "Translation", "Rotation", "Reflection"], a: 3, r: "الانعكاس (Reflection) يحافظ على الشكل ولكنه يعكس الاتجاه (Orientation)." },
+            { q: "122. Which transformation cannot be represented using a 2x2 matrix alone?", o: ["Rotation", "Scaling", "Shearing", "Translation"], a: 3, r: "الانسحاب (Translation) يحتاج إلى إحداثيات متجانسة ومصفوفة 3x3 لتمثيله بالضرب." },
+            { q: "123. If det(A) < 0, the linear transformation represented by A:", o: ["Preserves orientation", "Reverses orientation", "Collapses space", "Is not invertible"], a: 1, r: "المحدد السالب يعني أن التحويل يعكس الاتجاه (Reverses orientation) للفضاء." },
+            { q: "124. If eigenvalues of A are 2 and 5, eigenvalues of 3A are:", o: ["2 and 5", "6 and 15", "5 and 2", "1 and 3"], a: 1, r: "عند ضرب المصفوفة في ثابت، تُضرب القيم الذاتية في نفس الثابت (3 × 2 = 6، و 3 × 5 = 15)." },
+            { q: "125. In homogeneous coordinates, the extra coordinate allows:", o: ["Scaling only", "Rotation only", "Translation as matrix multiplication", "Reflection only"], a: 2, r: "الإحداثي الإضافي يسمح بتمثيل الانسحاب كعملية ضرب مصفوفات بدلاً من عملية جمع." },
+            { q: "126. In MediaPipe graphs, parallel execution is possible because:", o: ["Packets are mutable", "Calculators are independent nodes", "Streams block execution", "There is only one thread"], a: 1, r: "العقد (Calculators) تعمل بشكل مستقل تماماً، مما يسمح بتنفيذها على التوازي لزيادة السرعة." },
+            { q: "127. True/False: If A and B are invertible, then (AB)⁻¹ = A⁻¹ B⁻¹.", o: ["True", "False"], a: 1, r: "خطأ، القاعدة الصحيحة هي (AB)⁻¹ = B⁻¹ A⁻¹ (الترتيب ينعكس)." },
+            { q: "128. True/False: Eigenvectors corresponding to different eigenvalues are always linearly independent.", o: ["True", "False"], a: 0, r: "صحيح، هذه من أهم المبرهنات الأساسية في الجبر الخطي." },
+            { q: "129. True/False: A zero vector can be an eigenvector.", o: ["True", "False"], a: 1, r: "خطأ، المتجه الذاتي يجب أن يكون متجهاً غير صفري (Non-zero) حسب التعريف." },
+            { q: "130. True/False: The dot product can be used to find the angle between vectors.", o: ["True", "False"], a: 0, r: "صحيح، باستخدام قانون جيب التمام للضرب القياسي." },
+            { q: "131. True/False: The magnitude of a cross product equals the area of a triangle formed by the vectors.", o: ["True", "False"], a: 1, r: "خطأ، المقدار يمثل مساحة متوازي الأضلاع كاملاً، وليس المثلث (المثلث هو النصف)." },
+            { q: "132. True/False: A reflection matrix has determinant -1.", o: ["True", "False"], a: 0, r: "صحيح، لأنها تعكس اتجاه الفضاء." },
+            { q: "133. True/False: Non-uniform scaling changes both shape and size.", o: ["True", "False"], a: 0, r: "صحيح، التحجيم غير المنتظم يغير الأبعاد بنسب مختلفة مما يؤدي لتشوه الشكل." },
+            { q: "134. True/False: Translation affects vector magnitude.", o: ["True", "False"], a: 1, r: "خطأ، الانسحاب يغير فقط مكان (موقع) الشكل، ولا يغير طول أي متجه فيه." },
+            { q: "135. True/False: MediaPipe supports only batch processing.", o: ["True", "False"], a: 1, r: "خطأ، ميديا بايب تدعم معالجة البيانات المتدفقة (Streaming) بكفاءة عالية للفيديو الحي." },
+            { q: "136. True/False: TPU is more energy-efficient than GPU for deep learning tasks.", o: ["True", "False"], a: 0, r: "صحيح، وحدات الـ TPU مصممة خصيصاً للذكاء الاصطناعي وتستهلك طاقة أقل لإنجاز نفس المهام مقارنة بـ GPU." }
         ];
 
         let currentQuestion = 0;
