@@ -42,18 +42,18 @@
     <p class="hero-desc">بنوك أسئلة شاملة وكويزات تفاعلية لجميع مواد القسم الحيوي. تدرّب، اختبر نفسك، وتفوّق.</p>
     <div class="hero-stats">
         <div class="stat-item">
-            <span class="stat-num" id="total-q">500+</span>
+            <span class="stat-num" id="total-q">600+</span>
             <span class="stat-label">سؤال</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-            <span class="stat-num">3</span>
-            <span class="stat-label">كويز</span>
+            <span class="stat-num">10</span>
+            <span class="stat-label">كويزات</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-            <span class="stat-num">1</span>
-            <span class="stat-label">مادة</span>
+            <span class="stat-num">4</span>
+            <span class="stat-label">مواد</span>
         </div>
     </div>
     <a href="#subjects" class="cta-btn">
@@ -130,7 +130,7 @@
             <div class="subject-meta">
                 <div class="meta-item">
                     <span class="meta-icon">📝</span>
-                    <span>136سؤال</span>
+                    <span>40 سؤال</span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-icon">🎯</span>
@@ -141,7 +141,7 @@
                 <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('linear-algebra')">
                     <span class="pill-icon">📋</span>
                     <span>Linear Algebra Quiz</span>
-                    <span class="pill-count">136 سؤال</span>
+                    <span class="pill-count">40 سؤال</span>
                 </div>
             </div>
             <div class="card-footer">
@@ -162,14 +162,59 @@
             <div class="coming-overlay"><span>🔒 قريباً</span></div>
         </div>
 
-        <div class="subject-card coming-soon">
+        <!-- Genomics Card -->
+        <div class="subject-card active-subject" onclick="openSubject('genomics')">
+            <div class="card-glow"></div>
             <div class="card-header">
                 <div class="subject-icon">🧬</div>
-                <div class="subject-badge soon-badge">قريباً</div>
+                <div class="subject-badge">متاح</div>
             </div>
             <h3 class="subject-name">Genomics</h3>
             <p class="subject-ar">علم الجينوم</p>
-            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+            <p class="subject-desc">الجينوم البشري، الانقسام المنصف، التنميط النووي، والأمراض الوراثية</p>
+            <div class="subject-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📝</span>
+                    <span>99 سؤال</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🎯</span>
+                    <span>5 كويزات</span>
+                </div>
+            </div>
+            <div class="quiz-list">
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('human-genome')">
+                    <span class="pill-icon">🧬</span>
+                    <span>Human Genome</span>
+                    <span class="pill-count">20 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('meiosis')">
+                    <span class="pill-icon">⚡</span>
+                    <span>Meiosis</span>
+                    <span class="pill-count">15 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('karyotyping')">
+                    <span class="pill-icon">🔬</span>
+                    <span>Karyotyping</span>
+                    <span class="pill-count">20 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('pedigree')">
+                    <span class="pill-icon">📊</span>
+                    <span>Pedigree Analysis</span>
+                    <span class="pill-count">22 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('chromosomal-disorders')">
+                    <span class="pill-icon">⚠️</span>
+                    <span>Chromosomal Disorders</span>
+                    <span class="pill-count">22 سؤال</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="open-btn" onclick="event.stopPropagation(); openSubject('genomics')">
+                    فتح المادة
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
         </div>
 
         <div class="subject-card coming-soon">
@@ -233,7 +278,7 @@
 <section class="about-section" id="about">
     <div class="about-card">
         <div class="about-icon">🚀</div>
-        <h2>صنعت بكل حب ❤️</h2>
+        <h2>❤️صنعت بكل حب </h2>
         
         <div class="about-features">
             <div class="feature">✅ شرح تفصيلي لكل إجابة</div>
@@ -262,7 +307,12 @@
         'amino-acids':   'Amino.html',
         'dna-rna':       'BIO.html',
         'linear-algebra': 'linear_algebra.html',
-        'electronics':    'electronics.html'
+        'electronics':    'electronics.html',
+        'human-genome':   'human_genome.html',
+        'meiosis':        'meiosis.html',
+        'karyotyping':    'karyotyping.html',
+        'pedigree':       'pedigree.html',
+        'chromosomal-disorders': 'chromosomal_disorders.html'
     };
 
     function openQuiz(key) {
