@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚠️ Chromosomal Disorders Quiz</title>
+<style>
+  :root{--bg:#05060f;--panel:rgba(18,24,52,0.65);--border:rgba(120,180,255,0.18);--cyan:#22d3ee;--purple:#a855f7;--good:#10b981;--bad:#ef4444;--text:#e6edff;--muted:#9aa6c7;--grad:linear-gradient(135deg,#22d3ee,#a855f7);--glow:0 0 20px rgba(34,211,238,0.2);}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif;}
+  body{background:var(--bg);color:var(--text);display:flex;justify-content:center;padding:40px 20px;min-height:100vh; line-height: 1.6;}
+  .box{width:100%;max-width:800px;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:30px;box-shadow:var(--glow); height: fit-content;}
+  .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:15px;}
+  .head h1{font-size:1.5rem;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+  .prog{height:8px;background:rgba(255,255,255,0.1);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+  .fill{height:100%;width:0%;background:var(--grad);transition:0.4s;}
+  .q-text{font-size:1.2rem;font-weight:600;margin-bottom:20px;}
+  .opt{padding:15px;border-radius:12px;border:1px solid var(--border);background:rgba(10,15,36,0.6);margin-bottom:10px;cursor:pointer;transition:0.2s;}
+  .opt:hover:not(.dis){border-color:var(--cyan);background:rgba(34,211,238,0.1);}
+  .opt.c{border-color:var(--good);background:rgba(16,185,129,0.2);color:#a7f3d0;}
+  .opt.w{border-color:var(--bad);background:rgba(239,68,68,0.2);color:#fecaca;}
+  .opt.dis{pointer-events:none;}
+  .exp{margin-top:15px;padding:15px;border-radius:12px;background:rgba(34,211,238,0.08);border-left:4px solid var(--cyan);display:none;}
+  .exp.show{display:block;animation:fadeIn 0.4s;}
+  .btn{padding:10px 20px;border-radius:10px;background:var(--grad);color:#000;font-weight:bold;border:none;cursor:pointer;display:none;margin-top:20px;float:right;}
+  .btn.show{display:inline-block;}
+  .res{text-align:center;display:none;}
+  .res h2{font-size:2.5rem;margin-bottom:10px;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="box" id="app">
+  <div id="quiz">
+    <div class="head"><h1>⚠️ Chromosomal Disorders Quiz</h1><div id="stats" style="color:var(--muted); font-weight:bold;">Score: 0 | Q: 1/22</div></div>
+    <div class="prog"><div class="fill" id="fill"></div></div>
+    <div class="q-text" id="qtext"></div>
+    <div id="opts"></div>
+    <div class="exp" id="exp"></div>
+    <button class="btn" id="next">Next ➔</button>
+  </div>
+  <div class="res" id="res">
+    <h2>🎉 Complete!</h2><p style="font-size: 1.2rem; color: var(--muted); margin-bottom: 20px;">Score: <span id="fscore" style="color:#fff; font-weight:bold;"></span> / <span id="tscore"></span></p>
+    <button class="btn show" style="float:none;" onclick="location.reload()">🔄 Restart Quiz</button>
+  </div>
+</div>
+<script>
+  const data = [
+    {q:'How many pairs of autosomes do humans have?',o:['21','22','23','24'],a:1,e:'Humans have 22 pairs of autosomes plus 1 pair of sex chromosomes (46 total).'},
+    {q:'Which combination represents a normal human female?',o:['XY','XO','XX','XXY'],a:2,e:'Females are XX; males are XY.'},
+    {q:'Nondisjunction occurs during which process?',o:['Mitosis only','Meiosis','Transcription','DNA replication'],a:1,e:'Nondisjunction is failure of chromosomes to separate during meiosis (gamete formation).'},
+    {q:'A cell with 47 chromosomes is an example of:',o:['Monosomy','Euploidy','Trisomy','Polyploidy'],a:2,e:'Trisomy = one extra chromosome → 47 total.'},
+    {q:'Aneuploidy refers to:',o:['Doubling all chromosomes','Abnormal chromosome number','Gene mutation','Chromosomal translocation'],a:1,e:'Aneuploidy = abnormal chromosome number (45 or 47 instead of 46).'},
+    {q:'Trisomy 13 is also known as:',o:['Down syndrome','Edwards syndrome','Patau syndrome','Turner syndrome'],a:2,e:'Trisomy 13 = Patau syndrome.'},
+    {q:'What percentage of children with Patau syndrome die in the first year?',o:['~10%','~30%','~50%','>90%'],a:3,e:'More than 9 out of 10 (>90%) die within the first year.'},
+    {q:'Which feature is most characteristic of Trisomy 18?',o:['Webbed neck','Clenched fists with overriding fingers','Cleft lip','Inwardly curved 5th finger'],a:1,e:'Clenched fists with overriding fingers is a hallmark of Edwards syndrome (T18).'},
+    {q:'Approximate percentage of Edwards syndrome babies who live past their 1st birthday:',o:['~1%','~13%','~50%','~80%'],a:1,e:'About 13 in 100 babies with Edwards syndrome live past their first birthday.'},
+    {q:'Down syndrome is caused by:',o:['Monosomy 21','Trisomy 18','Trisomy 21','45,X'],a:2,e:'Down syndrome = Trisomy 21 (extra copy of chromosome 21).'},
+    {q:'Average adult life expectancy in Down syndrome is approximately:',o:['20 years','40 years','60 years','80 years'],a:2,e:'Adults with Down syndrome may live about 60 years (varies).'},
+    {q:'Which is NOT a typical feature of Down syndrome?',o:['Hypotonia','Inwardly curved little finger','Holoprosencephaly','Distinctive facial features'],a:2,e:'Holoprosencephaly is a feature of Patau (T13), not Down syndrome.'},
+    {q:'Holoprosencephaly is associated with:',o:['T13','T18','T21','Turner'],a:0,e:'Holoprosencephaly (brain failing to divide) is seen in Trisomy 13 (Patau).'},
+    {q:'Turner syndrome karyotype is:',o:['47,XXY','45,X','47,XX,+21','46,XY'],a:1,e:'Turner syndrome = 45,X (monosomy X), affecting girls.'},
+    {q:'Turner syndrome occurs in:',o:['Boys only','Girls only','Both equally','Neither'],a:1,e:'Turner syndrome occurs in girls — one X chromosome is missing or abnormal.'},
+    {q:'Which is a classic Turner syndrome feature?',o:['Tall stature','Webbed neck','Macrocephaly','Polydactyly'],a:1,e:'Wide/webbed neck with skin folds is a classic Turner sign.'},
+    {q:'Rudimentary ovaries in Turner syndrome lead to:',o:['Early puberty','No menstruation','Excess estrogen','Increased fertility'],a:1,e:'Underdeveloped (streak) gonads → no menstruation and infertility.'},
+    {q:'Coarctation of the aorta is associated with which syndrome?',o:['Patau','Edwards','Down','Turner'],a:3,e:'Coarctation of aorta is a known cardiovascular finding in Turner syndrome.'},
+    {q:'Cutis aplasia (missing patches of skin) is seen in:',o:['T13','T18','T21','45,X'],a:0,e:'Cutis aplasia is a feature of Trisomy 13 (Patau).'},
+    {q:'Approximately what percentage of babies are born with some genetic disorder?',o:['~1%','~6%','~15%','~25%'],a:1,e:'About 6% of all babies — roughly 8 million per year worldwide.'},
+    {q:'Most cases of trisomy 13, 18, 21 are:',o:['Inherited from mother','Inherited from father','Random events at conception','Caused by viruses'],a:2,e:'Most are non-inherited, random events during gamete formation or conception.'},
+    {q:'Mosaic trisomy 13 patients tend to:',o:['Die immediately','Live longer than full trisomy','Be unaffected','Develop cancer always'],a:1,e:'~1 in 10 with partial or mosaic T13 live longer than a year due to milder phenotype.'}
+  ];
+  let i=0, s=0, ans=false;
+  const $=(id)=>document.getElementById(id);
+  function load(){
+    ans=false; $('next').classList.remove('show'); $('exp').classList.remove('show');
+    $('stats').innerText=`Score: ${s} | Q: ${i+1}/${data.length}`;
+    $('fill').style.width=`${(i/data.length)*100}%`;
+    $('qtext').innerText=`Q${i+1}. `+data[i].q;
+    $('opts').innerHTML='';
+    data[i].o.forEach((o,j)=>{
+      let d=document.createElement('div'); d.className='opt'; d.innerHTML=`<b>${String.fromCharCode(65+j)}.</b> ${o}`;
+      d.onclick=()=>check(j); $('opts').appendChild(d);
+    });
+    $('exp').innerHTML=`<b>💡 Explanation:</b> ${data[i].e}`;
+  }
+  function check(j){
+    if(ans)return; ans=true;
+    let os=$('opts').children;
+    for(let k=0;k<os.length;k++){
+      os[k].classList.add('dis');
+      if(k===data[i].a) os[k].classList.add('c');
+      else if(k===j) os[k].classList.add('w');
+    }
+    if(j===data[i].a) s++;
+    $('exp').classList.add('show');
+    $('next').innerText = i===data.length-1 ? 'Results 🏁' : 'Next ➔';
+    $('next').classList.add('show');
+    $('stats').innerText=`Score: ${s} | Q: ${i+1}/${data.length}`;
+  }
+  $('next').onclick=()=>{
+    if(i<data.length-1){ i++; load(); }
+    else{ $('quiz').style.display='none'; $('res').style.display='block'; $('fscore').innerText=s; $('tscore').innerText=data.length; }
+  };
+  load();
+</script>
+</body>
+</html>

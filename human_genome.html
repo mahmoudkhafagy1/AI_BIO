@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Human Genome Quiz</title>
+<style>
+  :root{--bg:#05060f;--panel:rgba(18,24,52,0.65);--border:rgba(120,180,255,0.18);--cyan:#22d3ee;--purple:#a855f7;--good:#10b981;--bad:#ef4444;--text:#e6edff;--muted:#9aa6c7;--grad:linear-gradient(135deg,#22d3ee,#a855f7);--glow:0 0 20px rgba(34,211,238,0.2);}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif;}
+  body{background:var(--bg);color:var(--text);display:flex;justify-content:center;padding:40px 20px;min-height:100vh; line-height: 1.6;}
+  .box{width:100%;max-width:800px;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:30px;box-shadow:var(--glow); height: fit-content;}
+  .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:15px;}
+  .head h1{font-size:1.5rem;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+  .prog{height:8px;background:rgba(255,255,255,0.1);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+  .fill{height:100%;width:0%;background:var(--grad);transition:0.4s;}
+  .q-text{font-size:1.2rem;font-weight:600;margin-bottom:20px;}
+  .opt{padding:15px;border-radius:12px;border:1px solid var(--border);background:rgba(10,15,36,0.6);margin-bottom:10px;cursor:pointer;transition:0.2s;}
+  .opt:hover:not(.dis){border-color:var(--cyan);background:rgba(34,211,238,0.1);}
+  .opt.c{border-color:var(--good);background:rgba(16,185,129,0.2);color:#a7f3d0;}
+  .opt.w{border-color:var(--bad);background:rgba(239,68,68,0.2);color:#fecaca;}
+  .opt.dis{pointer-events:none;}
+  .exp{margin-top:15px;padding:15px;border-radius:12px;background:rgba(34,211,238,0.08);border-left:4px solid var(--cyan);display:none;}
+  .exp.show{display:block;animation:fadeIn 0.4s;}
+  .btn{padding:10px 20px;border-radius:10px;background:var(--grad);color:#000;font-weight:bold;border:none;cursor:pointer;display:none;margin-top:20px;float:right;}
+  .btn.show{display:inline-block;}
+  .res{text-align:center;display:none;}
+  .res h2{font-size:2.5rem;margin-bottom:10px;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="box" id="app">
+  <div id="quiz">
+    <div class="head"><h1>🧬 Human Genome Quiz</h1><div id="stats" style="color:var(--muted); font-weight:bold;">Score: 0 | Q: 1/20</div></div>
+    <div class="prog"><div class="fill" id="fill"></div></div>
+    <div class="q-text" id="qtext"></div>
+    <div id="opts"></div>
+    <div class="exp" id="exp"></div>
+    <button class="btn" id="next">Next ➔</button>
+  </div>
+  <div class="res" id="res">
+    <h2>🎉 Complete!</h2><p style="font-size: 1.2rem; color: var(--muted); margin-bottom: 20px;">Score: <span id="fscore" style="color:#fff; font-weight:bold;"></span> / <span id="tscore"></span></p>
+    <button class="btn show" style="float:none;" onclick="location.reload()">🔄 Restart Quiz</button>
+  </div>
+</div>
+<script>
+  const data = [
+    {q:'Which term describes the COMPLETE set of genetic material in an organism?',o:['Gene','Chromosome','Genome','Allele'],a:2,e:'Genome = all genes + all non-coding DNA.'},
+    {q:'Approximately how many base pairs are in the human genome?',o:['3 million','3 billion','30 million','300 million'],a:1,e:'~3 × 10⁹ bp.'},
+    {q:'How many chromosomes are present in a normal human somatic cell?',o:['23','44','46','48'],a:2,e:'46 chromosomes (23 pairs): 44 autosomes + 2 sex chromosomes.'},
+    {q:'The mitochondrial genome is:',o:['Linear, ~3 billion bp','Circular, 16,569 nt','Linear, 16,569 nt','Circular, 3 million bp'],a:1,e:'mtDNA is circular and 16,569 nucleotides long.'},
+    {q:'A nucleosome contains how many histone proteins?',o:['4','6','8','10'],a:2,e:'8 histones; DNA wraps 1.65 times around them.'},
+    {q:'Adding which histone forms the chromatosome?',o:['H2A','H2B','H3','H1'],a:3,e:'Nucleosome + H1 = chromatosome (~11 nm).'},
+    {q:'Which bond links nucleotides along the DNA backbone?',o:['Hydrogen bond','Phosphodiester bond','Glycosidic bond','Peptide bond'],a:1,e:'Phosphodiester bonds form the sugar-phosphate backbone.'},
+    {q:'A polynucleotide is defined as a chain of more than:',o:['10 nucleotides','15 nucleotides','20 nucleotides','50 nucleotides'],a:2,e:'Lecture: > 20 nucleotides joined by phosphodiester bonds.'},
+    {q:'Which sugar is found in DNA?',o:['Ribose','Deoxyribose','Glucose','Fructose'],a:1,e:'DNA contains deoxyribose (no 2′-OH).'},
+    {q:'Which base is present in RNA but NOT in DNA?',o:['Adenine','Thymine','Uracil','Cytosine'],a:2,e:'Uracil replaces thymine in RNA.'},
+    {q:'Which pair represents purines?',o:['A & G','C & T','A & T','G & C'],a:0,e:'Purines = Adenine + Guanine.'},
+    {q:'Which type of cell lacks a nucleus in its fully differentiated state?',o:['Hepatocyte','Neuron','Red blood cell','Lymphocyte'],a:2,e:'Mature RBCs lose their nucleus.'},
+    {q:'Gametes are:',o:['Diploid with 46 chromosomes','Haploid with 23 chromosomes','Diploid with 23 chromosomes','Haploid with 46 chromosomes'],a:1,e:'Gametes (sex cells) are haploid, 23 chromosomes.'},
+    {q:'Which is characteristic of a prokaryotic genome?',o:['Linear DNA in nucleus','Circular DNA, no nucleus','Linear DNA, no nucleus','Circular DNA in nucleus'],a:1,e:'Prokaryotes have circular DNA, no nucleus.'},
+    {q:'The correct order of mitosis phases is:',o:['Prophase → Anaphase → Metaphase → Telophase','Prophase → Metaphase → Anaphase → Telophase','Metaphase → Prophase → Telophase → Anaphase','Telophase → Anaphase → Metaphase → Prophase'],a:1,e:'P → M → A → T.'},
+    {q:'During which phase do chromosomes align at the equatorial plate?',o:['Prophase','Metaphase','Anaphase','Telophase'],a:1,e:'Metaphase — equatorial (metaphase) plate.'},
+    {q:'Division of the centromere marks the beginning of:',o:['Prophase','Metaphase','Anaphase','Cytokinesis'],a:2,e:'Anaphase begins with centromere division.'},
+    {q:'Cytokinesis refers to:',o:['Nuclear division','Chromosome condensation','Division of the cytoplasm','Spindle formation'],a:2,e:'Cytokinesis = division of the cytoplasm after karyokinesis.'},
+    {q:'How many copies of the mitochondrial genome does a typical human cell contain?',o:['~10','~100','~1000','~8000'],a:3,e:'About 8000 copies of mtDNA (≈10 per mitochondrion).'},
+    {q:'Which statement about mitosis is TRUE?',o:['Produces 4 haploid cells','Produces 2 genetically identical diploid cells','Occurs only in gametes','Halves the chromosome number'],a:1,e:'Mitosis yields 2 identical diploid daughter cells.'}
+  ];
+  let i=0, s=0, ans=false;
+  const $=(id)=>document.getElementById(id);
+  function load(){
+    ans=false; $('next').classList.remove('show'); $('exp').classList.remove('show');
+    $('stats').innerText=`Score: ${s} | Q: ${i+1}/${data.length}`;
+    $('fill').style.width=`${(i/data.length)*100}%`;
+    $('qtext').innerText=`Q${i+1}. `+data[i].q;
+    $('opts').innerHTML='';
+    data[i].o.forEach((o,j)=>{
+      let d=document.createElement('div'); d.className='opt'; d.innerHTML=`<b>${String.fromCharCode(65+j)}.</b> ${o}`;
+      d.onclick=()=>check(j); $('opts').appendChild(d);
+    });
+    $('exp').innerHTML=`<b>💡 Explanation:</b> ${data[i].e}`;
+  }
+  function check(j){
+    if(ans)return; ans=true;
+    let os=$('opts').children;
+    for(let k=0;k<os.length;k++){
+      os[k].classList.add('dis');
+      if(k===data[i].a) os[k].classList.add('c');
+      else if(k===j) os[k].classList.add('w');
+    }
+    if(j===data[i].a) s++;
+    $('exp').classList.add('show');
+    $('next').innerText = i===data.length-1 ? 'Results 🏁' : 'Next ➔';
+    $('next').classList.add('show');
+    $('stats').innerText=`Score: ${s} | Q: ${i+1}/${data.length}`;
+  }
+  $('next').onclick=()=>{
+    if(i<data.length-1){ i++; load(); }
+    else{ $('quiz').style.display='none'; $('res').style.display='block'; $('fscore').innerText=s; $('tscore').innerText=data.length; }
+  };
+  load();
+</script>
+</body>
+</html>

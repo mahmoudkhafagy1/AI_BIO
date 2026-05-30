@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔬 Karyotyping Quiz</title>
+<style>
+  :root{--bg:#05060f;--panel:rgba(18,24,52,0.65);--border:rgba(120,180,255,0.18);--cyan:#22d3ee;--purple:#a855f7;--good:#10b981;--bad:#ef4444;--text:#e6edff;--muted:#9aa6c7;--grad:linear-gradient(135deg,#22d3ee,#a855f7);--glow:0 0 20px rgba(34,211,238,0.2);}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif;}
+  body{background:var(--bg);color:var(--text);display:flex;justify-content:center;padding:40px 20px;min-height:100vh; line-height: 1.6;}
+  .box{width:100%;max-width:800px;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:30px;box-shadow:var(--glow); height: fit-content;}
+  .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:15px;}
+  .head h1{font-size:1.5rem;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+  .prog{height:8px;background:rgba(255,255,255,0.1);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+  .fill{height:100%;width:0%;background:var(--grad);transition:0.4s;}
+  .q-text{font-size:1.2rem;font-weight:600;margin-bottom:20px;}
+  .opt{padding:15px;border-radius:12px;border:1px solid var(--border);background:rgba(10,15,36,0.6);margin-bottom:10px;cursor:pointer;transition:0.2s;}
+  .opt:hover:not(.dis){border-color:var(--cyan);background:rgba(34,211,238,0.1);}
+  .opt.c{border-color:var(--good);background:rgba(16,185,129,0.2);color:#a7f3d0;}
+  .opt.w{border-color:var(--bad);background:rgba(239,68,68,0.2);color:#fecaca;}
+  .opt.dis{pointer-events:none;}
+  .exp{margin-top:15px;padding:15px;border-radius:12px;background:rgba(34,211,238,0.08);border-left:4px solid var(--cyan);display:none;}
+  .exp.show{display:block;animation:fadeIn 0.4s;}
+  .btn{padding:10px 20px;border-radius:10px;background:var(--grad);color:#000;font-weight:bold;border:none;cursor:pointer;display:none;margin-top:20px;float:right;}
+  .btn.show{display:inline-block;}
+  .res{text-align:center;display:none;}
+  .res h2{font-size:2.5rem;margin-bottom:10px;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="box" id="app">
+  <div id="quiz">
+    <div class="head"><h1>🔬 Karyotyping Quiz</h1><div id="stats" style="color:var(--muted); font-weight:bold;">Score: 0 | Q: 1/20</div></div>
+    <div class="prog"><div class="fill" id="fill"></div></div>
+    <div class="q-text" id="qtext"></div>
+    <div id="opts"></div>
+    <div class="exp" id="exp"></div>
+    <button class="btn" id="next">Next ➔</button>
+  </div>
+  <div class="res" id="res">
+    <h2>🎉 Complete!</h2><p style="font-size: 1.2rem; color: var(--muted); margin-bottom: 20px;">Score: <span id="fscore" style="color:#fff; font-weight:bold;"></span> / <span id="tscore"></span></p>
+    <button class="btn show" style="float:none;" onclick="location.reload()">🔄 Restart Quiz</button>
+  </div>
+</div>
+<script>
+  const data = [
+    {q:"At which stage of the cell cycle are chromosomes best visualised for karyotyping?",o:["Interphase","Prophase","Metaphase","Anaphase"],a:2,e:"Chromosomes are most condensed and visible during METAPHASE — that's why cells are chemically arrested there."},
+    {q:"Which stain is most commonly used to produce the classic banding pattern?",o:["Hematoxylin","Giemsa","Eosin","Safranin"],a:1,e:"Giemsa preferentially binds AT-rich regions producing the characteristic G-banding pattern."},
+    {q:"What is the normal female karyotype?",o:["45,X","46,XX","47,XXY","46,XY"],a:1,e:"Normal female = 44 autosomes + XX, written as 46,XX."},
+    {q:"What is the normal male karyotype?",o:["46,XX","47,XY","46,XY","45,Y"],a:2,e:"Normal male = 44 autosomes + XY, written as 46,XY."},
+    {q:"Down syndrome is caused by which chromosomal abnormality?",o:["Monosomy X","Trisomy 18","Trisomy 21","47,XXY"],a:2,e:"Down syndrome = Trisomy 21 — an extra copy of chromosome 21."},
+    {q:"Turner syndrome corresponds to which karyotype?",o:["45,X (Monosomy X)","47,XXX","46,XY","47,XXY"],a:0,e:"Turner syndrome = Monosomy X (45,X)."},
+    {q:"The Philadelphia chromosome is found in approximately what percentage of CML patients?",o:["25%","50%","75%","85%"],a:3,e:"The Philadelphia chromosome is found in ~85% of patients with chronic myelogenous leukemia (CML)."},
+    {q:"How many pairs of chromosomes does the typical human karyogram contain?",o:["22","23","24","46"],a:1,e:"23 pairs = 22 autosomes + 1 sex pair (XX or XY)."},
+    {q:"Chimpanzees have how many pairs of chromosomes?",o:["22","23","24","25"],a:2,e:"Chimps have 24 pairs. Humans lost a pair through fusion of two ancestral chromosomes."},
+    {q:"Which sample is obtained by amniocentesis?",o:["Bone marrow","Amniotic fluid","Placental villi","Peripheral blood"],a:1,e:"Amniocentesis obtains amniotic fluid for prenatal karyotyping."},
+    {q:"Which technique uses fluorescent probes to detect specific DNA sequences on chromosomes?",o:["CGH","FISH","WGS","PCR"],a:1,e:"FISH = Fluorescence In Situ Hybridization, more sensitive than classic banding for micro-deletions/duplications."},
+    {q:"Which method provides a GENOME-WIDE view of copy number variations?",o:["G-banding","FISH","CGH","Microscopy"],a:2,e:"Comparative Genomic Hybridization (CGH) uses microarrays to detect CNVs across the entire genome."},
+    {q:"Which limitation is TRUE of classical karyotyping?",o:["It detects point mutations","It detects epigenetic changes","It only detects chromosome-level changes","It works on non-dividing cells"],a:2,e:"Karyotyping only resolves changes at the chromosome level — point mutations and epigenetic marks are invisible to it."},
+    {q:"Which technique can detect point mutations AND structural variants at single-base resolution?",o:["Karyotyping","FISH","CGH","Whole Genome Sequencing (WGS)"],a:3,e:"WGS sequences every base — highest resolution, but currently slower & more expensive than karyotyping."},
+    {q:"Giemsa stain preferentially binds which regions of the chromosome?",o:["GC-rich","AT-rich","Centromeres only","Telomeres only"],a:1,e:"Giemsa binds AT-rich regions — that's why dark G-bands correspond to AT-rich DNA."},
+    {q:"Klinefelter syndrome corresponds to which karyotype?",o:["45,X","46,XX","47,XXY","47,XYY"],a:2,e:"Klinefelter syndrome = 47,XXY (an extra X chromosome in a male)."},
+    {q:"Which structural abnormalities can karyotyping detect?",o:["Only translocations","Only deletions","Translocations, inversions, deletions, duplications","Point mutations only"],a:2,e:"Karyotyping detects translocations, inversions, deletions and duplications — but not point mutations."},
+    {q:"In the human karyogram, where are the sex chromosomes placed?",o:["First (largest)","In the middle","At the end","Randomly"],a:2,e:"Chromosomes are ordered largest → smallest with the sex chromosomes (XX or XY) placed LAST."},
+    {q:"Mosaicism refers to:",o:["A single abnormal chromosome","Coexistence of normal and abnormal cell populations","A point mutation","Total chromosome loss"],a:1,e:"Mosaicism = two or more genetically distinct cell populations in the same individual — detectable by karyotyping."},
+    {q:"What may cause chromosome breaks producing artefactual abnormal karyotype results?",o:["Giemsa staining","Chemotherapy","Amniocentesis","Microscopy"],a:1,e:"Chemotherapy can induce chromosome breaks — repeat testing is recommended to confirm true in-vivo abnormalities."}
+  ];
+  let i=0, s=0, ans=false;
+  const $=(id)=>document.getElementById(id);
+  function load(){
+    ans=false; $('next').classList.remove('show'); $('exp').classList.remove('show');
+    $('stats').innerText=`Score: ${s} | Q: ${i+1}/${data.length}`;
+    $('fill').style.width=`${(i/data.length)*100}%`;
+    $('qtext').innerText=`Q${i+1}. `+data[i].q;
+    $('opts').innerHTML='';
+    data[i].o.forEach((o,j)=>{
+      let d=document.createElement('div'); d.className='opt'; d.innerHTML=`<b>${String.fromCharCode(65+j)}.</b> ${o}`;
+      d.onclick=()=>check(j); $('opts').appendChild(d);
+    });
+    $('exp').innerHTML=`<b>💡 Explanation:</b> ${data[i].e}`;
+  }
+  function check(j){
+    if(ans)return; ans=true;
+    let os=$('opts').children;
+    for(let k=0;k<os.length;k++){
+      os[k].classList.add('dis');
+      if(k===data[i].a) os[k].classList.add('c');
+      else if(k===j) os[k].classList.add('w');
+    }
+    if(j===data[i].a) s++;
+    $('exp').classList.add('show');
+    $('next').innerText = i===data.length-1 ? 'Results 🏁' : 'Next ➔';
+    $('next').classList.add('show');
+    $('stats').innerText=`Score: ${s} | Q: ${i+1}/${data.length}`;
+  }
+  $('next').onclick=()=>{
+    if(i<data.length-1){ i++; load(); }
+    else{ $('quiz').style.display='none'; $('res').style.display='block'; $('fscore').innerText=s; $('tscore').innerText=data.length; }
+  };
+  load();
+</script>
+</body>
+</html>
