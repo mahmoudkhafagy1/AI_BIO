@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Genomics Old Exam</title>
+<style>
+  :root{--bg:#05060f;--panel:rgba(18,24,52,0.65);--border:rgba(120,180,255,0.18);--cyan:#22d3ee;--purple:#a855f7;--good:#10b981;--bad:#ef4444;--text:#e6edff;--muted:#9aa6c7;--grad:linear-gradient(135deg,#22d3ee,#a855f7);--glow:0 0 20px rgba(34,211,238,0.2);}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif;}
+  body{background:var(--bg);color:var(--text);display:flex;justify-content:center;padding:40px 20px;min-height:100vh; line-height: 1.6;}
+  body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(34,211,238,0.1), transparent 50%); z-index: -1; }
+  .box{width:100%;max-width:800px;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:30px;box-shadow:var(--glow); height: fit-content; backdrop-filter: blur(10px);}
+  .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:15px;}
+  .head h1{font-size:1.5rem;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+  .prog{height:8px;background:rgba(255,255,255,0.1);border-radius:10px;margin-bottom:20px;overflow:hidden;}
+  .fill{height:100%;width:0%;background:var(--grad);transition:0.4s;}
+  .q-text{font-size:1.2rem;font-weight:600;margin-bottom:20px;}
+  .opt{padding:15px;border-radius:12px;border:1px solid var(--border);background:rgba(10,15,36,0.6);margin-bottom:10px;cursor:pointer;transition:0.2s;}
+  .opt:hover:not(.dis){border-color:var(--cyan);background:rgba(34,211,238,0.1);}
+  .opt.c{border-color:var(--good);background:rgba(16,185,129,0.2);color:#a7f3d0;}
+  .opt.w{border-color:var(--bad);background:rgba(239,68,68,0.2);color:#fecaca;}
+  .opt.dis{pointer-events:none;}
+  .exp{margin-top:15px;padding:15px;border-radius:12px;background:rgba(34,211,238,0.08);border-left:4px solid var(--cyan);display:none;}
+  .exp.show{display:block;animation:fadeIn 0.4s;}
+  .btn{padding:10px 20px;border-radius:10px;background:var(--grad);color:#000;font-weight:bold;border:none;cursor:pointer;display:none;margin-top:20px;float:right;}
+  .btn.show{display:inline-block;}
+  .res{text-align:center;display:none;}
+  .res h2{font-size:2.5rem;margin-bottom:10px;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="box" id="app">
+  <div id="quiz">
+    <div class="head"><h1>🧬 Genomics Old Exam</h1><div id="stats" style="color:var(--muted); font-weight:bold;">Score: 0 | Q: 1/60</div></div>
+    <div class="prog"><div class="fill" id="fill"></div></div>
+    <div class="q-text" id="qtext"></div>
+    <div id="opts"></div>
+    <div class="exp" id="exp"></div>
+    <button class="btn" id="next">Next ➔</button>
+  </div>
+  <div class="res" id="res">
+    <h2>🎉 Complete!</h2>
+    <p style="font-size: 1.2rem; color: var(--muted); margin-bottom: 20px;">Score: <span id="fscore" style="color:#fff; font-weight:bold;"></span> / <span id="tscore"></span></p>
+    <p id="feedback" style="font-size: 1.1rem; color: var(--text); margin-bottom: 30px;"></p>
+    <button class="btn show" style="float:none;" onclick="location.reload()">🔄 Restart Quiz</button>
+  </div>
+</div>
+<script>
+  const data = [
+    // 45 MCQs
+    { q: "Prokaryotic genomes are usually:", o: ["Linear and complex", "Circular and simpler", "Double-stranded with histones", "Enclosed in a nucleus"], a: 1, e: "Prokaryotic genomes are Circular and simpler." },
+    { q: "Karyotyping can determine a person's sex by identifying:", o: ["X chromosome only", "Presence or absence of Y chromosome", "Estrogen levels", "Hormone levels"], a: 1, e: "Karyotyping determines sex by checking for the presence or absence of the Y chromosome." },
+    { q: "Why are metaphase chromosomes preferred for karyotyping?", o: ["They are highly condensed and visible", "They are less condensed", "They contain RNA", "They are easiest to replicate"], a: 0, e: "Metaphase chromosomes are highly condensed and clearly visible under a microscope." },
+    { q: "What key event characterizes prophase during mitosis?", o: ["Chromosomes line up at the metaphase plate", "The nuclear envelope breaks down and spindle fibers begin to form", "Two new nuclei form around separated chromosomes", "Sister chromatids are pulled apart"], a: 1, e: "In prophase, the nuclear envelope breaks down and spindle fibers begin to form." },
+    { q: "At which step in mitosis do two nuclei begin to re-form?", o: ["Metaphase", "Prophase", "Anaphase", "Telophase"], a: 3, e: "Telophase is when two nuclei begin to re-form." },
+    { q: "What does cytogenetics primarily study?", o: ["Proteins", "Genetic material at the cellular level", "Plant breeding", "RNA transcription"], a: 1, e: "Cytogenetics studies genetic material at the cellular level." },
+    { q: "What are genes?", o: ["Non-coding regions of DNA", "Protein molecules", "Segments of DNA that code for proteins", "RNA molecules"], a: 2, e: "Genes are segments of DNA that code for proteins." },
+    { q: "Chromosomes are composed of:", o: ["Lipids and sugars", "Only proteins", "DNA and histone proteins", "Amino acids"], a: 2, e: "Chromosomes consist of DNA tightly wrapped around histone proteins." },
+    { q: "What does karyotyping primarily examine?", o: ["Mitochondrial function", "Chromosomes in cells", "RNA splicing", "Protein sequences"], a: 1, e: "Karyotyping primarily examines chromosomes in cells." },
+    { q: "Which nitrogenous base is only found in RNA?", o: ["Thymine", "Uracil", "Adenine", "Cytosine"], a: 1, e: "Uracil is exclusively found in RNA (replacing Thymine)." },
+    { q: "Which cells in the human body lack a nucleus and thus nuclear DNA?", o: ["Neurons", "Red blood cells", "Liver cells", "Muscle cells"], a: 1, e: "Mature red blood cells lack a nucleus." },
+    { q: "Which chromosomal abnormality is found in Turner syndrome?", o: ["XXY", "Monosomy X", "Trisomy 18", "Trisomy 13"], a: 1, e: "Turner syndrome is characterized by Monosomy X (45,X)." },
+    { q: "Which genome is inherited maternally?", o: ["Mitochondrial genome", "Nuclear genome", "Y chromosome", "Chloroplast genome"], a: 0, e: "The mitochondrial genome is strictly inherited from the mother." },
+    { q: "Which of the following samples can be used for karyotyping?", o: ["Saliva", "Bone marrow", "Sweat", "Hair"], a: 1, e: "Bone marrow (along with blood and amniotic fluid) can be used for karyotyping." },
+    { q: "At which step in mitosis do cells divide?", o: ["Cytokinesis", "Telophase", "Metaphase", "Anaphase"], a: 0, e: "Cytokinesis is the actual division of the cytoplasm into two cells." },
+    { q: "What is happening to the chromosomes in mitosis during metaphase?", o: ["The chromosomes are pulled to opposite ends of the cell.", "The chromosomes align in the center of the cell.", "The chromosomes are copied and the cell grows.", "The chromosomes are contained in two newly formed nuclei"], a: 1, e: "During metaphase, chromosomes align at the equatorial plate (center)." },
+    { q: "What is the function of the spindles, a cytoskeletal structure, as seen in metaphase and anaphase of mitosis?", o: ["The spindles separate the chromosomes, so each daughter cell will receive one of each chromosome.", "The spindles help to separate the one cell into two during cell division.", "The spindles separate the sister chromatids, so each daughter cell will receive one from each chromosome.", "The spindles help to separate the nucleus into two nuclei during cell division."], a: 2, e: "Spindles separate the sister chromatids to ensure each daughter cell receives an identical copy." },
+    { q: "How does chemotherapy potentially affect karyotype results?", o: ["Prevents mitosis", "Causes chromosome breaks", "Removes histones", "Destroys DNA entirely"], a: 1, e: "Chemotherapy can induce artefactual chromosome breaks." },
+    { q: "Mitochondrial DNA is:", o: ["Linear and found in the cytoplasm", "Circular and found in mitochondria", "Linear and found in the nucleus", "Circular and found in the nucleus"], a: 1, e: "Mitochondrial DNA is circular and found inside mitochondria." },
+    { q: "In prenatal testing, karyotyping is most commonly done using:", o: ["Feces", "Amniotic fluid", "Sweat", "Urine"], a: 1, e: "Amniotic fluid contains fetal cells suitable for karyotyping." },
+    { q: "Which human cells have only 23 chromosomes?", o: ["Liver cells", "Nerve cells", "Gametes", "Muscle cells"], a: 2, e: "Gametes (sperm and egg cells) are haploid and contain 23 chromosomes." },
+    { q: "Why is mitosis important in adult organisms?", o: ["Hormone regulation", "Tissue growth and repair", "Reproduction only", "DNA mutation"], a: 1, e: "Mitosis is crucial for tissue growth and repairing damaged cells." },
+    { q: "Which phase of mitosis involves the alignment of chromosomes at the equator?", o: ["Metaphase", "Telophase", "Anaphase", "Prophase"], a: 0, e: "Alignment at the equator occurs in Metaphase." },
+    { q: "What is a major limitation of karyotyping?", o: ["Cannot detect DNA at all", "Cannot be done on blood samples", "Too expensive to perform", "Cannot detect small mutations or epigenetic changes"], a: 3, e: "Karyotyping resolves only large chromosomal changes, missing point mutations and epigenetic marks." },
+    { q: "What technique uses fluorescent probes to detect specific DNA sequences on chromosomes?", o: ["FISH", "PCR", "ELISA", "Western blot"], a: 0, e: "FISH (Fluorescence In Situ Hybridization) uses fluorescent probes." },
+    { q: "What is the typical chromosome count in a normal female karyotype?", o: ["46, XX", "23, XX", "46, XY", "44, XX"], a: 0, e: "A normal female karyotype is 46, XX." },
+    { q: "What major event in meiosis is occurring at step A? [Involves pairing/crossing over]", o: ["DNA replication", "Meiosis II", "Meiosis I", "Mitosis"], a: 2, e: "Step A represents events typical of Meiosis I (synapsis/pairing)." },
+    { q: "Which chromosomal condition is identified by 47, XXY?", o: ["Edwards syndrome", "Turner syndrome", "Klinefelter syndrome", "Down syndrome"], a: 2, e: "47, XXY represents Klinefelter syndrome." },
+    { q: "Can AI choose your life partner?", o: ["Yes, completely", "Only if your genes match", "No, it can only provide scientific suggestions", "Yes, if approved by a doctor"], a: 2, e: "AI cannot choose life partners; it can only provide scientific suggestions based on genetics." },
+    { q: "During what phase of mitosis will the sister chromatids separate?", o: ["Metaphase", "prophase", "anaphase", "telophase"], a: 2, e: "Sister chromatids separate during anaphase." },
+    { q: "At which phase of the cell cycle are chromosomes best visualized for karyotyping?", o: ["Anaphase", "Prophase", "Metaphase", "Interphase"], a: 2, e: "Chromosomes are best visualized at Metaphase because they are highly condensed." },
+    { q: "Which chromosomal abnormality is associated with Down syndrome?", o: ["Trisomy 21", "Trisomy 18", "Deletion of chromosome 5", "Monosomy X"], a: 0, e: "Down syndrome is caused by Trisomy 21." },
+    { q: "What major event occurs during metaphase in mitosis?", o: ["The nuclear envelope breaks down", "Sister chromatids are pulled apart to opposite poles", "Chromosomes align at the cell’s equatorial plate", "Chromatin condenses into chromosomes"], a: 2, e: "Chromosomes align at the cell's equatorial plate." },
+    { q: "At what stage does the nuclear membrane disappear?", o: ["Prophase", "Anaphase", "Telophase", "Metaphase"], a: 0, e: "The nuclear membrane disappears during Prophase." },
+    { q: "What stage of mitosis is shown, and when does it occur? [Cell showing chromosome condensation & spindle formation]", o: ["metaphase; second phase", "prophase; first phase", "anaphase; third phase", "interphase; before mitosis takes place"], a: 1, e: "This depicts Prophase; the first phase of mitosis." },
+    { q: "Which method offers higher resolution than traditional karyotyping to detect CNVs (Copy Number Variations)?", o: ["Comparative Genomic Hybridization (CGH)", "FISH", "RFLP", "PCR"], a: 0, e: "CGH provides a genome-wide, higher-resolution scan for CNVs." },
+    { q: "How many phases are required for meiosis to take place?", o: ["eight", "four", "nine", "five"], a: 1, e: "According to the key, Meiosis is often summarized into Four main phases per division (Prophase, Metaphase, Anaphase, Telophase)." },
+    { q: "Which process follows mitosis and divides the cytoplasm?", o: ["DNA replication", "Cytokinesis", "Meiosis", "Transcription"], a: 1, e: "Cytokinesis is the division of the cytoplasm." },
+    { q: "What is one major reason for performing prenatal karyotyping?", o: ["To check fetal breathing", "To assess maternal nutrition", "To determine placenta weigh.", "To detect chromosomal abnormalities in the fetus"], a: 3, e: "It is primarily done to detect chromosomal abnormalities like Trisomy 21." },
+    { q: "During prophase I of meiosis, genetic recombination happens during a process known as:", o: ["pairing", "dissolving", "condensing", "crossover"], a: 3, e: "Genetic recombination happens during crossover." },
+    { q: "Which of the following is a numerical chromosomal abnormality?", o: ["Trisomy", "Deletion", "Inversion", "Translocation"], a: 0, e: "Trisomy refers to an abnormal number of chromosomes (e.g., 3 instead of 2)." },
+    { q: "When does crossing over take place?", o: ["During prophase of mitosis, when the chromosomes begin to pair", "During metaphase of mitosis, when the chromosomes begin to pair", "During metaphase I of meiosis, when the chromosomes begin to pair", "During prophase I of meiosis, when the chromosomes begin to pair"], a: 3, e: "Crossing over strictly takes place during prophase I of meiosis." },
+    { q: "What is meant by 'genetic privacy'?", o: ["The right to keep your medical records confidential", "The right to control access to and use of your personal genetic information", "The right to change your genetic code", "The right to avoid medical testing"], a: 1, e: "It refers to the right to control access to your personal genetic information." },
+    { q: "How are chromosomes organized in a karyogram?", o: ["Alphabetically", "By size, shape, and banding pattern", "By age of the person", "Random order"], a: 1, e: "Chromosomes are organized by size, shape, and banding pattern." },
+    { q: "How is artificial intelligence used in genomics?", o: ["Only for disease prediction", "Only for identifying ancestry", "For personalized medicine, disease prediction, and drug discovery", "Only to replace genetic counselors"], a: 2, e: "AI is used comprehensively for personalized medicine, disease prediction, and drug discovery." },
+
+    // 15 True / False
+    { q: "Karyotyping can identify Down syndrome by detecting an extra copy of chromosome 21.", o: ["True", "False"], a: 0, e: "True. Down syndrome is Trisomy 21, easily detectable by karyotyping." },
+    { q: "Whole genome sequencing provides less genetic detail than karyotyping.", o: ["True", "False"], a: 1, e: "False. Whole genome sequencing provides much MORE detail at single-base resolution." },
+    { q: "A genome refers only to the genes that code for proteins in an organism.", o: ["True", "False"], a: 1, e: "False. A genome includes ALL genetic material (coding and non-coding)." },
+    { q: "Chromosomes are made of DNA coiled around histone proteins.", o: ["True", "False"], a: 0, e: "True. DNA wraps around histones to form nucleosomes." },
+    { q: "Somatic cells in humans are haploid.", o: ["True", "False"], a: 1, e: "False. Somatic cells are diploid (46 chromosomes); gametes are haploid." },
+    { q: "Anaphase is the phase where chromosomes line up at the equator.", o: ["True", "False"], a: 1, e: "False. Chromosomes line up at the equator during METAPHASE." },
+    { q: "Karyotyping is used to examine chromosomes in a sample of cells.", o: ["True", "False"], a: 0, e: "True. Karyotyping is the standard test for examining whole chromosomes." },
+    { q: "In a pedigree chart, squares represent females and circles represent males.", o: ["True", "False"], a: 1, e: "False. Squares = males, circles = females." },
+    { q: "Chromosomes are best visualized during the telophase stage of cell division.", o: ["True", "False"], a: 1, e: "False. They are best visualized during METAPHASE when maximally condensed." },
+    { q: "Amniotic fluid can be used for prenatal karyotyping.", o: ["True", "False"], a: 0, e: "True. It contains fetal cells used for this purpose." },
+    { q: "During telophase, the nuclear envelope reforms around the separated chromatids.", o: ["True", "False"], a: 0, e: "True. Telophase marks the reformation of the nuclear envelope." },
+    { q: "Cytokinesis is the process of dividing the nuclear material during mitosis.", o: ["True", "False"], a: 1, e: "False. Cytokinesis divides the CYTOPLASM, not the nuclear material." },
+    { q: "A pedigree is a diagram that shows the occurrence of a genetic trait in several generations of a family.", o: ["True", "False"], a: 0, e: "True. This is the definition of a pedigree." },
+    { q: "In X-linked recessive inheritance, affected fathers pass the trait to all their sons.", o: ["True", "False"], a: 1, e: "False. Fathers pass their Y chromosome to sons, so they cannot pass an X-linked trait to them." },
+    { q: "An autosomal dominant trait appears in every generation.", o: ["True", "False"], a: 0, e: "True. Autosomal dominant traits generally do not skip generations." }
+  ];
+
+  let i=0, s=0, ans=false;
+  const $=(id)=>document.getElementById(id);
+
+  function load(){
+    ans=false; 
+    $('next').classList.remove('show'); 
+    $('exp').classList.remove('show');
+    $('stats').innerText=`Score: ${s} | Q: ${i+1}/${data.length}`;
+    $('fill').style.width=`${(i/data.length)*100}%`;
+    $('qtext').innerText=`Q${i+1}. `+data[i].q;
+    $('opts').innerHTML='';
+    
+    data[i].o.forEach((o,j)=>{
+      let d=document.createElement('div'); 
+      d.className='opt';
+      if(data[i].o.length > 2) {
+        d.innerHTML=`<b>${String.fromCharCode(65+j)}.</b> ${o}`;
+      } else {
+        d.innerHTML=`<b>${o}</b>`;
+      }
+      d.onclick=()=>check(j); 
+      $('opts').appendChild(d);
+    });
+    
+    $('exp').innerHTML=`<b>💡 Explanation:</b> ${data[i].e}`;
+  }
+
+  function check(j){
+    if(ans)return; 
+    ans=true;
+    let os=$('opts').children;
+    for(let k=0;k<os.length;k++){
+      os[k].classList.add('dis');
+      if(k===data[i].a) os[k].classList.add('c');
+      else if(k===j) os[k].classList.add('w');
+    }
+    if(j===data[i].a) s++;
+    $('exp').classList.add('show');
+    $('next').innerText = i===data.length-1 ? 'Results 🏁' : 'Next ➔';
+    $('next').classList.add('show');
+    $('stats').innerText=`Score: ${s} | Q: ${i+1}/${data.length}`;
+  }
+
+  $('next').onclick=()=>{
+    if(i<data.length-1){ 
+      i++; 
+      load(); 
+    } else { 
+      $('quiz').style.display='none'; 
+      $('res').style.display='block'; 
+      $('fscore').innerText=s; 
+      $('tscore').innerText=data.length; 
+      
+      let pct = (s / data.length) * 100;
+      let msg = '';
+      if(pct >= 90) msg = "🧬 Outstanding! You're fully prepared for the exam!";
+      else if(pct >= 75) msg = "🔥 Excellent work! You have a very strong grasp of the material.";
+      else if(pct >= 50) msg = "👍 Good job, but make sure to review the questions you missed.";
+      else msg = "📚 Keep studying! Review the course material and try again.";
+      $('feedback').innerText = msg;
+    }
+  };
+
+  load();
+</script>
+</body>
+</html>
