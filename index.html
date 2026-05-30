@@ -47,7 +47,7 @@
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-            <span class="stat-num">10</span>
+            <span class="stat-num">11</span>
             <span class="stat-label">كويزات</span>
         </div>
         <div class="stat-divider"></div>
@@ -175,11 +175,11 @@
             <div class="subject-meta">
                 <div class="meta-item">
                     <span class="meta-icon">📝</span>
-                    <span>99 سؤال</span>
+                    <span>159 سؤال</span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-icon">🎯</span>
-                    <span>5 كويزات</span>
+                    <span>6 كويزات</span>
                 </div>
             </div>
             <div class="quiz-list">
@@ -207,6 +207,11 @@
                     <span class="pill-icon">⚠️</span>
                     <span>Chromosomal Disorders</span>
                     <span class="pill-count">22 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('old-exam')">
+                    <span class="pill-icon">📝</span>
+                    <span>Old Exam</span>
+                    <span class="pill-count">60 سؤال</span>
                 </div>
             </div>
             <div class="card-footer">
@@ -312,7 +317,8 @@
         'meiosis':        'meiosis.html',
         'karyotyping':    'karyotyping.html',
         'pedigree':       'pedigree.html',
-        'chromosomal-disorders': 'chromosomal_disorders.html'
+        'chromosomal-disorders': 'chromosomal_disorders.html',
+        'old-exam':       'old_exam.html'
     };
 
     function openQuiz(key) {
