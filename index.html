@@ -47,12 +47,12 @@
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-            <span class="stat-num">11</span>
+            <span class="stat-num">13</span>
             <span class="stat-label">كويزات</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-            <span class="stat-num">4</span>
+            <span class="stat-num">5</span>
             <span class="stat-label">مواد</span>
         </div>
     </div>
@@ -152,14 +152,44 @@
             </div>
         </div>
 
-        <div class="subject-card coming-soon">
+        <!-- OOP Card -->
+        <div class="subject-card active-subject" onclick="openSubject('oop')">
+            <div class="card-glow"></div>
             <div class="card-header">
                 <div class="subject-icon">💻</div>
-                <div class="subject-badge soon-badge">قريباً</div>
+                <div class="subject-badge">متاح</div>
             </div>
             <h3 class="subject-name">OOP</h3>
             <p class="subject-ar">البرمجة كائنية التوجه</p>
-            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+            <p class="subject-desc">مفاهيم البرمجة كائنية التوجه ولغة C++ وهياكل البيانات الأساسية</p>
+            <div class="subject-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📝</span>
+                    <span>40 سؤال</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🎯</span>
+                    <span>2 كويز</span>
+                </div>
+            </div>
+            <div class="quiz-list">
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('oop-test')">
+                    <span class="pill-icon">📋</span>
+                    <span>OOP Test</span>
+                    <span class="pill-count">20 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('oop-midterm-2022')">
+                    <span class="pill-icon">📝</span>
+                    <span>Midterm 2022</span>
+                    <span class="pill-count">20 سؤال</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="open-btn" onclick="event.stopPropagation(); openSubject('oop')">
+                    فتح المادة
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
         </div>
 
         <!-- Genomics Card -->
@@ -318,7 +348,9 @@
         'karyotyping':    'karyotyping.html',
         'pedigree':       'pedigree.html',
         'chromosomal-disorders': 'chromosomal_disorders.html',
-        'old-exam':       'old_exam.html'
+        'old-exam':       'old_exam.html',
+        'oop-test':       'oop_test.html',
+        'oop-midterm-2022': 'oop_midterm_2022.html'
     };
 
     function openQuiz(key) {
