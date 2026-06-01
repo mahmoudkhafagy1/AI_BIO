@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midterm 2022 - Object Oriented Programming</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --panel: #12131c;
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00ea;
+            --text: #e0e6ed;
+        }
+        body {
+            background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px;
+            box-sizing: border-box;
+        }
+        .quiz-container {
+            background: var(--panel); padding: 30px; border-radius: 12px; width: 100%; max-width: 700px;
+            box-shadow: 0 0 15px rgba(255, 0, 234, 0.15); border: 1px solid rgba(255, 0, 234, 0.3); position: relative;
+        }
+        h2 { color: var(--neon-pink); text-shadow: 0 0 8px var(--neon-pink); text-align: center; margin-bottom: 30px; }
+        .question { font-size: 1.2rem; margin-bottom: 20px; line-height: 1.5; white-space: pre-wrap; }
+        .option {
+            background: rgba(255, 255, 255, 0.03); padding: 15px; margin: 12px 0; border-radius: 6px;
+            cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent; font-size: 1rem;
+        }
+        .option:hover { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0, 243, 255, 0.4); transform: translateX(5px); }
+        .option.correct { background: rgba(0, 255, 0, 0.1); border-color: #0f0; box-shadow: 0 0 12px #0f0; }
+        .option.wrong { background: rgba(255, 0, 0, 0.1); border-color: #f00; box-shadow: 0 0 12px #f00; }
+        .option.disabled { pointer-events: none; }
+        #next-btn {
+            background: transparent; color: var(--neon-pink); border: 2px solid var(--neon-pink);
+            padding: 12px 20px; border-radius: 6px; cursor: pointer; display: none; width: 100%;
+            font-size: 1.1rem; font-weight: bold; margin-top: 25px; transition: 0.3s; text-transform: uppercase;
+        }
+        #next-btn:hover { background: var(--neon-pink); color: var(--bg); box-shadow: 0 0 15px var(--neon-pink); }
+        #score-board { text-align: center; display: none; }
+        .progress { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan); font-size: 0.9rem; margin-bottom: 15px; text-align: right; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div class="progress" id="progress">Question 1 of 20</div>
+    <h2 id="quiz-title">OOP Midterm Quiz</h2>
+    <div id="quiz-body">
+        <div class="question" id="question">Loading...</div>
+        <div id="options"></div>
+    </div>
+    <button id="next-btn" onclick="nextQuestion()">Next Question</button>
+    <div id="score-board">
+        <h2 id="final-score" style="color:var(--neon-cyan);"></h2>
+        <button id="next-btn" style="display:block; border-color:var(--neon-cyan); color:var(--neon-cyan);" onmouseover="this.style.background='var(--neon-cyan)'; this.style.color='var(--bg)'" onmouseout="this.style.background='transparent'; this.style.color='var(--neon-cyan)'" onclick="location.reload()">Restart Quiz</button>
+    </div>
+</div>
+
+<script>
+const quizData = [
+    { q: "The namespace variable can be accessed as:", o: ["namespace.operator", "namespaceid::operator", "namespace:operator", "None of these"], a: 1 },
+    { q: "What is the output of the following code?\nclass student { int rno = 10; } v;\ncout << v.rno;", o: ["10", "Garbage", "Compile error", "None of these"], a: 2 },
+    { q: "The output of the following code is 'Constructor of class A'\nclass A { public: A() { cout<<\"Constructor of class A\\n\";} };\nclass B: public A { public: B() {cout<<\"Constructor of class B\\n\";} };\nint main() { B b; return 0;}", o: ["True", "False"], a: 0 },
+    { q: "The binding of data and functions together into a single class-type variable is referred to as polymorphism", o: ["True", "False"], a: 1 },
+    { q: "References differ from pointers in that they can't be made null, they can't be changed once they've been initialized, and they don't require an extra operator to dereference them.", o: ["True", "False"], a: 0 },
+    { q: "Inheritance means deriving new classes from existing classes", o: ["True", "False"], a: 0 },
+    { q: "What is the scope of the user-defined functions declared variable?", o: ["header section", "the main function", "whole program", "only inside the {} block"], a: 3 },
+    { q: "Encapsulation exposes only necessary information to users or clients and hides background process details", o: ["True", "False"], a: 1 },
+    { q: "The base class's private members will never become members of the derived class while inheriting.", o: ["True", "False"], a: 0 },
+    { q: "The derived inherits _____ of the properties of the base class.", o: ["some", "all", "some or all", "None of these"], a: 2 },
+    { q: "What is the name of the feature that allows the same message to be sent to objects of various classes, each of which can respond differently?", o: ["Polymorphism", "Overriding", "abstraction", "Overloading"], a: 0 },
+    { q: "There are only two ways for comments", o: ["True", "False"], a: 0 },
+    { q: "Which of the following access specifiers are applicable?", o: ["Functions", "Member data", "Both Member data & Functions", "Protected members"], a: 2 },
+    { q: "Which of the following is the address operator?", o: ["*", "&", "E-10", "* or &"], a: 1 },
+    { q: "When a derived class inherits a base class secretly (privately), only the derived class's member functions have access to the base class's public members.", o: ["True", "False"], a: 0 },
+    { q: "Encapsulation and Abstraction are some features of object-oriented programming", o: ["True", "False"], a: 0 },
+    { q: "cin.get(ch) function is used to read a single character from the console in C++", o: ["True", "False"], a: 0 },
+    { q: "There is one way of specifiers that used to derive a class", o: ["True", "False"], a: 1 },
+    { q: "Select the correct option in a function that is required.", o: ["parameters", "return type", "return type & function name", "function name"], a: 2 },
+    { q: "What is the effective way to call the function?", o: ["by object", "by value", "by reference", "by pointer"], a: 2 }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+function loadQuestion() {
+    const q = quizData[currentQuestion];
+    document.getElementById("progress").innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
+    document.getElementById("question").innerText = `${currentQuestion + 1}. ${q.q}`;
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+    q.o.forEach((opt, index) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.innerText = opt;
+        div.onclick = () => selectOption(div, index, q.a);
+        optionsDiv.appendChild(div);
+    });
+    document.getElementById("next-btn").style.display = "none";
+}
+
+function selectOption(element, selectedIndex, correctIndex) {
+    const options = document.querySelectorAll(".option");
+    options.forEach(opt => opt.classList.add("disabled"));
+    
+    if (selectedIndex === correctIndex) {
+        element.classList.add("correct");
+        score++;
+    } else {
+        element.classList.add("wrong");
+        options[correctIndex].classList.add("correct");
+    }
+    document.getElementById("next-btn").style.display = "block";
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion < quizData.length) {
+        loadQuestion();
+    } else {
+        document.getElementById("quiz-title").style.display = "none";
+        document.getElementById("progress").style.display = "none";
+        document.getElementById("quiz-body").style.display = "none";
+        document.getElementById("next-btn").style.display = "none";
+        document.getElementById("score-board").style.display = "block";
+        document.getElementById("final-score").innerText = `Mission Accomplished!\nScore: ${score} / ${quizData.length}`;
+    }
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
