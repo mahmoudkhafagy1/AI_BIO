@@ -42,12 +42,12 @@
     <p class="hero-desc">بنوك أسئلة شاملة وكويزات تفاعلية لجميع مواد القسم الحيوي. تدرّب، اختبر نفسك، وتفوّق.</p>
     <div class="hero-stats">
         <div class="stat-item">
-            <span class="stat-num" id="total-q">600+</span>
+            <span class="stat-num" id="total-q">850+</span>
             <span class="stat-label">سؤال</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-            <span class="stat-num">13</span>
+            <span class="stat-num">16</span>
             <span class="stat-label">كويزات</span>
         </div>
         <div class="stat-divider"></div>
@@ -165,14 +165,29 @@
             <div class="subject-meta">
                 <div class="meta-item">
                     <span class="meta-icon">📝</span>
-                    <span>40 سؤال</span>
+                    <span>337 سؤال</span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-icon">🎯</span>
-                    <span>2 كويز</span>
+                    <span>5 كويزات</span>
                 </div>
             </div>
             <div class="quiz-list">
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('oop-part1')">
+                    <span class="pill-icon">📘</span>
+                    <span>OOP Part 1 (1 - 97)</span>
+                    <span class="pill-count">97 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('oop-part2')">
+                    <span class="pill-icon">📙</span>
+                    <span>OOP Part 2 (98 - 197)</span>
+                    <span class="pill-count">100 سؤال</span>
+                </div>
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('oop-part3')">
+                    <span class="pill-icon">📗</span>
+                    <span>OOP Part 3 (198 - 297)</span>
+                    <span class="pill-count">100 سؤال</span>
+                </div>
                 <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('oop-test')">
                     <span class="pill-icon">📋</span>
                     <span>OOP Test</span>
@@ -349,6 +364,9 @@
         'pedigree':       'pedigree.html',
         'chromosomal-disorders': 'chromosomal_disorders.html',
         'old-exam':       'old_exam.html',
+        'oop-part1':      'oop_1.html',
+        'oop-part2':      'oop_2.html',
+        'oop-part3':      'oop_3.html',
         'oop-test':       'oop_test.html',
         'oop-midterm-2022': 'oop_midterm_2022.html'
     };
@@ -376,3 +394,4 @@
 
 
 </body></html>
+
