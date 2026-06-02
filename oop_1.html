@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كويز OOP - الملف الأول (1 إلى 97)</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8; /* لون لبني/سماوي للملف الأول */
+            --accent-hover: #0284c7;
+            --correct: #16a34a;
+            --wrong: #dc2626;
+            --border: #334155;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0; /* Changed to 0 to accommodate sticky header */
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+        .scoreboard {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--accent);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+        }
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .score-correct { color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.5); }
+        .score-wrong { color: #f87171; text-shadow: 0 0 10px rgba(248, 113, 113, 0.5); }
+        .score-total { color: var(--accent); }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+        .q-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        .q-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .q-num {
+            font-weight: bold;
+            color: var(--accent);
+            background: rgba(56, 189, 248, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .q-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        .code-block {
+            background: #000;
+            border-left: 3px solid var(--accent);
+            padding: 15px;
+            border-radius: 5px;
+            color: #a5b4fc;
+            font-family: monospace;
+            direction: ltr;
+            text-align: left;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .options {
+            display: grid;
+            gap: 12px;
+            direction: ltr;
+        }
+        .btn {
+            background: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover:not(:disabled) {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: var(--accent);
+        }
+        .btn:disabled {
+            cursor: default;
+        }
+        .btn.correct {
+            background: var(--correct) !important;
+            border-color: #22c55e !important;
+            color: white;
+            box-shadow: 0 0 15px rgba(22, 163, 74, 0.4);
+        }
+        .btn.wrong {
+            background: var(--wrong) !important;
+            border-color: #ef4444 !important;
+            color: white;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(56, 189, 248, 0.05);
+            border-right: 4px solid var(--accent);
+            border-radius: 8px;
+            display: none;
+            font-size: 15.5px;
+            color: #cbd5e1;
+            animation: fadeIn 0.5s;
+        }
+        .explanation strong {
+            color: var(--accent);
+        }
+        
+        .finish-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 40px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            transition: transform 0.3s;
+        }
+        .finish-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+        }
+
+        /* Modal Styles */
+        #result-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 6px solid var(--accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            font-weight: bold;
+            color: var(--accent);
+            box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.2), 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+        .modal-details {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .close-modal-btn {
+            background: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .close-modal-btn:hover { background: rgba(255,255,255,0.1); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<div class="scoreboard">
+    <div class="score-item score-correct">✅ صح: <span id="correct-counter">0</span></div>
+    <div class="score-item score-wrong">❌ خطأ: <span id="wrong-counter">0</span></div>
+    <div class="score-item score-total">🎯 المتبقي: <span id="remaining-counter">97</span></div>
+</div>
+
+<div class="container">
+    <h1>مراجعة أساسيات OOP - الملف الأول (الأسئلة 1 - 97)</h1>
+    <div id="quiz-container"></div>
+    <button class="finish-btn" onclick="showResults()">عرض النتيجة النهائية 🏆</button>
+</div>
+
+<div id="result-modal">
+    <div class="modal-content">
+        <h2 id="result-message" style="margin-top:0;">النتيجة النهائية</h2>
+        <div class="modal-score-circle" id="result-percentage">0%</div>
+        <div class="modal-details">
+            <div class="score-correct">✅ صح: <span id="res-correct">0</span></div>
+            <div class="score-wrong">❌ خطأ: <span id="res-wrong">0</span></div>
+            <div style="color:var(--text-muted)">⏳ لم يُجاب: <span id="res-unanswered">0</span></div>
+        </div>
+        <button class="close-modal-btn" onclick="document.getElementById('result-modal').style.display='none'">إغلاق</button>
+    </div>
+</div>
+
+<script>
+    let correctCount = 0;
+    let wrongCount = 0;
+    let answeredQuestions = new Set();
+    const TOTAL_QUESTIONS = 97;
+
+    // Data Structure: q = Question, c = Code (optional), o = Options, a = Answer Index, e = Arabic Explanation
+    const questions = [
+        {q: "In Assembly language single statements accomplish substantial tasks.", o: ["True", "False"], a: 1, e: "لغة التجميع (Assembly) لغة منخفضة المستوى، لذا فهي تتطلب تعليمات وأسطر عديدة لتنفيذ مهام معقدة، عكس اللغات عالية المستوى."},
+        {q: "In Compiler Language script is converted to Assembly Language.", o: ["True", "False"], a: 1, e: "المترجم (Compiler) لا يحول الكود إلى لغة تجميع، بل يحوله مباشرة إلى لغة الآلة (Machine Language) ليفهمها المعالج."},
+        {q: "____ : Set of statements to perform some task.", o: ["Class", "Function", "Program", "No mention above"], a: 1, e: "الدالة (Function) هي كتلة أو مجموعة من التعليمات البرمجية المصممة لأداء وظيفة أو مهمة محددة."},
+        {q: "A C++ program may not have any function.", o: ["True", "False"], a: 1, e: "لغة C++ تعتمد هيكلياً على الدوال، وأي برنامج يجب أن يحتوي على دالة واحدة على الأقل وهي main()."},
+        {q: "Which of the following is called low level languages?", o: ["Assembly Language", "Machine Language", "Both of the above", "None of the above"], a: 2, e: "كل من لغة التجميع ولغة الآلة تُصنفان كلغات منخفضة المستوى لقربهما المباشر من العتاد (Hardware)."},
+        {q: "What is the only thing that computers understand?", o: ["Low Level Language", "Machine Code", "High Level Languages", "Algorithms"], a: 1, e: "الدوائر الإلكترونية في الحاسوب لا تفهم سوى الإشارات الكهربائية الممثلة في لغة الآلة (الأصفار والآحاد)."},
+        {q: "______ is needed to convert a high level language to machine language.", o: ["Assembler", "Editor", "Compiler", "Interpreter"], a: 2, e: "المترجم (Compiler) هو الأداة التي تحول الكود المكتوب بلغة عالية المستوى بالكامل إلى لغة آلة."},
+        {q: "Compiler creates object code and stores it on disk (.o file).", o: ["True", "False"], a: 0, e: "بعد عملية الترجمة، ينتج ملف وسيط يسمى Object Code بامتداد .o أو .obj قبل أن يتم ربطه لتكوين البرنامج النهائي."},
+        {q: "Loader puts program in ______.", o: ["Memory (RAM)", "Hard disk", "CPU", "None of the above"], a: 0, e: "برنامج التحميل (Loader) يأخذ البرنامج من القرص الصلب ويضعه في الذاكرة العشوائية (RAM) لكي ينفذه المعالج."},
+        {q: "Types of User-Defined Data types:", o: ["Enumeration", "Union", "Class", "All of the above"], a: 3, e: "التعدادات (Enums)، الاتحادات (Unions)، والفئات (Classes) كلها أمثلة على أنواع بيانات يقوم المستخدم (المبرمج) بتعريفها."},
+        {q: "The types of Derived Data types include pointers.", o: ["True", "False"], a: 0, e: "المؤشرات (Pointers) تُعتبر من أنواع البيانات المشتقة لأنها تُبنى فوق أنواع البيانات الأساسية."},
+        {q: "Translates source code from high level languages into object code and then into machine code:", o: ["Assembler", "Compiler", "Interpreter"], a: 1, e: "هذا هو التعريف الدقيق لعمل المترجم (Compiler) في لغات مثل C++."},
+        {q: "Which of the following is FALSE?", o: ["INTERPRETED programs run slower than COMPILED programs", "ASSEMBLY LANGUAGE is easier to read than MACHINE CODE", "COMPILED programs are easier to debug", "MACHINE CODE programs are usually HARDWARE SPECIFIC"], a: 2, e: "البرامج المترجمة (Compiled) ليست أسهل في اكتشاف الأخطاء. البرامج المفسرة (Interpreted) غالباً أسهل لأنها تتوقف عند السطر الخاطئ فوراً."},
+        {q: "Which language is directly understood by the computer?", o: ["High-level language", "Assembly language", "Machine language", "C++ language"], a: 2, e: "لغة الآلة هي الوحيدة المكونة من النظام الثنائي والتي يتمكن العتاد من فهمها مباشرة دون تحويل."},
+        {q: "What is the purpose of an assembler?", o: ["To convert high-level language to machine language", "To convert machine language to high-level language", "To convert assembly language to machine language", "To convert machine language to assembly language"], a: 2, e: "وظيفة المُجمِّع (Assembler) تقتصر على أخذ أوامر لغة التجميع وتحويلها لنظام ثنائي."},
+        {q: "Which of the following is a common high-level programming language?", o: ["Machine language", "Assembly language", "C++", "None of the above"], a: 2, e: "لغة C++ تعتبر عالية المستوى لأنها تستخدم مفردات إنجليزية قريبة للغة البشر وتحتاج لمترجم."},
+        {q: "Which of the following is an example of a preprocessor directive in C++?", o: ["std::cout", "<<", "#include", "+"], a: 2, e: "التعليمات التي تبدأ برمز (#) مثل #include تُسمى تعليمات المعالج المسبق."},
+        {q: "Which of the following is used to declare a variable in C++?", o: ["<<", "()", "==", "int"], a: 3, e: "الكلمة int هي نوع بيانات تُستخدم لتعريف متغير يحمل قيماً صحيحة."},
+        {q: "What is the purpose of the modulus operator (%) in C++?", o: ["To perform addition", "To perform subtraction", "To perform division", "To return the remainder of division"], a: 3, e: "المعامل (%) يقوم بقسمة عددين ويُرجع باقي القسمة فقط."},
+        {q: "What is the purpose of the increment operator (++) in C++?", o: ["To add 1 to a variable", "To subtract 1 from a variable", "To multiply a variable by 2", "To divide a variable by 2"], a: 0, e: "المعامل ++ (Increment) يزيد قيمة المتغير بمقدار 1."},
+        {q: "Which of the following is a valid comparison operator in C++?", o: ["&", "|", "~", "=="], a: 3, e: "المعامل (==) يُستخدم في الشروط لمقارنة التساوي، بينما (=) المفردة للتعيين."},
+        {q: "Comments in a program are ignored by the compiler.", o: ["True", "False"], a: 0, e: "المترجم يتجاهل أي نصوص مكتوبة كتعليقات لأنها موجهة للمبرمج البشري فقط."},
+        {q: "The stream insertion operator (<<) is used to extract input from the user.", o: ["True", "False"], a: 1, e: "المعامل (<<) يُستخدم للإخراج (الطباعة)، أما استقبال المدخلات (Extraction) فيستخدم (>>)."},
+        {q: "Variables in a program have a name, type, size, and value.", o: ["True", "False"], a: 0, e: "كل متغير له اسم يميزه، نوع يحدد مساحته، وقيمة مخزنة بداخله."},
+        {q: "The modulus operator (%) returns the quotient of two numbers.", o: ["True", "False"], a: 1, e: "العلامة (%) ترجع باقي القسمة وليس ناتج القسمة (Quotient)."},
+        {q: "Global variables can only be accessed within the function where they are declared.", o: ["True", "False"], a: 1, e: "المتغيرات المحلية هي التي تُقيد بدالة معينة. أما المتغيرات العامة (Global) يمكن الوصول إليها من أي مكان."},
+        {q: "Call by reference allows the function to modify the value of the argument.", o: ["True", "False"], a: 0, e: "التمرير بالمرجع يرسل عنوان الذاكرة الفعلي، مما يتيح للدالة تعديل القيمة الأصلية."},
+        {q: "An array is a collection of variables of different data types.", o: ["True", "False"], a: 1, e: "المصفوفة تشترط أن تكون جميع عناصرها من نفس نوع البيانات."},
+        {q: "The purpose of the preprocessor is to strip out comments and expand.", o: ["True", "False"], a: 0, e: "هذه مرحلة تسبق المترجم يتم فيها إزالة التعليقات وتجهيز الأكواد المضمنة."},
+        {q: "The double data type is used for integer numbers.", o: ["True", "False"], a: 1, e: "النوع double يُستخدم للأعداد العشرية، بينما int للأعداد الصحيحة (Integer)."},
+        {q: "Local variables are declared within a function and can only be accessed within that function.", o: ["True", "False"], a: 0, e: "هذا هو التعريف الصحيح للمتغيرات المحلية ونطاق عملها."},
+        {q: "Call by value allows the function to modify the original value of the argument.", o: ["True", "False"], a: 1, e: "التمرير بالقيمة يرسل نسخة فقط، لذا التعديل لا يؤثر على القيمة الأصلية."},
+        {q: "An array in C++ is a collection of variables of the same data type.", o: ["True", "False"], a: 0, e: "شرط أساسي في المصفوفات أن تتجانس جميع العناصر في نفس نوع البيانات."},
+        {q: "The logical AND operator in C++ is represented by two ampersands (&&).", o: ["True", "False"], a: 0, e: "الرمز && يمثل المعامل المنطقي (و) في الشروط."},
+        {q: "In Call by Value method, what is passed as arguments to the function?", o: ["Address of the variables", "A copy of the variable", "The actual variable", "None of the above"], a: 1, e: "في التمرير بالقيمة، يتم إرسال نسخة من المتغير للاحتفاظ بالأصل."},
+        {q: "In Call by Reference method, what is passed as arguments to the function?", o: ["A copy of the variable", "The actual variable", "The address of the variable", "None of the above"], a: 2, e: "يتم تمرير عنوان المتغير في الذاكرة لتتمكن الدالة من الوصول إليه مباشرة."},
+        {q: "What is the effect of Call by Value method on the original variable?", o: ["The original variable is modified.", "The original variable is not modified.", "The original variable is deleted.", "None of the above"], a: 1, e: "لأن التعديل يتم على النسخة، يظل المتغير الأصلي كما هو دون تغيير."},
+        {q: "What is the effect of Call by Reference method on the original variable?", o: ["The original variable is modified.", "The original variable is not modified.", "The original variable is deleted.", "None of the above"], a: 0, e: "لأن الدالة تصل لعنوان الذاكرة الأصلي، فإن أي تعديل ينعكس عليه فوراً."},
+        {q: "What is the advantage of using Call by Value method?", o: ["The function can change the value of the argument.", "It preserves the original variable.", "It is memory efficient.", "None of the above"], a: 1, e: "الميزة الكبرى هي حماية البيانات الأصلية من أي تعديل غير مقصود."},
+        {q: "What is the disadvantage of using Call by Value method?", o: ["Changes to actual parameters can also modify corresponding argument variables.", "You can't directly change a variable in a function body.", "There are two copies created for the same variable which is not memory efficient.", "None of the above"], a: 2, e: "إنشاء نسخة إضافية يستهلك مساحة من الذاكرة ويقلل الكفاءة مع البيانات الكبيرة."},
+        {q: "What is the advantage of using Call by Reference method?", o: ["The method doesn't change the original variable, so it is preserving data.", "It helps to avoid changes done by mistake.", "It is processed very fast.", "None of the above"], a: 0, e: "في المنهج اعتبرت هذه الإجابة (المقصود عند استخدام const reference) لحماية البيانات دون استهلاك ذاكرة."},
+        {q: "What is the disadvantage of using Call by Reference method?", o: ["Passing by reference makes the function not pure theoretically.", "A lifetime guarantee is a big issue with references.", "Strong non-null guarantee.", "None of the above"], a: 1, e: "أكبر مشكلة هي احتمالية الإشارة لمتغير تم حذفه من الذاكرة (Dangling Reference)."},
+        {q: "How do we access the value at the address available in the pointer variable?", o: ["By using unary operator &", "By using unary operator *", "By using binary operator &", "None of the above"], a: 1, e: "المعامل (*) يُسمى Dereference operator ووظيفته جلب القيمة من العنوان."},
+        {q: "What is the difference between Call by Value and Call by Reference method?", o: ["In Call by Value, a copy of the variable is passed as an argument, while in Call by Reference, the address of the variable is passed.", "In Call by Value, the function can change the value of the argument, while in Call by Reference, the original variable is preserved.", "In Call by Value, the actual and formal parameters are stored in the same memory location, while in Call by Reference, they are stored in different memory locations.", "None of the above"], a: 0, e: "الأول يمرر نسخة، والثاني يمرر عنوان الذاكرة."},
+        {q: "What is the syntax for defining a pointer variable in C++?", o: ["int *ptr;", "pointer int ptr;", "int int &ptr;", "None of the above"], a: 0, e: "الصيغة الصحيحة هي نوع البيانات ثم نجمة ثم اسم المؤشر."},
+        {q: "How do we assign the address of a variable to a pointer in C++?", o: ["ptr = &variable;", "&ptr = variable;", "ptr = variable;", "None of the above"], a: 0, e: "المعامل (&) يُستخدم للحصول على عنوان المتغير."},
+        {q: "What is the unary operator used to access the value at the address available in the pointer variable?", o: ["&", "*", "^", "None of the above"], a: 1, e: "العلامة (*) تُستخدم لاستخراج القيمة."},
+        {q: "What is the difference between Method 1 and Method 2 for initializing a string in C++?", o: ["Method 1 uses a null character at the end of the array, while Method 2 does not.", "Method 1 uses a character array to initialize the string, while Method 2 uses a string literal.", "Method 1 is more memory-efficient, while Method 2 is easier to read and write.", "None of the above"], a: 1, e: "يمكن تهيئة النصوص إما כמصفوفة من الحروف أو كنص مباشر بين علامتي تنصيص."},
+        {q: "A compiler is a program that:", o: ["Translates high-level language into low-level language", "Translates low-level language into high-level language", "Converts machine language into assembly language", "Converts assembly language into machine language"], a: 0, e: "المترجم يحول الأكواد من لغات عالية المستوى إلى لغات منخفضة المستوى (لغة الآلة)."},
+        {q: "Interpreters translate:", o: ["The entire program at once", "One statement of the program at a time", "Low-level language into high-level language", "High-level language into assembly language"], a: 1, e: "المفسر يقوم بالترجمة والتنفيذ سطرًا بسطر متتالي."},
+        {q: "Which of the following is a disadvantage of compilers?", o: ["They take less time for analyzing the source code", "They are less efficient", "They are smaller than interpreters", "They translate only one statement of the program at a time"], a: 1, e: "حسب المنهج المرفق، تعتبر المترجمات أقل كفاءة في استهلاك الموارد أثناء عملية الترجمة المعقدة مقارنة بالمفسرات التفاعلية."},
+        {q: "In Call by Reference method, a copy of the variable is passed as an argument.", o: ["True", "False"], a: 1, e: "في التمرير بالمرجع نمرر العنوان وليس النسخة."},
+        {q: "Call by Value is faster than Call by Reference.", o: ["True", "False"], a: 1, e: "التمرير بالمرجع أسرع لأنه يتجنب عملية النسخ التي تستهلك الوقت."},
+        {q: "Pointer variables are required to store the address of variables in Call by Value.", o: ["True", "False"], a: 1, e: "في التمرير بالقيمة نتعامل مع نسخ للبيانات ولا نحتاج למؤشرات أو عناوين."},
+        {q: "The unary operator * is used to assign the address of a variable to a pointer.", o: ["True", "False"], a: 1, e: "نستخدم & لتعيين العنوان، وليس *."},
+        {q: "In Call by Reference, actual arguments are not safe and can be accidentally modified.", o: ["True", "False"], a: 0, e: "صحيح، لأن الدالة يمكنها التعديل المباشر على المتغير الأصلي."},
+        {q: "In C++, a pointer is a variable that stores the memory address of another variable.", o: ["True", "False"], a: 0, e: "هذا هو التعريف الدقيق والأساسي للمؤشرات."},
+        {q: "The unary operator & is used to access the value at the address available in the pointer variable.", o: ["True", "False"], a: 1, e: "نستخدم (*) للوصول للقيمة، بينما (&) للوصول للعنوان."},
+        {q: "Compilers are more intelligent than assemblers.", o: ["True", "False"], a: 0, e: "المترجمات أذكى لأنها تعالج هياكل منطقية وتعمل تحسينات على الكود، بينما المجمع يترجم ترجمة مباشرة."},
+        {q: "Interpreters are faster than compilers in executing the object code.", o: ["True", "False"], a: 1, e: "المترجم أسرع جداً في التنفيذ لأنه يُنتج الكود التنفيذي جاهزاً."},
+        {q: "Machine code is stored in the disk storage in interpreters.", o: ["True", "False"], a: 1, e: "المفسر ينفذ مباشرة في الذاكرة ولا يحفظ ملفات قابلة للتشغيل على القرص."},
+        {q: "Interpreters take less time for analyzing the source code than compilers.", o: ["True", "False"], a: 1, e: "وفقاً للمنهج المرفق العبارة خاطئة."},
+        {q: "Compilers are more efficient than interpreters.", o: ["True", "False"], a: 1, e: "وفقاً للمنهج المرفق تم اعتبار العبارة خاطئة بناءً على معايير معينة للمقارنة."},
+        {q: "CPU utilization is less in interpreters than in compilers.", o: ["True", "False"], a: 0, e: "تعتبر هذه العبارة صحيحة في سياق المنهج."},
+        {q: "What is Object-Oriented Programming?", o: ["A programming methodology that models real-world objects and processes", "A programming language", "A type of database", "A type of algorithm"], a: 0, e: "البرمجة الكائنية هي أسلوب برمجي ينمذج الكيانات البرمجية لتبدو مثل الأشياء في الواقع."},
+        {q: "What are the attributes and behaviors of real-world objects?", o: ["Size and shape", "Color and texture", "Breed and color", "Weight and height"], a: 2, e: "السلالة واللون هي الخصائص الشهيرة المذكورة في أمثلة المنهج لشرح الكائنات الحقيقية."},
+        {q: "What are software objects?", o: ["Objects that exist in the real world", "Objects that are created in programming languages", "Objects that are used in databases", "Objects that are used in algorithms"], a: 1, e: "هي الكائنات التي يتم بناؤها داخل الكود لتمثيل الأشياء."},
+        {q: "What is a class?", o: ["A type of object", "A method in object-oriented programming", "A blueprint for creating objects", "A type of programming language"], a: 2, e: "الفئة (Class) هي القالب أو المخطط (Blueprint) الذي ننشئ منه الكائنات."},
+        {q: "What is the purpose of the \"account\" class in the bank example?", o: ["To describe the attributes and behaviors of bank accounts", "To create a database of bank accounts", "To create a method for depositing money", "To create a method for withdrawing money"], a: 0, e: "وظيفته وضع تعريف شامل للبيانات والسلوكيات الخاصة بأي حساب بنكي."},
+        {q: "What are state variables in the bank example?", o: ["Variables that describe the state of the program", "Variables that describe the attributes of the account class", "Variables that describe the behavior of the account class", "Variables that describe the balance of the bank account"], a: 1, e: "متغيرات الحالة (State Variables) هي التي تخزن خصائص وصفات الفئة."},
+        {q: "What is the purpose of the deposit and withdraw methods in the bank example?", o: ["To create a database of bank accounts", "To describe the attributes of the account class", "To create a method for depositing and withdrawing money from the bank account", "To create a method for checking the balance of the bank account"], a: 2, e: "الدوال (Methods) تمثل الأفعال أو السلوكيات مثل الإيداع والسحب."},
+        {q: "What is the difference between attributes and methods in object-oriented programming?", o: ["Attributes describe the behavior of the object, while methods describe the object's characteristics", "Attributes describe the object's characteristics, while methods describe the object's behavior", "Attributes and methods are the same thing in object-oriented programming", "Attributes and methods are not used in object-oriented programming"], a: 1, e: "السمات (Attributes) تصف الخصائص، بينما الدوال (Methods) تصف السلوكيات والأفعال."},
+        {q: "What is inheritance in object-oriented programming?", o: ["The ability to hide the internals of a class", "The ability to access a class through its parent interface", "The ability to inherit members from a parent class", "The ability to define and execute abstract actions"], a: 2, e: "الوراثة هي اكتساب الفئة الفرعية لخصائص الفئة الأساسية (الأب)."},
+        {q: "What is abstraction in object-oriented programming?", o: ["The ability to hide the internals of a class", "The ability to access a class through its parent interface", "The ability to inherit members from a parent class", "The ability to define and execute abstract actions"], a: 3, e: "التجريد هو إخفاء تعقيد التنفيذ وإظهار الإجراءات والوظائف المجردة فقط."},
+        {q: "Real-world objects have attributes but not behaviors.", o: ["True", "False"], a: 1, e: "كل الكائنات في الواقع تمتلك الاثنين: خصائص وسلوكيات."},
+        {q: "Encapsulation in object-oriented programming means hiding the internals of a class.", o: ["True", "False"], a: 0, e: "التغليف يعني جمع البيانات وإخفائها داخلياً لحمايتها (Data Hiding)."},
+        {q: "Inheritance in object-oriented programming means defining and executing abstract actions.", o: ["True", "False"], a: 1, e: "هذا هو التجريد وليس الوراثة."},
+        {q: "Software objects have attributes and behaviors, just like real-world objects.", o: ["True", "False"], a: 0, e: "نعم، لأن الـ OOP تصمم خصيصاً لمحاكاة العالم الحقيقي."},
+        {q: "Each instance of a class has its own distinct set of attributes.", o: ["True", "False"], a: 0, e: "كل كائن يُنشأ من الفئة يحتفظ بقيمه الخاصة والمستقلة عن باقي الكائنات."},
+        {q: "Abstraction in object-oriented programming means accessing a class through its parent interface.", o: ["True", "False"], a: 1, e: "هذا يعبر عن مفهوم التعددية وليس التجريد."},
+        {q: "Polymorphism in object-oriented programming means inheriting members from a parent class.", o: ["True", "False"], a: 1, e: "هذا تعريف الوراثة، أما التعددية فتعني قدرة الدالة على اتخاذ أشكال متعددة."},
+        {q: "What do classes define in object-oriented programming?", o: ["Attributes and behavior", "Fields and properties", "Operations and methods", "Interfaces and implementations"], a: 0, e: "تُعرّف الفئات كلاً من الخصائص والسلوكيات معاً."},
+        {q: "What is the purpose of interfaces in object-oriented programming?", o: ["To define fields and properties", "To define a set of operations", "To implement methods", "To extend base classes"], a: 1, e: "الواجهة بمثابة عقد يحدد مجموعة دوال يجب على الكلاس تنفيذها."},
+        {q: "What is the benefit of using inheritance in object-oriented programming?", o: ["Extensibility", "Reusability", "Information hiding", "All of the above"], a: 3, e: "الوراثة تقدم ميزات شاملة من توسع وإعادة استخدام وإخفاء (باستخدام محددات الوصول)."},
+        {q: "What is the difference between a base class and a derived class in inheritance?", o: ["The base class gives its members to the derived class", "The derived class takes members from the base class", "Both a and b", "None of the above"], a: 2, e: "من الناحية المنطقية الفئة الفرعية هي التي ترث وتأخذ الخصائص من الأب."},
+        {q: "What are access modifiers in object-oriented programming?", o: ["Settings that restrict access to certain class members", "Settings that allow access to all class members", "Settings that define the class hierarchy", "Settings that define the interface implementation"], a: 0, e: "محددات الوصول (public, private) تنظم صلاحيات الدخول لبيانات الكلاس."},
+        {q: "What is single inheritance in C++?", o: ["A class is allowed to inherit from only one class", "A class can inherit from more than one class", "A derived class is created from another derived class", "More than one subclass is inherited from a single base class"], a: 0, e: "في الوراثة المفردة، يكون للفئة المشتقة أب واحد فقط."},
+        {q: "What is hierarchical inheritance in C++?", o: ["A class is allowed to inherit from only one class", "A class can inherit from more than one class", "A derived class is created from another derived class", "More than one subclass is inherited from a single base class"], a: 3, e: "الوراثة الهرمية تعني وجود عدة أبناء يرثون من أب (فئة أساسية) واحد."},
+        {q: "What is encapsulation in object-oriented programming?", o: ["The ability to extend a parent class with new fields and methods", "The ability to implement an interface with new methods", "The ability to hide the internals of a class", "The ability to access a class through its parent interface"], a: 2, e: "التغليف يعتمد على إخفاء تفاصيل العمل الداخلية للفئة."},
+        {q: "What is polymorphism in object-oriented programming?", o: ["The ability to hide the internals of a class", "The ability to access a class through its parent interface", "The ability to inherit members from a parent class", "The ability to have multiple forms of a method based on the context"], a: 3, e: "التعددية هي إمكانية الحصول على أشكال وتنفيذات مختلفة لنفس الدالة."},
+        {q: "Difference between inheritance and interface implementation?", o: ["Inheritance allows a child class to inherit characteristics of a parent class, while interface implementation defines a set of operations for a class to implement.", "Inheritance defines a set of operations for a class to implement, while interface implementation allows a child class to inherit characteristics of a parent class.", "Inheritance and interface implementation are the same thing in object-oriented programming.", "Inheritance and interface implementation are not used in object-oriented programming."], a: 0, e: "الوراثة تورث صفات جاهزة، بينما الواجهة تفرض تنفيذ عمليات محددة."},
+        {q: "What is the purpose of a constructor in object-oriented programming?", o: ["To create a new instance of a class", "To define a set of operations for a class to implement", "To hide the internals of a class", "To access a class through its parent interface"], a: 0, e: "البنّاء أو الـ Constructor يُستدعى تلقائياً لحظة إنشاء كائن جديد من الفئة لتهيئته."},
+        {q: "Difference between private and protected access modifiers?", o: ["Private access is restricted to the containing type, while protected access is limited to the containing type and all types derived from it.", "Private access is limited to the containing type and all types derived from it, while protected access is restricted to the containing type.", "Private and protected access modifiers are the same thing in object-oriented programming.", "Private and protected access modifiers are not used in object-oriented programming."], a: 0, e: "private تمنع الوصول تماماً من الخارج، بينما protected تسمح للفئات الأبناء بالوصول."},
+        {q: "Difference between single and multiple inheritance in C++?", o: ["Single inheritance allows a class to inherit from only one class, while multiple inheritance allows a class to inherit from more than one class.", "Single inheritance allows a class to inherit from more than one class, while multiple inheritance allows a class to inherit from only one class.", "Single and multiple inheritance are the same thing in C++.", "Single and multiple inheritance are not used in C++."], a: 0, e: "المفردة من أب واحد، والمتعددة من أكثر من أب."},
+        {q: "Inheritance allows a child class to inherit all characteristics of a parent class, including attributes and methods.", o: ["True", "False"], a: 0, e: "الفئة الفرعية تمتلك القدرة على الوصول للأعضاء العامة والمحمية للفئة الأب."},
+        {q: "Encapsulation in object-oriented programming means exposing the internals of a class to other classes.", o: ["True", "False"], a: 1, e: "التغليف يُستخدم للإخفاء (Hiding) وليس للكشف أو الفضح (Exposing)."},
+        {q: "A constructor is a method that is called when an object is instantiated.", o: ["True", "False"], a: 0, e: "الكونستركتور يعمل فوراً في لحظة الـ Instantiation (إنشاء الكائن)."}
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+    const correctCounterEl = document.getElementById('correct-counter');
+    const wrongCounterEl = document.getElementById('wrong-counter');
+    const remainingCounterEl = document.getElementById('remaining-counter');
+
+    function renderQuiz() {
+        questions.forEach((q, qIndex) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            
+            let html = `
+                <div class="q-header">
+                    <span class="q-num">السؤال ${qIndex + 1} / 97</span>
+                </div>
+                <div class="q-text">${q.q}</div>
+            `;
+            
+            if(q.c) {
+                html += `<div class="code-block">${q.c}</div>`;
+            }
+
+            html += `<div class="options" id="opts-${qIndex}">`;
+            
+            q.o.forEach((opt, oIndex) => {
+                html += `<button class="btn" onclick="checkAnswer(this, ${qIndex}, ${oIndex})">${opt}</button>`;
+            });
+
+            html += `</div>
+                <div class="explanation" id="exp-${qIndex}">
+                    <strong>الشرح:</strong> ${q.e}
+                </div>
+            `;
+            
+            card.innerHTML = html;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    function updateScoreboard() {
+        correctCounterEl.textContent = correctCount;
+        wrongCounterEl.textContent = wrongCount;
+        remainingCounterEl.textContent = TOTAL_QUESTIONS - answeredQuestions.size;
+    }
+
+    function checkAnswer(btn, qIndex, selectedOptIndex) {
+        const q = questions[qIndex];
+        const optionsContainer = document.getElementById(`opts-${qIndex}`);
+        const buttons = optionsContainer.getElementsByTagName('button');
+        
+        // تعطيل كل الأزرار لنفس السؤال بعد الاختيار
+        for (let b of buttons) {
+            b.disabled = true;
+        }
+
+        // تسجيل الإجابة في المتغيرات
+        if (!answeredQuestions.has(qIndex)) {
+            answeredQuestions.add(qIndex);
+            
+            if (selectedOptIndex === q.a) {
+                btn.classList.add('correct');
+                correctCount++;
+            } else {
+                btn.classList.add('wrong');
+                buttons[q.a].classList.add('correct');
+                wrongCount++;
+            }
+            updateScoreboard();
+        }
+
+        // إظهار الشرح
+        document.getElementById(`exp-${qIndex}`).style.display = 'block';
+    }
+
+    function showResults() {
+        const modal = document.getElementById('result-modal');
+        const pctCircle = document.getElementById('result-percentage');
+        const resMsg = document.getElementById('result-message');
+        const unanswered = TOTAL_QUESTIONS - answeredQuestions.size;
+        
+        // تحديث الأرقام
+        document.getElementById('res-correct').textContent = correctCount;
+        document.getElementById('res-wrong').textContent = wrongCount;
+        document.getElementById('res-unanswered').textContent = unanswered;
+
+        // حساب النسبة
+        const percentage = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+        pctCircle.textContent = percentage + '%';
+
+        // تغيير اللون والرسالة حسب النسبة
+        if(percentage >= 85) {
+            pctCircle.style.color = '#38bdf8';
+            pctCircle.style.borderColor = '#38bdf8';
+            resMsg.textContent = "أداء ممتاز يا باشمهندس محمود! 🚀";
+        } else if (percentage >= 60) {
+            pctCircle.style.color = '#f59e0b';
+            pctCircle.style.borderColor = '#f59e0b';
+            resMsg.textContent = "أداء جيد، شد حيلك في المراجعة! 👍";
+        } else {
+            pctCircle.style.color = '#ef4444';
+            pctCircle.style.borderColor = '#ef4444';
+            resMsg.textContent = "محتاج تراجع الملفات تاني يا بطل! 📚";
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    renderQuiz();
+</script>
+
+</body>
+</html>

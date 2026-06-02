@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كويز OOP - الملف الثالث والأخير (198 إلى 297)</title>
+    <style>
+        :root {
+            --bg-color: #020617;
+            --card-bg: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #10b981; /* لون أخضر زمردي نيون للملف الأخير */
+            --accent-hover: #059669;
+            --correct: #16a34a;
+            --wrong: #ef4444;
+            --border: #1e293b;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0; /* Changed to 0 to accommodate sticky header */
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+        .scoreboard {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--accent);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .score-correct { color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.5); }
+        .score-wrong { color: #f87171; text-shadow: 0 0 10px rgba(248, 113, 113, 0.5); }
+        .score-total { color: var(--accent); }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+        .q-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        .q-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .q-num {
+            font-weight: bold;
+            color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .q-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+        }
+        .code-block {
+            background: #000;
+            border-left: 3px solid var(--accent);
+            padding: 15px;
+            border-radius: 5px;
+            color: #a7f3d0;
+            font-family: monospace;
+            direction: ltr;
+            text-align: left;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .options {
+            display: grid;
+            gap: 12px;
+            direction: ltr;
+        }
+        .btn {
+            background: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover:not(:disabled) {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--accent);
+        }
+        .btn:disabled {
+            cursor: default;
+        }
+        .btn.correct {
+            background: var(--correct) !important;
+            border-color: #22c55e !important;
+            color: white;
+            box-shadow: 0 0 15px rgba(22, 163, 74, 0.4);
+        }
+        .btn.wrong {
+            background: var(--wrong) !important;
+            border-color: #ef4444 !important;
+            color: white;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(16, 185, 129, 0.05);
+            border-right: 4px solid var(--accent);
+            border-radius: 8px;
+            display: none;
+            font-size: 15.5px;
+            color: #cbd5e1;
+            animation: fadeIn 0.5s;
+        }
+        .explanation strong { color: var(--accent); }
+        
+        .finish-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 40px;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+            transition: transform 0.3s;
+        }
+        .finish-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+        }
+
+        /* Modal Styles */
+        #result-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.3);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 6px solid var(--accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            font-weight: bold;
+            color: var(--accent);
+            box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+        .modal-details {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .close-modal-btn {
+            background: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .close-modal-btn:hover { background: rgba(255,255,255,0.1); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<div class="scoreboard">
+    <div class="score-item score-correct">✅ صح: <span id="correct-counter">0</span></div>
+    <div class="score-item score-wrong">❌ خطأ: <span id="wrong-counter">0</span></div>
+    <div class="score-item score-total">🎯 المتبقي: <span id="remaining-counter">100</span></div>
+</div>
+
+<div class="container">
+    <h1>مراجعة أساسيات OOP - الملف النهائي (الأسئلة 198 - 297)</h1>
+    <div id="quiz-container"></div>
+    <button class="finish-btn" onclick="showResults()">عرض النتيجة النهائية 🏆</button>
+</div>
+
+<div id="result-modal">
+    <div class="modal-content">
+        <h2 id="result-message" style="margin-top:0;">النتيجة النهائية</h2>
+        <div class="modal-score-circle" id="result-percentage">0%</div>
+        <div class="modal-details">
+            <div class="score-correct">✅ صح: <span id="res-correct">0</span></div>
+            <div class="score-wrong">❌ خطأ: <span id="res-wrong">0</span></div>
+            <div style="color:var(--text-muted)">⏳ لم يُجاب: <span id="res-unanswered">0</span></div>
+        </div>
+        <button class="close-modal-btn" onclick="document.getElementById('result-modal').style.display='none'">إغلاق</button>
+    </div>
+</div>
+
+<script>
+    let correctCount = 0;
+    let wrongCount = 0;
+    let answeredQuestions = new Set();
+    const TOTAL_QUESTIONS = 100;
+
+    // الأسئلة من 198 إلى 297
+    const questions = [
+        { q: "What is the output of the following code?", c: "#include <iostream>\nusing namespace std;\nvoid fun (int x, int y) { x = 20; y = 10; }\nint main () {\n    int x = 10;\n    fun (x, x);\n    cout << x;\n    return 0;\n}", o: ["Compile error", "None of these", "20", "10"], a: 3, e: "التمرير هنا بالقيمة (Call by value)، وبالتالي التعديل داخل الدالة لا يؤثر على قيمة المتغير الأصلي x في دالة main، فتظل قيمته 10." },
+        { q: "Which of the following is an abstract (user-defined) class?", o: ["int", "string", "class", "float"], a: 2, e: "الفئة (Class) هي نوع بيانات مجرد (Abstract) يُعرّفه المستخدم." },
+        { q: "What is the output of the following code?", c: "#include<iostream>\nusing namespace std;\nint main() {\n    class student {\n        int rno = 10;\n    };\n    cout << v.rno;\n    return 0;\n}", o: ["Compile error", "10", "Garbage", "None of these"], a: 0, e: "سيحدث خطأ برمجي (Compile error) لأن الكائن 'v' لم يتم الإعلان عنه أو تعريفه في الكود." },
+        { q: "What is the output of the following code?\nint main() { fun() = 30; cout << fun(); return 0; }", o: ["30", "10", "30 10", "compile error"], a: 0, e: "إذا كانت الدالة تُرجع مرجعاً (Reference)، فإن إسناد القيمة `fun() = 30` سيغير القيمة الأصلية، وعند طباعتها ستطبع 30." },
+        { q: "What is the output of the following recursive code?", c: "int f(int &x, int c) {\n    c = c - 1;\n    if (c == 0) return 1;\n    x = x + 1;\n    return f(x, c) * x;\n}\nint main() {\n    int a = 4;\n    cout<<f(a,a);\n    return 0;\n}", o: ["343", "336", "120", "compile error"], a: 0, e: "بتتبع التكرار والدالة التراجعية والتمرير بالمرجع، القيمة النهائية التي سيتم إرجاعها هي 343." },
+        { q: "What will happen in the following code part?\n`int a = 100, b = 200; int *p = &a, *q = &b; p = q;`", o: ["b is assigned to a", "a is assigned to b", "p now points to b", "q now points to a"], a: 2, e: "العبارة `p = q` تجعل المؤشر p يحمل نفس العنوان الموجود في المؤشر q (وهو عنوان b)، إذن p سيشير إلى b." },
+        { q: "What will be the output of the following code?", c: "enum month { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };\nfor (i = MAR; i <= NOV; i++)\n    cout << i;", o: ["MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV", "123456789101112", "34567891011", "None of these"], a: 2, e: "MAR قيمتها 3 و NOV قيمتها 11. الحلقة ستطبع الأرقام من 3 إلى 11 متصلة: 34567891011." },
+        { q: "Which of the following is accessed by a member function of a class?", o: ["The object of that class", "The public part of a class", "All members of a class", "The private part of a class"], a: 2, e: "دوال الأعضاء (Member functions) داخل الفئة تمتلك صلاحية الوصول إلى جميع أعضاء الفئة (Public, Private, Protected)." },
+        { q: "When the inheritance is private, the private methods in base class are __ in the derived class.", o: ["inaccessible", "accessible", "protected", "public"], a: 0, e: "الأعضاء الخاصة (Private) في الفئة الأب تكون غير قابلة للوصول (Inaccessible) دائماً في الفئة الابن، بغض النظر عن نوع الوراثة." },
+        { q: "Predict the output of the following code:", c: "class Base {\npublic:\n    int fun() { cout << \"Base::fun() called\"; }\n    int fun(int i){ cout << \"Base::fun(int i) called\"; }\n};\nclass Derived: public Base {\npublic:\n    int fun() { cout << \"Derived::fun() called\"; }\n};\nint main() {\n    Derived d;\n    d.Base::fun(5);\n    return 0;\n}", o: ["Derived::fun() called", "Base::fun() called", "Base::fun(int i) called", "compile error"], a: 2, e: "تم استخدام معامل تحديد النطاق `d.Base::fun(5)` لاستدعاء دالة الأب التي تأخذ متغيراً صريحاً، فتطبع Base::fun(int i) called." },
+        { q: "Which header file is required to use file I/O operations?", o: ["<ifstream>", "<fstream>", "<iostream>", "<ostream>"], a: 1, e: "المكتبة `<fstream>` هي المكتبة الشاملة التي توفر وظائف التعامل مع الملفات (قراءة وكتابة)." },
+        { q: "Which of the following is used to create an output stream?", o: ["ofstream", "ifstream", "iostream", "fsstream"], a: 0, e: "الـ `ofstream` (Output File Stream) يُستخدم لإنشاء مسار لكتابة البيانات إلى الملفات." },
+        { q: "By default, all the files in C++ are opened in _______ mode.", o: ["Binary", "Text", "ASCII", "None of these"], a: 1, e: "الوضع الافتراضي لفتح الملفات في C++ هو وضع النصوص (Text mode)." },
+        { q: "What is Inheritance in C++?", o: ["Deriving new classes from existing classes", "Wrapping of data into a single class", "Overloading of classes", "Classes with same names"], a: 0, e: "الوراثة تعني بناء واشتقاق فئات جديدة معتمدة على فئات موجودة مسبقاً." },
+        { q: "What is the number of specifiers used to derive a class?", o: ["1", "2", "3", "None of these"], a: 2, e: "هناك 3 محددات وصول يمكن استخدامها في الوراثة (public, private, protected)." },
+        { q: "Which specifier makes all the data members and functions of base class inaccessible by the derived class?", o: ["private", "protected", "public", "both private and protected"], a: 0, e: "في الوراثة، الأعضاء الخاصة (private) بالأب لا يمكن للابن الوصول إليها أبداً." },
+        { q: "What is the output of the following code?", c: "class B: public A { int(a = 15); public: void print(){cout<<a;} };", o: ["10 10", "10 15", "compile error", "None of these"], a: 2, e: "طريقة الإعلان `int(a = 15);` داخل الفئة غير صحيحة بناءً على قواعد C++ وتسبب خطأ برمجي." },
+        { q: "What is the output of the following code?", c: "class A { public: void func(){cout<<\"Hello this is class A\\n\";} };\nclass B: public A { public: void func(){cout<<\"Hello this is class B\\n\";} };\n// in main: B b; b.func();", o: ["Hello this is class B", "Hello this is class A", "compile error", "function cannot overload"], a: 0, e: "استدعاء `b.func()` سيستدعي الدالة الموجودة في الفئة B لأنها تغطي (Override) دالة الأب." },
+        { q: "The concept of deciding which function to invoke during execution is:", o: ["Runtime polymorphism", "Function overloading", "Compile time Polymorphism", "Abstraction"], a: 0, e: "تحديد الدالة المطلوبة أثناء تشغيل البرنامج يسمى التعددية في وقت التشغيل (ويتحقق باستخدام الدوال الافتراضية)." },
+        { q: "What is the output of the following code?", c: "class A { int a; public: A(){a = 0;} void show(){ a++; cout<<\"a: \"<<a<<endl;} };\nclass B: public A {};\nint main() { B b; b.show(); return 0; }", o: ["a: 1", "a: 0", "compile error", "None of these"], a: 0, e: "الفئة B ترث الدالة show()، والتي تقوم بزيادة a إلى 1 ثم تطبع القيمة a: 1." },
+        { q: "What is meant by multiple inheritance?", o: ["Deriving a derived class from more than one base class", "Deriving a base class from derived class", "Deriving a derived class from base class", "Deriving a derived base class"], a: 0, e: "الوراثة المتعددة تعني أن الفئة الفرعية ترث من (أكثر من أب/فئة أساسية) في نفس الوقت." },
+        { q: "Which symbol is used to create multiple inheritance?", o: ["Comma", ".", "*", "None of these"], a: 0, e: "تُستخدم الفاصلة (,) للفصل بين أسماء الفئات الأساسية عند وراثتها: `class C : public A, public B`." },
+        { q: "To which of the following access specifiers are applicable?", o: ["Member data", "Functions", "Both Member data & Functions", "Protected members"], a: 2, e: "محددات الوصول تطبق على كل من المتغيرات والدوال." },
+        { q: "If two classes combine some private data members and provides public member functions to access those. Where is abstraction used?", o: ["Using private access specifier for data members", "Using public member functions to access the data", "Using class concept with both data and member functions", "all of these"], a: 3, e: "كل هذه الآليات تعمل معاً لإنشاء واجهة مجردة تخفي التفاصيل وتحمي البيانات." },
+        { q: "A phone is made of motherboard, camera, etc. If the phone is represented as a whole, which has the highest level of abstraction?", o: ["Motherboard", "Display", "Camera", "Phone"], a: 3, e: "الهاتف ككيان كامل (Phone) يمثل أعلى مستوى تجريد لأنه يخفي كل التفاصيل المعقدة لمكوناته." },
+        { q: "What do you call languages that support classes but not polymorphism?", o: ["Class based language", "Procedure Oriented language", "If classes are supported polymorphism will be supported", "Object-based language"], a: 3, e: "اللغة التي تدعم الفئات (Classes) دون الوراثة والتعددية تُسمى Object-based language." },
+        { q: "If same message is passed to objects of several different classes and all respond in a different way, what is this called?", o: ["Inheritance", "Overloading", "Polymorphism", "Overriding"], a: 2, e: "هذا هو التعريف الجوهري لتعددية الأشكال (Polymorphism)." },
+        { q: "Which C++ OOPS feature is related to re-usability?", o: ["Encapsulation", "Inheritance", "Abstraction", "None of these"], a: 1, e: "الوراثة (Inheritance) هي الأداة الأساسية لإعادة استخدام الكود المكتوب مسبقاً." },
+        { q: "For Cat and Animal class, correct way of inheritance is:", o: ["class Cat: public Animal", "class Animal: public Cat", "Both are correct way", "None of these"], a: 0, e: "القطة (Cat) هي التي ترث من الحيوان (Animal) وليس العكس." },
+        { q: "_______ data member can be accessed through any object of the class.", o: ["public", "private", "protected", "internal"], a: 0, e: "البيانات العامة (Public) هي الوحيدة التي يمكن الوصول إليها عبر الكائن من خارج الفئة." },
+        { q: "_______ data member can be accessed directly by object of any inherited class.", o: ["public", "private", "protected", "internal"], a: 0, e: "المتغير العام (Public) هو الوحيد القابل للوصول مباشرة (من خلال نقطة . عبر الكائن)، بينما المحمي (Protected) يتم الوصول إليه داخل دوال الابن فقط." },
+        { q: "_______ enables clients to read, or obtain the values of private data.", o: ["setter accessor", "getter accessor", "setter, getter accessor", "indexer"], a: 1, e: "دوال الـ (Getter) وظيفتها قراءة وجلب القيم الخاصة." },
+        { q: "Which two features of object-oriented programming are similar/the same in concept?", o: ["Encapsulation and Polymorphism", "Abstraction and Polymorphism", "Inheritance and Encapsulation", "Encapsulation and Abstraction"], a: 3, e: "التغليف والتجريد مرتبطان ببعضهما بشكل وثيق لتحقيق إخفاء وحماية البيانات." },
+        { q: "Which header file is required by C++ to use the OOPS concept?", o: ["We can easily use OOPS without using any header file", "stdio.h", "iostream.h", "None of these"], a: 0, e: "مفاهيم الـ OOP كالفئات والوراثة مبنية في أصل اللغة ولا تحتاج لمكتبات (Header files) لتعمل." },
+        { q: "Exposing only necessary information to users and hiding background details is known as:", o: ["Abstraction", "Encapsulation", "Data hiding", "Polymorphism"], a: 0, e: "إخفاء التفاصيل المعقدة وإظهار الوظيفة فقط يُعرف بالتجريد (Abstraction)." },
+        { q: "From the following code: `class C: public Z` which concept is NOT used?", o: ["Polymorphism", "Encapsulation", "Inheritance", "Abstraction"], a: 0, e: "الكود يوضح الوراثة والتغليف، لكنه لا يحتوي على أي دوال افتراضية (Virtual) مما يعني غياب التعددية (Polymorphism)." },
+        { q: "Among the following, which shows multiple inheritance?", o: ["Z:X, Y", "Z:X: Y", "Z:X; X: Y", "None of these"], a: 0, e: "الفاصلة (,) تُستخدم لتوريث أكثر من أب للفئة: Class Z inherits from X and Y." },
+        { q: "Only the ___________ can have access to private members and private functions.", o: ["data functions", "inline functions", "member functions", "member variables"], a: 2, e: "دوال الأعضاء (Member functions) هي الوحيدة التي يحق لها قراءة المتغيرات الخاصة في فئتها." },
+        { q: "Choose the invalid identifier from the below:", o: ["Int", "bool", "DOUBLE", "All of these"], a: 1, e: "bool كلمة محجوزة (Keyword) في C++ ولا يمكن أن تُسمى بها المتغيرات." },
+        { q: "References cannot be made null, cannot be changed once initialized, and no extra operator is needed for dereferencing.", o: ["True", "False"], a: 0, e: "صحيح، هذا ما يميز الـ Reference عن الـ Pointer." },
+        { q: "An object is an instance of its class.", o: ["True", "False"], a: 0, e: "صحيح، الكائن هو تجسيد فعلي (نسخة) من الفئة." },
+        { q: "Integer is the stored type by the compiler for enumerators.", o: ["True", "False"], a: 0, e: "صحيح، التعدادات (Enums) تُخزن كأرقام صحيحة داخلياً." },
+        { q: "The output of the following code is error during compiling: int a=5; a++; cout<<a;", o: ["True", "False"], a: 1, e: "خطأ، الكود سليم تماماً وسيطبع الرقم 6." },
+        { q: "The derived inherits some or all of the properties of the base class.", o: ["True", "False"], a: 0, e: "صحيح، الابن يرث بناءً على محددات الوصول في الأب." },
+        { q: "When properties of one class are inherited by more than one class, it is hierarchical inheritance.", o: ["True", "False"], a: 0, e: "صحيح، أب واحد يتفرع منه عدة أبناء يُسمى وراثة هرمية." },
+        { q: "When a base class is privately inherited, public members of the base class can only be accessed by the member functions of the derived class.", o: ["True", "False"], a: 0, e: "صحيح، في الوراثة الخاصة تتحول أعضاء الأب إلى Private داخل الابن فلا يصلها سوى دواله." },
+        { q: "A public member of a class cannot be accessed by its own objects using the dot operator.", o: ["True", "False"], a: 1, e: "خطأ. الأعضاء العامة (Public) مصممة خصيصاً ليتم الوصول إليها باستخدام النقطة (.)." },
+        { q: "The binding of data and functions together into a single class-type variable is referred to as encapsulation.", o: ["True", "False"], a: 0, e: "صحيح، هذا هو تعريف التغليف." },
+        { q: "While inheriting, the private members of the base class will never become members of its derived class.", o: ["True", "False"], a: 0, e: "صحيح، الأعضاء الخاصة لا تُورث للابن." },
+        { q: "Both // and /* */ are used for comments.", o: ["True", "False"], a: 0, e: "صحيح." },
+        { q: "cin.get(ch) function is used to read a single character from the console in C++.", o: ["True", "False"], a: 0, e: "صحيح." },
+        { q: "Boolean is best suited to represent the logical values.", o: ["True", "False"], a: 0, e: "صحيح، نوع bool يخزن (True/False)." },
+        { q: "Both enumeration and classes are identified as user-defined types.", o: ["True", "False"], a: 0, e: "صحيح." },
+        { q: "A structure may contain elements of different data types.", o: ["True", "False"], a: 0, e: "صحيح، عكس المصفوفة، الـ Struct يقبل أنواعاً مختلفة." },
+        { q: "What is the output? A* a = new B(); a->f(5); (Where B's f takes double, A's f takes int)", o: ["Compilation error", "Runtime error", "B", "A"], a: 3, e: "لأن دالة f في الفئة B تأخذ double، فهي لا تقوم بتعويض (Override) دالة f في A التي تأخذ int، وبالتالي يتم استدعاء دالة A." },
+        { q: "The feature in OOP that allows the same operation to be carried out differently depending on the object is:", o: ["Polymorphism", "Overfunctioning", "Overriding", "Inheritance"], a: 0, e: "تعددية الأشكال (Polymorphism)." },
+        { q: "Which constructor will be called: A() or A(int x=0) when calling A obj1; ?", o: ["Run time error", "Compile time error", "Parameterized constructor", "Default constructor"], a: 1, e: "بما أن البناء الثاني يعطي قيمة افتراضية، المترجم لا يستطيع التمييز أي الدالتين يستدعي (Ambiguity)، مما يسبب خطأ برمجي." },
+        { q: "Which feature of OOP indicates code reusability?", o: ["Abstraction", "Inheritance", "Polymorphism", "Encapsulation"], a: 1, e: "الوراثة توفر إعادة استخدام الأكواد." },
+        { q: "Which of the following shows the correct constructor declaration?", o: ["()class name", "~()class name", "class_name()", "~class name()"], a: 2, e: "البناء يحمل نفس اسم الفئة مع أقواس `class_name()`." },
+        { q: "Which comment is most appropriate for: class Student { int a; public: float a; };", o: ["Error: data types are different for same variable", "It is correct", "Error: same variable name can't be used twice", "Error: Public must come first"], a: 2, e: "لا يمكنك الإعلان عن متغيرين بنفس الاسم داخل نفس الفئة حتى لو اختلف نوعهما." },
+        { q: "Consider: (a) A publicly derived class is a subtype of its base class. (b) Inheritance provides for code reuse.", o: ["Both (a) and (b) are correct", "Neither is correct", "(a) is incorrect, (b) is correct", "(a) is correct, (b) is incorrect"], a: 0, e: "كلتا العبارتين صحيحتان تماماً." },
+        { q: "Which of the following best describes encapsulation?", o: ["Combining methods with data into a class", "Linking two classes using inheritance", "Restricting direct access to internal data", "Creating multiple objects"], a: 2, e: "تقييد الوصول المباشر للبيانات الداخلية عبر التغليف لحمايتها." },
+        { q: "What is the implicit return type of a constructor?", o: ["A class object", "No return type", "void", "none"], a: 1, e: "دوال البناء لا تمتلك أي نوع إرجاع (لا حتى void)." },
+        { q: "In which of the following is memory allocated for objects?", o: ["Cache", "HDD", "RAM", "ROM"], a: 2, e: "الكائنات تُنشأ أثناء عمل البرنامج وتحجز مساحتها في الذاكرة العشوائية (RAM)." },
+        { q: "What is cout?", o: ["function", "macro", "object", "operator"], a: 2, e: "الكائن cout هو كائن يتبع فئة ostream." },
+        { q: "Which of the following differentiates between overloaded and overridden functions?", o: ["Overloading is static binding; overriding is dynamic binding", "Overloading is dynamic; overriding is static", "Redefining in a friend class is overloading; in a derived class is overridden", "Redefining in a derived class is overloading; in a friend class is overriding"], a: 0, e: "الـ Overloading يُحلل ويُربط أثناء الترجمة (Static)، بينما الـ Overriding يُربط وقت التشغيل عبر الدوال الافتراضية (Dynamic)." },
+        { q: "Which are essential features of an OOP language? (i) Abstraction & encapsulation (ii) Strictly-typedness (iii) Type-safe (iv) Polymorphism with inheritance", o: ["(i),(ii),(iv) only", "(i),(ii) only", "(i),(iv) only", "(i),(iii),(iv) only"], a: 3, e: "الـ OOP يتطلب التجريد، التغليف، الأمان في الأنواع (Type-safe)، والتعددية المرتبطة بالوراثة." },
+        { q: "A copy constructor is a constructor which:", o: ["Creates an object by copying values from any other object", "Creates an object by copying values from the first object created", "Creates an object by copying values from another object of another class", "Creates an object by initializing it with another previously created object of the same class"], a: 3, e: "وظيفة بنّاء النسخ هي أخذ كائن موجود مسبقاً وإنشاء نسخة مطابقة منه لنفس الفئة." },
+        { q: "With one try block, how many catch blocks can be used?", o: ["multiple", "1", "2", "3"], a: 0, e: "يمكن استخدام عدد لا نهائي من كتل catch للتعامل مع أخطاء وأنواع استثناءات مختلفة." },
+        { q: "Why do we need to handle exceptions?", o: ["To avoid unexpected behavior of a program during run-time", "To let the compiler remove all exceptions itself", "To successfully compile the program", "To get correct output"], a: 0, e: "إدارة الاستثناءات تمنع البرنامج من الانهيار (Crash) أثناء التشغيل." },
+        { q: "A -> B (single). C -> D -> E. Then C is made to inherit from B. What is the resultant inheritance type?", o: ["Single level", "Multilevel", "Hybrid", "Multiple"], a: 1, e: "تصبح السلسلة A -> B -> C -> D -> E وهذا يُسمى وراثة متعددة المستويات (Multilevel)." },
+        { q: "Which best defines hierarchical inheritance?", o: ["More than one class derived from one class", "More than 2 classes derived from a single base class", "At most 2 classes derived from a single base class", "At most 1 class derived from another class"], a: 0, e: "أب واحد يتفرع منه فئتين أو أكثر." },
+        { q: "Two classes have identical members but different names. Can a copy constructor initialize one class's object from the other's?", o: ["Yes, possible", "Yes, because the members are same", "No, not possible", "No, but possible if constructor is also same"], a: 2, e: "بنّاء النسخ يقبل كائناً من نفس الفئة حصراً." },
+        { q: "What will be the output? enum month { JAN=1,... }; for (int i=MAR; i<=NOV; i++) cout<<i;", o: ["01234567891011", "123456789101112", "34567891011", "MAR,APR,...,NOV"], a: 2, e: "مكرر للتأكيد: حلقة تكرارية تطبع الأرقام المتتالية." },
+        { q: "How many parameters does a default constructor require?", o: ["1", "2", "0", "3"], a: 2, e: "البناء الافتراضي (Default) لا يأخذ أي بارامترات (0)." },
+        { q: "What is the meaning of the declaration: int (*ptr[5])() ;", o: ["ptr is a pointer to function", "ptr is an array of pointers to function", "ptr is a pointer to a function returning an array", "ptr is a pointer to an array of functions"], a: 1, e: "ptr هي مصفوفة من 5 عناصر، كل عنصر هو مؤشر (Pointer) يشير إلى دالة." },
+        { q: "The relation between a base class and a derived class is related to:", o: ["Inheritance", "Polymorphism", "Encapsulation", "All of the above"], a: 0, e: "علاقة الأب والابن تُعرف بالوراثة." },
+        { q: "By default, data members of a class are private.", o: ["True", "False"], a: 0, e: "صحيح، الوضع الافتراضي للفئة (Class) هو Private." },
+        { q: "How many constructors can be defined in a class?", o: ["1", "2", "3", "Multiple (overloaded)"], a: 3, e: "يمكن تعريف أي عدد بفضل ميزة تحميل الدوال (Overloading)." },
+        { q: "What is the scope of a variable declared inside a user-defined function?", o: ["Whole program", "Only inside the {} block", "The main function", "Header section"], a: 1, e: "المتغير المحلي يعيش ويموت داخل أقواس المجموعة الخاص به." },
+        { q: "C++ is considered which level of language?", o: ["High level", "Middle level", "Low level", "Both high and low"], a: 1, e: "لأنها تجمع بين مزايا اللغات العالية (كالـ OOP) والمنخفضة (كالمؤشرات والذاكرة)، تُعتبر Middle level." },
+        { q: "How do structures and classes in C++ differ?", o: ["In structures members are public by default; in classes they are private", "In structures members are private; in classes they are public", "Structures hide members by default; classes don't", "Structures can't have private members; classes can"], a: 0, e: "الفرق الأساسي هو حالة الوصول الافتراضية." },
+        { q: "Which header file is required for file I/O operations?", o: ["<ifstream>", "<ostream>", "<fstream>", "<iostream>"], a: 2, e: "<fstream> تشمل عمليات القراءة والكتابة للملفات." },
+        { q: "Which of the following is the scope resolution operator?", o: [".", "*", "::", "~"], a: 2, e: "النقطتين المتعامدتين (::) يُعرفان بـ Scope resolution operator." },
+        { q: "The operator used for dereferencing/indirection is:", o: ["*", "&", "->", "->>"], a: 0, e: "علامة النجمة (*) للوصول لمحتوى المؤشر." },
+        { q: "What happens here?\nint a=100, b=200; int *p=&a, *q=&b; p = q;", o: ["b is assigned to a", "p now points to b", "a is assigned to b", "Compile error"], a: 1, e: "مكرر للتأكيد، p أصبحت تحمل نفس عنوان q أي عنوان المتغير b." },
+        { q: "Which of the following is an abstract (user-defined) type?", o: ["int", "string", "class", "float"], a: 2, e: "الفئة (class)." },
+        { q: "Which syntax is used to access a member of a namespace?", o: ["namespace->member", "namespace~member", "namespace.member", "namespace::member"], a: 3, e: "اسم مساحة الاسم متبوعاً بـ (::)." },
+        { q: "A phone has many components. When we represent the phone as a whole, which concept is this?", o: ["Camera", "Phone", "Display", "Motherboard"], a: 1, e: "الهاتف الكلي." },
+        { q: "Call by Reference creates a different memory location for the actual argument.", o: ["True", "False"], a: 1, e: "خطأ، هي تعتمد على نفس عنوان الذاكرة للمتغير الأصلي." },
+        { q: "What is the correct way to write inheritance if Dog inherits from Mammal?", o: ["None of these", "class Mammal: public Dog", "class Dog :: public Mammal", "class Dog: public Mammal"], a: 3, e: "الكلب يرث من الثدييات." },
+        { q: "Instead of `using namespace std;`, which symbol can access members of the standard namespace?", o: ["None of these", "::", ":", "."], a: 1, e: "معامل ::" },
+        { q: "Which is more effective when calling functions?", o: ["By value and by reference", "By pointer", "By value", "By reference"], a: 3, e: "التمرير بالمرجع أسرع ولا يستهلك ذاكرة إضافية." },
+        { q: "Which is used to create an output stream?", o: ["fsstream", "ifstream", "iostream", "ofstream"], a: 3, e: "ofstream." },
+        { q: "Which is correct about objects and classes?", o: ["An object is an instance of the data type of the class", "An object is an instance of its class", "A class is an instance of its objects", "A class is an instance of the data type that the class has"], a: 1, e: "الكائن هو نسخة من الفئة." },
+        { q: "Which access specifiers can a member function of a derived class be declared as?", o: ["private and public", "protected and public", "public", "private and protected"], a: 0, e: "الدوال داخل الابن يمكن أن تُعرف بأي محدد (عام أو خاص)." },
+        { q: "What are mandatory parts in a function declaration?", o: ["Return type, function name", "Parameters, function name", "Return type, function name, parameters", "None of these"], a: 0, e: "يجب تحديد نوع الإرجاع والاسم، بينما المتغيرات (Parameters) يمكن أن تكون فارغة." },
+        { q: "Which of the following is a valid C++ data type?", o: ["Int", "bool", "DOUBLE", "_0_"], a: 1, e: "bool." },
+        { q: "Which function is used to read a single character from the console?", o: ["cin.get(ch)", "getline(ch)", "read(ch)", "scanf(ch)"], a: 0, e: "دالة get." },
+        { q: "What is the user-defined type?", o: ["Enumeration", "Classes", "Structure", "All of them"], a: 3, e: "جميع الخيارات السابقة (Enum, Class, Struct) تمثل أنواع بيانات من صُنع المستخدم." }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+    const correctCounterEl = document.getElementById('correct-counter');
+    const wrongCounterEl = document.getElementById('wrong-counter');
+    const remainingCounterEl = document.getElementById('remaining-counter');
+
+    function renderQuiz() {
+        questions.forEach((q, qIndex) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            
+            // الترقيم يبدأ من 198
+            let displayIndex = qIndex + 198;
+
+            let html = `
+                <div class="q-header">
+                    <span class="q-num">السؤال ${displayIndex} / 297</span>
+                </div>
+                <div class="q-text">${q.q}</div>
+            `;
+            
+            if(q.c) {
+                html += `<div class="code-block">${q.c}</div>`;
+            }
+
+            html += `<div class="options" id="opts-${qIndex}">`;
+            
+            q.o.forEach((opt, oIndex) => {
+                html += `<button class="btn" onclick="checkAnswer(this, ${qIndex}, ${oIndex})">${opt}</button>`;
+            });
+
+            html += `</div>
+                <div class="explanation" id="exp-${qIndex}">
+                    <strong>الشرح:</strong> ${q.e}
+                </div>
+            `;
+            
+            card.innerHTML = html;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    function updateScoreboard() {
+        correctCounterEl.textContent = correctCount;
+        wrongCounterEl.textContent = wrongCount;
+        remainingCounterEl.textContent = TOTAL_QUESTIONS - answeredQuestions.size;
+    }
+
+    function checkAnswer(btn, qIndex, selectedOptIndex) {
+        const q = questions[qIndex];
+        const optionsContainer = document.getElementById(`opts-${qIndex}`);
+        const buttons = optionsContainer.getElementsByTagName('button');
+        
+        // تعطيل كل الأزرار لنفس السؤال بعد الاختيار
+        for (let b of buttons) {
+            b.disabled = true;
+        }
+
+        // تسجيل الإجابة في المتغيرات
+        if (!answeredQuestions.has(qIndex)) {
+            answeredQuestions.add(qIndex);
+            
+            if (selectedOptIndex === q.a) {
+                btn.classList.add('correct');
+                correctCount++;
+            } else {
+                btn.classList.add('wrong');
+                buttons[q.a].classList.add('correct');
+                wrongCount++;
+            }
+            updateScoreboard();
+        }
+
+        // إظهار الشرح
+        document.getElementById(`exp-${qIndex}`).style.display = 'block';
+    }
+
+    function showResults() {
+        const modal = document.getElementById('result-modal');
+        const pctCircle = document.getElementById('result-percentage');
+        const resMsg = document.getElementById('result-message');
+        const unanswered = TOTAL_QUESTIONS - answeredQuestions.size;
+        
+        // تحديث الأرقام
+        document.getElementById('res-correct').textContent = correctCount;
+        document.getElementById('res-wrong').textContent = wrongCount;
+        document.getElementById('res-unanswered').textContent = unanswered;
+
+        // حساب النسبة
+        const percentage = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+        pctCircle.textContent = percentage + '%';
+
+        // تغيير اللون والرسالة حسب النسبة
+        if(percentage >= 85) {
+            pctCircle.style.color = '#10b981';
+            pctCircle.style.borderColor = '#10b981';
+            resMsg.textContent = "أداء ممتاز يا باشمهندس محمود! 🚀";
+        } else if (percentage >= 60) {
+            pctCircle.style.color = '#f59e0b';
+            pctCircle.style.borderColor = '#f59e0b';
+            resMsg.textContent = "أداء جيد، شد حيلك في المراجعة! 👍";
+        } else {
+            pctCircle.style.color = '#ef4444';
+            pctCircle.style.borderColor = '#ef4444';
+            resMsg.textContent = "محتاج تراجع الملفات تاني يا بطل! 📚";
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    renderQuiz();
+</script>
+
+</body>
+</html>
