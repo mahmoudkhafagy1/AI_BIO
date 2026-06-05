@@ -42,17 +42,17 @@
     <p class="hero-desc">بنوك أسئلة شاملة وكويزات تفاعلية لجميع مواد القسم الحيوي. تدرّب، اختبر نفسك، وتفوّق.</p>
     <div class="hero-stats">
         <div class="stat-item">
-            <span class="stat-num" id="total-q">850+</span>
+            <span class="stat-num" id="total-q">1100+</span>
             <span class="stat-label">سؤال</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-            <span class="stat-num">16</span>
+            <span class="stat-num">17</span>
             <span class="stat-label">كويزات</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-            <span class="stat-num">5</span>
+            <span class="stat-num">6</span>
             <span class="stat-label">مواد</span>
         </div>
     </div>
@@ -277,14 +277,39 @@
             <div class="coming-overlay"><span>🔒 قريباً</span></div>
         </div>
 
-        <div class="subject-card coming-soon">
+        <!-- Probability & Statistics Card -->
+        <div class="subject-card active-subject" onclick="openSubject('probability')">
+            <div class="card-glow"></div>
             <div class="card-header">
                 <div class="subject-icon">📊</div>
-                <div class="subject-badge soon-badge">قريباً</div>
+                <div class="subject-badge">متاح</div>
             </div>
             <h3 class="subject-name">Probability &amp; Statistics</h3>
             <p class="subject-ar">الاحتمالات والإحصاء</p>
-            <div class="coming-overlay"><span>🔒 قريباً</span></div>
+            <p class="subject-desc">احتمالات، إحصاء وصفي، التوزيع الطبيعي، بواسون، وثنائي الحدين</p>
+            <div class="subject-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📝</span>
+                    <span>291 سؤال</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🎯</span>
+                    <span>1 كويز</span>
+                </div>
+            </div>
+            <div class="quiz-list">
+                <div class="quiz-pill" onclick="event.stopPropagation(); openQuiz('probability')">
+                    <span class="pill-icon">📋</span>
+                    <span>Probability &amp; Statistics Quiz</span>
+                    <span class="pill-count">291 سؤال</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="open-btn" onclick="event.stopPropagation(); openSubject('probability')">
+                    فتح المادة
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
         </div>
 
         <!-- Electronics Card -->
@@ -368,7 +393,8 @@
         'oop-part2':      'oop_2.html',
         'oop-part3':      'oop_3.html',
         'oop-test':       'oop_test.html',
-        'oop-midterm-2022': 'oop_midterm_2022.html'
+        'oop-midterm-2022': 'oop_midterm_2022.html',
+        'probability':    'probability.html'
     };
 
     function openQuiz(key) {
